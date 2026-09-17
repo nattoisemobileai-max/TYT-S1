@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>中史 · 單元一：史前至夏商周 | S1 互動學習</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Nunito', 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f3f0ea 0%, #e8e2d8 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(3px);
+            border-radius: 2rem;
+            padding: 1rem 1rem 1.8rem;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+        }
+
+        .top-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 0.7rem 1.2rem;
+            border-radius: 60px;
+            box-shadow: 0 6px 0 #cbdbe0;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .user-greeting {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: #fdf2e9;
+            padding: 0.3rem 1rem 0.3rem 0.6rem;
+            border-radius: 50px;
+            border: 1px solid #e8c9a8;
+        }
+        .user-greeting i {
+            font-size: 1.8rem;
+            color: #a0522d;
+            background: white;
+            border-radius: 50%;
+            padding: 0.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .user-greeting span {
+            font-weight: 800;
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            color: #3d2b1f;
+        }
+        .user-greeting .sub {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #7a5c3e;
+        }
+
+        .quote-ticker {
+            flex: 1;
+            min-width: 220px;
+            background: #fdf6ed;
+            border-radius: 60px;
+            padding: 0.45rem 1rem;
+            border: 1px solid #e6c9a8;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .quote-scroll {
+            display: inline-block;
+            white-space: nowrap;
+            font-style: italic;
+            font-weight: 500;
+            color: #8b5e3c;
+            font-size: clamp(0.85rem, 3.5vw, 1rem);
+            animation: scrollRightLeft 22s cubic-bezier(0.2, 0.9, 0.3, 1) 2 forwards;
+        }
+        @keyframes scrollRightLeft {
+            0% { transform: translateX(100%); }
+            25% { transform: translateX(20%); }
+            50% { transform: translateX(-20%); }
+            75% { transform: translateX(-80%); }
+            100% { transform: translateX(-150%); }
+        }
+
+        .stats {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            background: #3d2b1f;
+            padding: 0.3rem 1rem;
+            border-radius: 50px;
+            color: white;
+            box-shadow: 0 4px 0 #1f140e;
+        }
+        .xp-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            background: #e6b800;
+            color: #2f2f2f;
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+        }
+        .level-badge {
+            background: white;
+            color: #3d2b1f;
+            font-weight: 800;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: clamp(0.9rem, 3vw, 1.1rem);
+        }
+
+        /* 🎙️ Podcast 專區樣式 (保持風格，但改為中史主題) */
+        .podcast-section {
+            background: linear-gradient(105deg, #fef7e8 0%, #f7ebd6 100%);
+            border-radius: 1.8rem;
+            padding: 0.9rem 1.2rem 1.2rem 1.2rem;
+            border-left: 8px solid #b8860b;
+            box-shadow: 0 8px 0 #d4b88c;
+            margin-bottom: 1.8rem;
+        }
+        .podcast-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .podcast-header i {
+            font-size: 2rem;
+            color: #b8860b;
+            background: white;
+            border-radius: 50%;
+            padding: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .podcast-header h3 {
+            font-size: clamp(1.1rem, 5vw, 1.5rem);
+            font-weight: 800;
+            color: #5c3e1f;
+            margin: 0;
+        }
+        .podcast-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 0.8rem;
+        }
+        .podcast-btn {
+            background: white;
+            border-radius: 60px;
+            padding: 0.7rem 0.4rem;
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.2rem;
+            font-weight: 700;
+            color: #3d2b1f;
+            border: 1px solid #d4b88c;
+            box-shadow: 0 3px 0 #b89b6b;
+            transition: 0.08s linear;
+            font-size: clamp(0.8rem, 3.5vw, 0.9rem);
+            cursor: pointer;
+        }
+        .podcast-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #b89b6b;
+        }
+        .podcast-btn i {
+            font-size: 1.5rem;
+            margin-bottom: 0.2rem;
+            color: #b8860b;
+        }
+        .podcast-title {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: #5c3e1f;
+        }
+        .podcast-subtitle {
+            font-size: 0.7rem;
+            color: #7a5c3e;
+            font-weight: 600;
+        }
+        .podcast-sub {
+            font-size: 0.7rem;
+            margin-top: 0.8rem;
+            text-align: center;
+            color: #7a5c3e;
+            font-weight: 500;
+        }
+        .audio-player-container {
+            margin-top: 0.5rem;
+            width: 100%;
+            display: none;
+        }
+        .audio-player-container.active {
+            display: block;
+        }
+        .audio-player-container audio {
+            width: 100%;
+            border-radius: 40px;
+            margin-top: 0.4rem;
+        }
+
+        /* 書籍卡片網格 */
+        .books-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .book-card {
+            width: 100%;
+            background: white;
+            border-radius: 2rem;
+            padding: 1.5rem 1.3rem;
+            box-shadow: 0 10px 0 #c3d4e3, 0 12px 28px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+        .book-title {
+            font-size: clamp(1.5rem, 6vw, 2rem);
+            font-weight: 900;
+            color: #3d2b1f;
+            margin-bottom: 0.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+        .book-title i { font-size: clamp(1.6rem, 6vw, 2.2rem); color: #b8860b; }
+        .book-sub {
+            font-size: clamp(0.9rem, 4vw, 1.05rem);
+            color: #7a5c3e;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px dotted #d4b88c;
+            padding-bottom: 0.6rem;
+            font-weight: 600;
+        }
+
+        .lesson-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 0.3rem;
+        }
+        .lesson-btn {
+            background: #fdf8f2;
+            border: 2px solid #e8d5c0;
+            border-radius: 50px;
+            padding: 0.85rem 1.2rem;
+            font-weight: 800;
+            font-size: clamp(0.95rem, 4vw, 1.1rem);
+            color: #5c3e1f;
+            box-shadow: 0 5px 0 #c9b09b;
+            cursor: pointer;
+            transition: 0.06s linear;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            width: 100%;
+            text-align: left;
+            background: #fefcf9;
+        }
+        .lesson-btn i {
+            font-size: 1.4rem;
+            min-width: 32px;
+            color: #b8860b;
+        }
+        .lesson-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 #c9b09b;
+        }
+        .lesson-btn.active {
+            background: #b8860b;
+            color: white;
+            border-color: #9a6e0a;
+        }
+        .lesson-btn.active i {
+            color: white;
+        }
+
+        .sub-mode-section {
+            margin: 0.5rem 0 0.8rem 1.2rem;
+            padding: 0.8rem 0 0.3rem 1rem;
+            border-left: 4px solid #d4b88c;
+            display: none;
+        }
+        .sub-mode-section.expanded {
+            display: block;
+        }
+        .sub-mode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.8rem;
+        }
+        .sub-mode-item {
+            background: #fdf8f2;
+            border: 2px solid #e0cdb6;
+            border-radius: 40px;
+            padding: 0.7rem 0.3rem;
+            text-align: center;
+            text-decoration: none;
+            color: #5c3e1f;
+            transition: 0.08s linear;
+            box-shadow: 0 3px 0 #c9b09b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: clamp(0.8rem, 3vw, 0.9rem);
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .sub-mode-item:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #c9b09b;
+        }
+        .sub-mode-item i {
+            font-size: 1.3rem;
+            color: #b8860b;
+        }
+
+        .footer-credit {
+            margin-top: 2rem;
+            text-align: center;
+            color: #7a5c3e;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        @media (min-width: 768px) {
+            .app-container { padding: 1.5rem 1.8rem 2rem; }
+            .book-card { padding: 1.8rem 1.8rem; }
+            .sub-mode-grid { gap: 1rem; }
+            .podcast-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (min-width: 1024px) {
+            .books-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.8rem;
+            }
+            .top-bar { flex-wrap: nowrap; }
+            .podcast-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        @media (min-width: 1280px) {
+            .app-container { max-width: 1500px; padding: 1.8rem 2.2rem 2.2rem; }
+            .sub-mode-grid { grid-template-columns: repeat(5, 1fr); }
+            .podcast-grid { grid-template-columns: repeat(6, 1fr); }
+        }
+
+        @media (max-width: 550px) {
+            .top-bar { flex-direction: column; align-items: stretch; }
+            .user-greeting, .quote-ticker, .stats { justify-content: center; width: 100%; }
+            .sub-mode-section { margin-left: 0.5rem; padding-left: 0.8rem; }
+            .sub-mode-grid { grid-template-columns: repeat(2, 1fr); }
+            .podcast-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (hover: hover) {
+            .lesson-btn:hover { background: #f5ede3; transform: translateY(-1px); }
+            .sub-mode-item:hover, .podcast-btn:hover { background: #f5ede3; transform: translateY(-1px); }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="top-bar">
+        <div class="user-greeting">
+            <i class="fas fa-scroll"></i>
+            <span>中史 · 探索者</span>
+            <span class="sub">📜 單元一：史前至夏商周</span>
+        </div>
+        <div class="quote-ticker">
+            <span class="quote-scroll" id="quoteSpan">
+                <i class="fas fa-quote-left"></i> 究天人之際，通古今之變 · 司馬遷  <i class="fas fa-quote-right"></i>  夏商周三代 · 華夏文明的奠基
+            </span>
+        </div>
+        <div class="stats">
+            <div class="xp-badge"><i class="fas fa-star"></i> 3,120 XP</div>
+            <div class="level-badge">Lv. 8</div>
+        </div>
+    </div>
+
+    <!-- 🎙️ Podcast 專區 (中史主題) -->
+    <div class="podcast-section">
+        <div class="podcast-header">
+            <i class="fas fa-head-side-brain"></i>
+            <h3>🎧 聲歷其境 · 中史導讀</h3>
+        </div>
+        <div class="podcast-grid">
+            <div class="podcast-btn" data-audio="podcast/中史-第1章-中華民族與早期國家.mp3">
+                <i class="fas fa-users"></i>
+                <span class="podcast-title">第1章</span>
+                <span class="podcast-subtitle">中華民族與早期國家</span>
+            </div>
+            <div class="podcast-btn" data-audio="podcast/中史-第2章-西周的封建.mp3">
+                <i class="fas fa-landmark"></i>
+                <span class="podcast-title">第2章</span>
+                <span class="podcast-subtitle">西周的封建</span>
+            </div>
+            <div class="podcast-btn" data-audio="podcast/中史-第3章-春秋戰國時期的變局.mp3">
+                <i class="fas fa-chess-board"></i>
+                <span class="podcast-title">第3章</span>
+                <span class="podcast-subtitle">春秋戰國時期的變局</span>
+            </div>
+            <div class="podcast-btn" data-audio="podcast/中史-小測.mp3">
+                <i class="fas fa-pen-to-square"></i>
+                <span class="podcast-title">小測</span>
+                <span class="podcast-subtitle">單元一綜合</span>
+            </div>
+        </div>
+        <div id="globalAudioContainer" style="margin-top: 1rem; display: none;">
+            <audio id="dynamicAudioPlayer" controls style="width: 100%; border-radius: 60px;">
+                <source src="" type="audio/mpeg">
+                您的瀏覽器不支援音頻播放。
+            </audio>
+        </div>
+        <div class="podcast-sub">🎙️ 一鍵播放 · MP3課程導讀（需將音檔置於 podcast/ 資料夾）</div>
+    </div>
+
+    <div class="books-grid">
+        <!-- 單元一：史前至夏商周 (根據圖片內容) -->
+        <div class="book-card" id="book1">
+            <div class="book-title"><i class="fas fa-timeline"></i> 單元一 · 史前至夏商周</div>
+            <div class="book-sub">中華民族起源 · 夏商周三代 · 西周封建 · 春秋戰國變局</div>
+            <div class="lesson-grid">
+                <!-- 第1章 中華民族與早期國家的起源 -->
+                <button class="lesson-btn" data-lesson="lesson1" data-book="1">
+                    <i class="fas fa-people-group"></i> 第1章 · 中華民族與早期國家的起源
+                </button>
+                <div class="sub-mode-section" id="book1-lesson1">
+                    <div class="sub-mode-grid">
+                        <a href="1-1/flashcard.html" class="sub-mode-item"><i class="fas fa-layer-group"></i> Flashcard</a>
+                        <a href="1-1/test.html" class="sub-mode-item"><i class="fas fa-pencil-alt"></i> Test</a>
+                        <a href="1-1/selfnotes.html" class="sub-mode-item"><i class="fas fa-pen-fancy"></i> Selfnotes</a>
+                        <a href="1-1/mindmap.html" class="sub-mode-item"><i class="fas fa-brain"></i> Mindmap</a>
+                        <a href="1-1/notes.html" class="sub-mode-item"><i class="fas fa-book-open"></i> Notes</a>
+                    </div>
+                    <!-- 子章節按鈕 (第1節、第2節) -->
+                    <div style="margin-top: 0.8rem; display: flex; flex-wrap: wrap; gap: 0.6rem;">
+                        <a href="1-1/1-1-1.html" class="sub-mode-item" style="flex:1; min-width:120px;"><i class="fas fa-play"></i> 第1節 · 演進歷程</a>
+                        <a href="1-1/1-1-2.html" class="sub-mode-item" style="flex:1; min-width:120px;"><i class="fas fa-play"></i> 第2節 · 夏商周三代的盟替概況</a>
+                    </div>
+                </div>
+
+                <!-- 第2章 西周的封建 -->
+                <button class="lesson-btn" data-lesson="lesson2" data-book="1">
+                    <i class="fas fa-crown"></i> 第2章 · 西周的封建
+                </button>
+                <div class="sub-mode-section" id="book1-lesson2">
+                    <div class="sub-mode-grid">
+                        <a href="1-2/flashcard.html" class="sub-mode-item"><i class="fas fa-layer-group"></i> Flashcard</a>
+                        <a href="1-2/test.html" class="sub-mode-item"><i class="fas fa-pencil-alt"></i> Test</a>
+                        <a href="1-2/selfnotes.html" class="sub-mode-item"><i class="fas fa-pen-fancy"></i> Selfnotes</a>
+                        <a href="1-2/mindmap.html" class="sub-mode-item"><i class="fas fa-brain"></i> Mindmap</a>
+                        <a href="1-2/notes.html" class="sub-mode-item"><i class="fas fa-book-open"></i> Notes</a>
+                    </div>
+                    <div style="margin-top: 0.8rem; display: flex; flex-wrap: wrap; gap: 0.6rem;">
+                        <a href="1-2/1-2-1.html" class="sub-mode-item" style="flex:1; min-width:140px;"><i class="fas fa-play"></i> 封建制度的內容和作用</a>
+                        <a href="1-2/1-2-2.html" class="sub-mode-item" style="flex:1; min-width:160px;"><i class="fas fa-play"></i> 封建制度與春秋戰國局面形成的關係</a>
+                    </div>
+                </div>
+
+                <!-- 第3章 春秋戰國時期的變局 -->
+                <button class="lesson-btn" data-lesson="lesson3" data-book="1">
+                    <i class="fas fa-chess"></i> 第3章 · 春秋戰國時期的變局
+                </button>
+                <div class="sub-mode-section" id="book1-lesson3">
+                    <div class="sub-mode-grid">
+                        <a href="1-3/flashcard.html" class="sub-mode-item"><i class="fas fa-layer-group"></i> Flashcard</a>
+                        <a href="1-3/test.html" class="sub-mode-item"><i class="fas fa-pencil-alt"></i> Test</a>
+                        <a href="1-3/selfnotes.html" class="sub-mode-item"><i class="fas fa-pen-fancy"></i> Selfnotes</a>
+                        <a href="1-3/mindmap.html" class="sub-mode-item"><i class="fas fa-brain"></i> Mindmap</a>
+                        <a href="1-3/notes.html" class="sub-mode-item"><i class="fas fa-book-open"></i> Notes</a>
+                    </div>
+                    <div style="margin-top: 0.8rem; display: flex; flex-wrap: wrap; gap: 0.6rem;">
+                        <a href="1-3/1-3-1.html" class="sub-mode-item" style="flex:1; min-width:150px;"><i class="fas fa-play"></i> 第1節 · 春秋戰國時期的兼併戰爭</a>
+                        <a href="1-3/1-3-2.html" class="sub-mode-item" style="flex:1; min-width:120px;"><i class="fas fa-play"></i> 第2節 · 商鞅變法</a>
+                        <a href="1-3/1-3-3.html" class="sub-mode-item" style="flex:1; min-width:160px;"><i class="fas fa-play"></i> 第3節 · 先秦百家爭鳴與時代的關係</a>
+                    </div>
+                </div>
+
+                <!-- 小測 (獨立按鈕，不展開子模式，直接連結) -->
+                <a href="unit1-quiz.html" class="lesson-btn" style="text-decoration: none; background: #fef3e0; border-color: #e6b86a; color: #8b5e3c;">
+                    <i class="fas fa-file-pen"></i> **** 小測 ****
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-credit">
+        📜 中史 · 單元一：史前至夏商周 | 建構歷史思維與文化素養
+    </div>
+</div>
+
+<script>
+    (function() {
+        // 名言跑馬燈優雅停止
+        const quoteSpan = document.getElementById('quoteSpan');
+        let animCount = 0;
+        if (quoteSpan) {
+            quoteSpan.addEventListener('animationiteration', () => {
+                animCount++;
+                if (animCount === 2) {
+                    quoteSpan.style.animation = 'none';
+                    quoteSpan.style.transform = 'translateX(0%)';
+                }
+            });
+            setTimeout(() => {
+                if (quoteSpan.style.animation !== 'none') {
+                    quoteSpan.style.animation = 'none';
+                    quoteSpan.style.transform = 'translateX(0%)';
+                }
+            }, 22000);
+        }
+
+        // 課程區塊展開折疊
+        const lessonBtns = document.querySelectorAll('.lesson-btn[data-lesson]');
+        lessonBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const book = this.dataset.book;
+                const lesson = this.dataset.lesson;
+                const targetId = `book${book}-${lesson}`;
+                const targetSection = document.getElementById(targetId);
+                if (!targetSection) return;
+                const isExpanded = targetSection.classList.contains('expanded');
+                if (!isExpanded) {
+                    const parentCard = this.closest('.book-card');
+                    if (parentCard) {
+                        const allSections = parentCard.querySelectorAll('.sub-mode-section');
+                        allSections.forEach(section => {
+                            section.classList.remove('expanded');
+                        });
+                        const allBtns = parentCard.querySelectorAll('.lesson-btn');
+                        allBtns.forEach(b => b.classList.remove('active'));
+                    }
+                }
+                targetSection.classList.toggle('expanded');
+                this.classList.toggle('active');
+            });
+        });
+
+        // Podcast 音頻播放器
+        const podcastBtns = document.querySelectorAll('.podcast-btn');
+        const globalAudioContainer = document.getElementById('globalAudioContainer');
+        const dynamicAudioPlayer = document.getElementById('dynamicAudioPlayer');
+        
+        if (globalAudioContainer) {
+            globalAudioContainer.style.display = 'none';
+        }
+        
+        podcastBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const audioSrc = this.getAttribute('data-audio');
+                if (audioSrc && dynamicAudioPlayer) {
+                    if (globalAudioContainer) {
+                        globalAudioContainer.style.display = 'block';
+                    }
+                    dynamicAudioPlayer.src = audioSrc;
+                    dynamicAudioPlayer.load();
+                    dynamicAudioPlayer.play().catch(err => {
+                        console.log('瀏覽器限制自動播放，請手動點擊播放鍵');
+                    });
+                    globalAudioContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        });
+    })();
+</script>
+</body>
+</html>
