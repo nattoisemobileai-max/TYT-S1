@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <title>中一 | 中史 · 單元一：史前至夏商周</title>
+    <title>第1章 · 中華民族與早期國家的起源 | 中史</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
@@ -31,9 +31,9 @@
             border-radius: 2rem;
             padding: 1rem 1rem 1.8rem;
             box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s;
         }
 
+        /* 頂部列 */
         .top-bar {
             display: flex;
             align-items: center;
@@ -132,7 +132,7 @@
             font-size: clamp(0.9rem, 3vw, 1.1rem);
         }
 
-        /* 🎙️ Podcast 專區樣式 */
+        /* 🎙️ Podcast 專區 */
         .podcast-section {
             background: linear-gradient(105deg, #fef7e8 0%, #f7ebd6 100%);
             border-radius: 1.8rem;
@@ -221,7 +221,7 @@
             border-radius: 60px;
         }
 
-        /* 書籍卡片網格 */
+        /* 書籍卡片 */
         .books-grid {
             display: flex;
             flex-direction: column;
@@ -238,7 +238,7 @@
             border: 1px solid rgba(255,255,255,0.7);
         }
         .book-title {
-            font-size: clamp(1.5rem, 6vw, 2rem);
+            font-size: clamp(1.4rem, 5.5vw, 1.9rem);
             font-weight: 900;
             color: #3d2b1f;
             margin-bottom: 0.2rem;
@@ -247,7 +247,7 @@
             gap: 0.6rem;
             flex-wrap: wrap;
         }
-        .book-title i { font-size: clamp(1.6rem, 6vw, 2.2rem); color: #b8860b; }
+        .book-title i { font-size: clamp(1.5rem, 5.5vw, 2rem); color: #b8860b; }
         .book-sub {
             font-size: clamp(0.9rem, 4vw, 1.05rem);
             color: #7a5c3e;
@@ -260,14 +260,14 @@
         .lesson-grid {
             display: flex;
             flex-direction: column;
-            gap: 0.8rem;
+            gap: 0.9rem;
             margin-bottom: 0.3rem;
         }
         .lesson-btn {
             background: #fdf8f2;
             border: 2px solid #e8d5c0;
             border-radius: 50px;
-            padding: 0.85rem 1.2rem;
+            padding: 0.9rem 1.2rem;
             font-weight: 800;
             font-size: clamp(0.95rem, 4vw, 1.1rem);
             color: #5c3e1f;
@@ -279,7 +279,6 @@
             gap: 0.8rem;
             width: 100%;
             text-align: left;
-            background: #fefcf9;
             text-decoration: none;
         }
         .lesson-btn i {
@@ -300,8 +299,9 @@
             color: white;
         }
 
+        /* 子模式 */
         .sub-mode-section {
-            margin: 0.5rem 0 0.8rem 1.2rem;
+            margin: 0.4rem 0 0.6rem 1.2rem;
             padding: 0.8rem 0 0.3rem 1rem;
             border-left: 4px solid #d4b88c;
             display: none;
@@ -341,17 +341,7 @@
             color: #b8860b;
         }
 
-        .sub-section-row {
-            margin-top: 0.8rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-        }
-        .sub-section-row .sub-mode-item {
-            flex: 1;
-            min-width: 120px;
-        }
-
+        /* 小測按鈕 */
         .quiz-link {
             text-decoration: none;
             background: #fef3e0;
@@ -367,7 +357,7 @@
             font-size: 0.9rem;
         }
 
-        /* 響應式設計 */
+        /* 響應式 */
         @media (min-width: 768px) {
             .app-container { padding: 1.5rem 1.8rem 2rem; }
             .book-card { padding: 1.8rem 1.8rem; }
@@ -397,7 +387,6 @@
             .sub-mode-section { margin-left: 0.5rem; padding-left: 0.8rem; }
             .sub-mode-grid { grid-template-columns: repeat(2, 1fr); }
             .podcast-grid { grid-template-columns: repeat(2, 1fr); }
-            .sub-section-row .sub-mode-item { min-width: 100%; }
         }
 
         @media (hover: hover) {
@@ -408,11 +397,12 @@
 </head>
 <body>
 <div class="app-container">
+    <!-- 頂部列 -->
     <div class="top-bar">
         <div class="user-greeting">
             <i class="fas fa-scroll"></i>
             <span>中史 · 探索者</span>
-            <span class="sub">📜 單元一：史前至夏商周</span>
+            <span class="sub">📜 第1章 · 中華民族與早期國家的起源</span>
         </div>
         <div class="quote-ticker">
             <span class="quote-scroll" id="quoteSpan">
@@ -432,25 +422,20 @@
             <h3>🎧 聲歷其境 · 中史導讀</h3>
         </div>
         <div class="podcast-grid">
-            <div class="podcast-btn" data-audio="podcast/中史-第1章-中華民族與早期國家.mp3">
-                <i class="fas fa-users"></i>
-                <span class="podcast-title">第1章</span>
-                <span class="podcast-subtitle">中華民族與早期國家</span>
+            <div class="podcast-btn" data-audio="podcast/中史-第1章-第1節-演進歷程.mp3">
+                <i class="fas fa-timeline"></i>
+                <span class="podcast-title">第1節</span>
+                <span class="podcast-subtitle">演進歷程</span>
             </div>
-            <div class="podcast-btn" data-audio="podcast/中史-第2章-西周的封建.mp3">
-                <i class="fas fa-landmark"></i>
-                <span class="podcast-title">第2章</span>
-                <span class="podcast-subtitle">西周的封建</span>
+            <div class="podcast-btn" data-audio="podcast/中史-第1章-第2節-夏商周三代.mp3">
+                <i class="fas fa-crown"></i>
+                <span class="podcast-title">第2節</span>
+                <span class="podcast-subtitle">夏商周三代的盥替概況</span>
             </div>
-            <div class="podcast-btn" data-audio="podcast/中史-第3章-春秋戰國時期的變局.mp3">
-                <i class="fas fa-chess-board"></i>
-                <span class="podcast-title">第3章</span>
-                <span class="podcast-subtitle">春秋戰國時期的變局</span>
-            </div>
-            <div class="podcast-btn" data-audio="podcast/中史-小測.mp3">
+            <div class="podcast-btn" data-audio="podcast/中史-第1章-小測.mp3">
                 <i class="fas fa-pen-to-square"></i>
                 <span class="podcast-title">小測</span>
-                <span class="podcast-subtitle">單元一綜合</span>
+                <span class="podcast-subtitle">第1章綜合</span>
             </div>
         </div>
         <div id="globalAudioContainer">
@@ -463,14 +448,14 @@
     </div>
 
     <div class="books-grid">
-        <!-- 單元一：史前至夏商周 -->
+        <!-- 第1章卡片 -->
         <div class="book-card" id="book1">
-            <div class="book-title"><i class="fas fa-timeline"></i> 單元一 · 史前至夏商周</div>
-            <div class="book-sub">中華民族起源 · 夏商周三代 · 西周封建 · 春秋戰國變局</div>
+            <div class="book-title"><i class="fas fa-timeline"></i> 第1章 · 中華民族與早期國家的起源</div>
+            <div class="book-sub">演進歷程 · 夏商周三代的盥替概況</div>
             <div class="lesson-grid">
-                <!-- 第1章 中華民族與早期國家的起源 -->
+                <!-- 第1節 演進歷程 -->
                 <button class="lesson-btn" data-lesson="lesson1" data-book="1">
-                    <i class="fas fa-people-group"></i> 第1章 · 中華民族與早期國家的起源
+                    <i class="fas fa-people-group"></i> 第1節 · 演進歷程
                 </button>
                 <div class="sub-mode-section" id="book1-lesson1">
                     <div class="sub-mode-grid">
@@ -480,15 +465,11 @@
                         <a href="1-1/mindmap.html" class="sub-mode-item"><i class="fas fa-brain"></i> Mindmap</a>
                         <a href="1-1/notes.html" class="sub-mode-item"><i class="fas fa-book-open"></i> Notes</a>
                     </div>
-                    <div class="sub-section-row">
-                        <a href="1-1/1-1-1.html" class="sub-mode-item"><i class="fas fa-play"></i> 第1節 · 演進歷程</a>
-                        <a href="1-1/1-1-2.html" class="sub-mode-item"><i class="fas fa-play"></i> 第2節 · 夏商周三代的盟替概況</a>
-                    </div>
                 </div>
 
-                <!-- 第2章 西周的封建 -->
+                <!-- 第2節 夏、商、周三代的盥替概況 -->
                 <button class="lesson-btn" data-lesson="lesson2" data-book="1">
-                    <i class="fas fa-crown"></i> 第2章 · 西周的封建
+                    <i class="fas fa-crown"></i> 第2節 · 夏、商、周三代的盥替概況
                 </button>
                 <div class="sub-mode-section" id="book1-lesson2">
                     <div class="sub-mode-grid">
@@ -498,32 +479,9 @@
                         <a href="1-2/mindmap.html" class="sub-mode-item"><i class="fas fa-brain"></i> Mindmap</a>
                         <a href="1-2/notes.html" class="sub-mode-item"><i class="fas fa-book-open"></i> Notes</a>
                     </div>
-                    <div class="sub-section-row">
-                        <a href="1-2/1-2-1.html" class="sub-mode-item"><i class="fas fa-play"></i> 封建制度的內容和作用</a>
-                        <a href="1-2/1-2-2.html" class="sub-mode-item"><i class="fas fa-play"></i> 封建制度與春秋戰國局面形成的關係</a>
-                    </div>
                 </div>
 
-                <!-- 第3章 春秋戰國時期的變局 -->
-                <button class="lesson-btn" data-lesson="lesson3" data-book="1">
-                    <i class="fas fa-chess"></i> 第3章 · 春秋戰國時期的變局
-                </button>
-                <div class="sub-mode-section" id="book1-lesson3">
-                    <div class="sub-mode-grid">
-                        <a href="1-3/flashcard.html" class="sub-mode-item"><i class="fas fa-layer-group"></i> Flashcard</a>
-                        <a href="1-3/test.html" class="sub-mode-item"><i class="fas fa-pencil-alt"></i> Test</a>
-                        <a href="1-3/selfnotes.html" class="sub-mode-item"><i class="fas fa-pen-fancy"></i> Selfnotes</a>
-                        <a href="1-3/mindmap.html" class="sub-mode-item"><i class="fas fa-brain"></i> Mindmap</a>
-                        <a href="1-3/notes.html" class="sub-mode-item"><i class="fas fa-book-open"></i> Notes</a>
-                    </div>
-                    <div class="sub-section-row">
-                        <a href="1-3/1-3-1.html" class="sub-mode-item"><i class="fas fa-play"></i> 第1節 · 春秋戰國時期的兼併戰爭</a>
-                        <a href="1-3/1-3-2.html" class="sub-mode-item"><i class="fas fa-play"></i> 第2節 · 商鞅變法</a>
-                        <a href="1-3/1-3-3.html" class="sub-mode-item"><i class="fas fa-play"></i> 第3節 · 先秦百家爭鳴與時代的關係</a>
-                    </div>
-                </div>
-
-                <!-- 小測 (獨立按鈕) -->
+                <!-- 小測 (獨立按鈕，直接連結) -->
                 <a href="unit1-quiz.html" class="lesson-btn quiz-link">
                     <i class="fas fa-file-pen"></i> **** 小測 ****
                 </a>
@@ -532,7 +490,7 @@
     </div>
 
     <div class="footer-credit">
-        📜 中史 · 單元一：史前至夏商周 | 建構歷史思維與文化素養
+        📜 中史 · 第1章：中華民族與早期國家的起源 | 建構歷史思維與文化素養
     </div>
 </div>
 
@@ -589,11 +547,11 @@
         const podcastBtns = document.querySelectorAll('.podcast-btn');
         const globalAudioContainer = document.getElementById('globalAudioContainer');
         const dynamicAudioPlayer = document.getElementById('dynamicAudioPlayer');
-        
+
         if (globalAudioContainer) {
             globalAudioContainer.style.display = 'none';
         }
-        
+
         podcastBtns.forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
