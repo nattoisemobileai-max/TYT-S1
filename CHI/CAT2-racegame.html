@@ -2,13 +2,18 @@
 <html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1 成語極速賽車 3D</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>成語極速手遊</title>
     <style>
+        * {
+            box-sizing: border-box;
+            touch-action: none; /* 防止手機預設縮放與捲動 */
+        }
         body {
             margin: 0;
+            padding: 0;
             overflow: hidden;
-            background: #000;
+            background: #0b0f19;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             color: white;
             user-select: none;
@@ -18,90 +23,119 @@
             height: 100vh;
             display: block;
         }
-        /* 頂部狀態列 (HUD) */
-        #hud {
+        /* 頂部 HUD 狀態列 (參考截圖) */
+        #hud-top {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
+            top: 15px;
+            left: 15px;
+            right: 15px;
             display: flex;
             justify-content: space-between;
-            font-size: 18px;
-            font-weight: bold;
+            align-items: center;
             z-index: 10;
             pointer-events: none;
         }
-        .hud-panel {
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 8px;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        .badge {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 8px 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
-        /* 答題彈窗 */
-        #quiz-box {
+        /* 底部仿截圖時速錶 */
+        #speedometer {
             position: absolute;
-            bottom: 40px;
+            bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%;
-            max-width: 480px;
-            background: rgba(20, 25, 35, 0.95);
-            border: 2px solid #00d2ff;
+            width: 90px;
+            height: 90px;
+            background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+            border: 3px solid #00d2ff;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+            z-index: 10;
+            pointer-events: none;
+        }
+        #speed-num {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+        }
+        #speed-unit {
+            font-size: 10px;
+            color: #94a3b8;
+        }
+        /* 仿截圖嘅答題彈窗卡片 */
+        #quiz-box {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 400px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid #10b981;
             border-radius: 16px;
-            padding: 20px;
+            padding: 18px;
             box-sizing: border-box;
             display: none;
             z-index: 20;
-            box-shadow: 0 10px 30px rgba(0,210,255,0.4);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+            animation: slideDown 0.3s ease-out;
         }
-        .status-badge {
-            background: #ff3b30;
+        @keyframes slideDown {
+            from { opacity: 0; transform: translate(-50%, -20px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+        .quiz-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .correct-badge {
+            background: #10b981;
             color: white;
-            padding: 4px 12px;
+            padding: 4px 10px;
             border-radius: 6px;
-            font-size: 14px;
-            display: inline-block;
-            margin-bottom: 12px;
+            font-size: 13px;
             font-weight: bold;
+            margin-right: 8px;
+        }
+        .boost-text {
+            font-size: 12px;
+            color: #34d399;
         }
         .question-text {
-            font-size: 17px;
-            margin-bottom: 15px;
+            font-size: 16px;
+            margin-bottom: 14px;
             font-weight: bold;
             line-height: 1.4;
         }
         .option-btn {
             display: block;
             width: 100%;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            background: #2c3e50;
-            border: 1px solid #34495e;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            background: #1e293b;
+            border: 1px solid #334155;
             color: white;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
             text-align: left;
             transition: all 0.2s;
         }
-        .option-btn:hover {
-            background: #00d2ff;
-            color: #000;
-            font-weight: bold;
-        }
-        /* 操作提示 */
-        #controls-tip {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0,0,0,0.6);
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-size: 13px;
-            color: #aaa;
-            pointer-events: none;
+        .option-btn:active {
+            background: #10b981;
+            border-color: #10b981;
         }
     </style>
     <!-- 引入 Three.js -->
@@ -109,119 +143,161 @@
 </head>
 <body>
 
-    <div id="hud">
-        <div class="hud-panel" id="score-display">分數: 0</div>
-        <div class="hud-panel" id="speed-display">速度: 240 km/h</div>
+    <!-- 頂部狀態列 -->
+    <div id="hud-top">
+        <div class="badge" id="score-display">分數: 0</div>
+        <div class="badge" id="level-display">成語挑戰賽</div>
     </div>
 
-    <div id="controls-tip">提示：按 A / D 鍵或 ⬅️ ➡️ 左右切換賽道位置</div>
+    <!-- 3D 畫面容器 -->
     <div id="canvas-container"></div>
 
-    <!-- 答題互動介面 -->
+    <!-- 底部圓形時速錶 (參考截圖) -->
+    <div id="speedometer">
+        <div id="speed-num">180</div>
+        <div id="speed-unit">km/h</div>
+    </div>
+
+    <!-- 答題彈窗 (參考截圖 UI) -->
     <div id="quiz-box">
-        <div id="quiz-status" class="status-badge">⚡ 成語挑戰！</div>
+        <div class="quiz-header">
+            <span class="correct-badge" id="quiz-status-badge">答題中</span>
+            <span class="boost-text" id="boost-desc">答對獲得 +80% 加速！</span>
+        </div>
         <div class="question-text" id="q-text">載入中...</div>
         <div id="options-container"></div>
     </div>
 
 <script>
-    // --- 1. 3D 場景與 F1 賽道初始化 ---
+    // --- 1. 手機直倒 3D 場景初始化 ---
     const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x050510); // 深空藍背景
+    scene.background = new THREE.Color(0x0a0f1d);
+    scene.fog = new THREE.FogExp2(0x0a0f1d, 0.03); // 增加浪漫嘅迷霧/深度感
 
-    // 攝影機 (動感追尾視角)
-    const camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 3.2, -4.5);
+    // 手機直倒攝影機視角
+    const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 3.8, -4.8);
 
-    // 渲染器
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    // 燈光
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    // 質感燈光
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
-    dirLight.position.set(10, 20, -10);
+    const dirLight = new THREE.DirectionalLight(0x00d2ff, 1.2);
+    dirLight.position.set(5, 15, -5);
     scene.add(dirLight);
 
-    // --- 2. 建立具備彎道流線感的正常賽道 ---
-    // 用圓柱曲線（TubeGeometry）或者分段平面模擬彎道賽道
-    const trackWidth = 12;
+    // --- 2. 建立精緻賽道與環境 ---
+    const trackWidth = 10;
     const trackLength = 400;
-    const roadGeo = new THREE.PlaneGeometry(trackWidth, trackLength, 20, 100);
-    const roadMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.8 });
+    const roadGeo = new THREE.PlaneGeometry(trackWidth, trackLength, 15, 80);
+    const roadMat = new THREE.MeshStandardMaterial({ color: 0x161e2e, roughness: 0.7 });
     const road = new THREE.Mesh(roadGeo, roadMat);
     road.rotation.x = -Math.PI / 2;
     scene.add(road);
 
-    // 賽道兩旁紅白邊界石 (Kerbs)
-    const kerbGeo = new THREE.BoxGeometry(0.6, 0.1, trackLength);
-    const kerbMat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+    // 賽道中心虛線
+    const centerLineGeo = new THREE.BoxGeometry(0.15, 0.02, trackLength);
+    const centerLineMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+    const centerLine = new THREE.Mesh(centerLineGeo, centerLineMat);
+    centerLine.position.set(0, 0.02, 0);
+    scene.add(centerLine);
+
+    // 賽道兩旁安全防撞欄 (更有手遊賽車質感)
+    const wallGeo = new THREE.BoxGeometry(0.4, 0.6, trackLength);
+    const wallMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.5 });
     
-    const leftKerb = new THREE.Mesh(kerbGeo, kerbMat);
-    leftKerb.position.set(-trackWidth/2 - 0.3, 0.02, 0);
-    scene.add(leftKerb);
+    const leftWall = new THREE.Mesh(wallGeo, wallMat);
+    leftWall.position.set(-trackWidth/2 - 0.2, 0.3, 0);
+    scene.add(leftWall);
 
-    const rightKerb = new THREE.Mesh(kerbGeo, kerbMat);
-    rightKerb.position.set(trackWidth/2 + 0.3, 0.02, 0);
-    scene.add(rightKerb);
+    const rightWall = new THREE.Mesh(wallGeo, wallMat);
+    rightWall.position.set(trackWidth/2 + 0.2, 0.3, 0);
+    scene.add(rightWall);
 
 
-    // --- 3. 建立精細 F1 賽車模型 ---
+    // --- 3. 升級版 F1 賽車模型 ---
     const f1Group = new THREE.Group();
-    const f1Mat = new THREE.MeshStandardMaterial({ color: 0xff1801, metalness: 0.7, roughness: 0.2 }); //法拉利紅
+    const carPaintMat = new THREE.MeshStandardMaterial({ color: 0x3b82f6, metalness: 0.8, roughness: 0.2 }); // 科技藍車身
 
-    // F1 車身主體 (流線尖頭)
-    const mainBodyGeo = new THREE.BoxGeometry(0.9, 0.3, 2.8);
-    const mainBody = new THREE.Mesh(mainBodyGeo, f1Mat);
-    mainBody.position.y = 0.2;
-    f1Group.add(mainBody);
+    // 主車身
+    const bodyGeo = new THREE.BoxGeometry(0.8, 0.3, 2.6);
+    const carBody = new THREE.Mesh(bodyGeo, carPaintMat);
+    carBody.position.y = 0.2;
+    f1Group.add(carBody);
 
-    // F1 駕駛艙/頭盔
-    const cockpitGeo = new THREE.BoxGeometry(0.4, 0.25, 0.6);
-    const cockpitMat = new THREE.MeshStandardMaterial({ color: 0x111111 });
-    const cockpit = new THREE.Mesh(cockpitGeo, cockpitMat);
+    // 駕駛艙
+    const cockpitMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.9 });
+    const cockpit = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.25, 0.6), cockpitMat);
     cockpit.position.set(0, 0.35, -0.1);
     f1Group.add(cockpit);
 
-    // F1 前翼 (Front Wing)
-    const frontWingGeo = new THREE.BoxGeometry(2.2, 0.08, 0.6);
-    const frontWing = new THREE.Mesh(frontWingGeo, f1Mat);
-    frontWing.position.set(0, 0.08, 1.4);
+    // 前翼
+    const frontWing = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.06, 0.5), carPaintMat);
+    frontWing.position.set(0, 0.06, 1.3);
     f1Group.add(frontWing);
 
-    // F1 後翼 (Rear Wing)
-    const rearWingGeo = new THREE.BoxGeometry(1.8, 0.4, 0.3);
-    const rearWing = new THREE.Mesh(rearWingGeo, f1Mat);
-    rearWing.position.set(0, 0.6, -1.3);
+    // 後翼
+    const rearWing = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.35, 0.3), carPaintMat);
+    rearWing.position.set(0, 0.55, -1.2);
     f1Group.add(rearWing);
 
-    // 車輪 (四個輪)
-    const wheelGeo = new THREE.CylinderGeometry(0.25, 0.25, 0.2, 16);
+    // 車輪
+    const wheelGeo = new THREE.CylinderGeometry(0.22, 0.22, 0.18, 16);
     wheelGeo.rotateZ(Math.PI / 2);
-    const wheelMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.9 });
-
-    const wheelPositions = [
-        [-0.9, 0.25, 1.0],  // 左前
-        [ 0.9, 0.25, 1.0],  // 右前
-        [-0.9, 0.25, -1.0], // 左後
-        [ 0.9, 0.25, -1.0]  // 右後
-    ];
-
-    wheelPositions.forEach(pos => {
-        const wheel = new THREE.Mesh(wheelGeo, wheelMat);
-        wheel.position.set(...pos);
-        f1Group.add(wheel);
+    const wheelMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.9 });
+    [[ -0.85, 0.22, 0.9 ], [ 0.85, 0.22, 0.9 ], [ -0.85, 0.22, -0.9 ], [ 0.85, 0.22, -0.9 ]].forEach(pos => {
+        const w = new THREE.Mesh(wheelGeo, wheelMat);
+        w.position.set(...pos);
+        f1Group.add(w);
     });
 
-    f1Group.position.set(0, 0, 0);
     scene.add(f1Group);
 
 
-    // --- 4. 遊戲邏輯與鍵盤左右移動控制 ---
+    // --- 4. 手機 Touch 觸控左右滑動控制 ---
+    let targetX = 0;
+    const maxLaneX = 3.8;
+    let isDragging = false;
+    let startTouchX = 0;
+    let initialCarX = 0;
+
+    window.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startTouchX = e.touches[0].clientX;
+        initialCarX = targetX;
+    });
+
+    window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const currentTouchX = e.touches[0].clientX;
+        const diffX = (currentTouchX - startTouchX) * 0.015; // 靈敏度系數
+        targetX = Math.max(-maxLaneX, Math.min(maxLaneX, initialCarX + diffX));
+    });
+
+    window.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+
+    // 同時支援電腦滑鼠拖曳測試
+    window.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startTouchX = e.clientX;
+        initialCarX = targetX;
+    });
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const diffX = (e.clientX - startTouchX) * 0.015;
+        targetX = Math.max(-maxLaneX, Math.min(maxLaneX, initialCarX + diffX));
+    });
+    window.addEventListener('mouseup', () => { isDragging = false; });
+
+
+    // --- 5. 遊戲題庫與邏輯 ---
     const questions = [
         {
             q: "以下邊個成語嘅寫法係「正確」嘅？",
@@ -240,36 +316,21 @@
         }
     ];
 
-    let currentSpeed = 0.6;
+    let currentSpeed = 0.5;
+    let displaySpeedNum = 180;
     let score = 0;
     let isPaused = false;
     let currentQIndex = 0;
-    
-    // 車輛左右移動目標位置
-    let targetX = 0;
-    const maxLaneX = 4.5;
-
-    // 監聽鍵盤左右控制 (A/D 或 左右方向鍵)
-    window.addEventListener('keydown', (e) => {
-        if (isPaused) return;
-        if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
-            targetX = Math.min(targetX + 2.5, maxLaneX); // 向左移
-        }
-        if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-            targetX = Math.max(targetX - 2.5, -maxLaneX); // 向右移
-        }
-    });
 
     const quizBox = document.getElementById('quiz-box');
     const qText = document.getElementById('q-text');
     const optionsContainer = document.getElementById('options-container');
     const scoreDisplay = document.getElementById('score-display');
-    const speedDisplay = document.getElementById('speed-display');
+    const speedNumElem = document.getElementById('speed-num');
 
     function triggerQuiz() {
         isPaused = true;
-        currentSpeed = 0.15; // 答題時減速
-        speedDisplay.innerText = "速度: 120 km/h (思考中)";
+        currentSpeed = 0.15;
         
         const q = questions[currentQIndex];
         qText.innerText = q.q;
@@ -290,27 +351,29 @@
         quizBox.style.display = 'none';
         isPaused = false;
         
+        const badge = document.getElementById('quiz-status-badge');
+        const boostText = document.getElementById('boost-desc');
+
         if (isCorrect) {
             score += 100;
-            currentSpeed = 1.5; // 答對爆發加速！
-            speedDisplay.innerText = "加速衝刺！ 🚀 320 km/h";
-            document.getElementById('quiz-status').innerText = "答對！+80% 加速";
-            document.getElementById('quiz-status').style.background = "#28a745";
+            currentSpeed = 1.4; // 答對衝刺
+            badge.innerText = "答對！";
+            badge.style.background = "#10b981";
+            boostText.innerText = "+80% 加速衝刺中！";
         } else {
-            currentSpeed = 0.3;
-            speedDisplay.innerText = "答錯減速 🐢 150 km/h";
-            document.getElementById('quiz-status').innerText = "哎呀！答錯咗";
-            document.getElementById('quiz-status').style.background = "#dc3545";
+            currentSpeed = 0.25;
+            badge.innerText = "答錯";
+            badge.style.background = "#ef4444";
+            boostText.innerText = "減速中，小心！";
         }
 
         scoreDisplay.innerText = "分數: " + score;
         currentQIndex = (currentQIndex + 1) % questions.length;
 
-        // 5秒後自動下一條題目
         setTimeout(triggerQuiz, 5000);
     }
 
-    // --- 5. 動畫循環與賽道彎道模擬 ---
+    // --- 6. 動畫循環 ---
     let clock = new THREE.Clock();
 
     function animate() {
@@ -318,40 +381,41 @@
         let time = clock.getElapsedTime();
 
         if (!isPaused) {
-            // 賽道滾動向前
             road.position.z -= currentSpeed;
             if (road.position.z < -200) {
                 road.position.z = 0;
             }
-
-            // 讓賽道產生輕微的左右S形彎道弧度，提升真實感
-            road.position.x = Math.sin(time * 0.5) * 1.5;
-            leftKerb.position.x = road.position.x - trackWidth/2 - 0.3;
-            rightKerb.position.x = road.position.x + trackWidth/2 - 0.3;
+            // 賽道微彎動態
+            road.position.x = Math.sin(time * 0.4) * 1.2;
+            leftWall.position.x = road.position.x - trackWidth/2 - 0.2;
+            rightWall.position.x = road.position.x + trackWidth/2 - 0.2;
         }
 
-        // 車輛平滑左右移動 (Lerp) 配合過彎傾側效果
-        f1Group.position.x += (targetX - f1Group.position.x) * 0.1;
-        // 轉彎時車身輕微傾側（Bank angle）
-        f1Group.rotation.z = (f1Group.position.x - targetX) * 0.1;
+        // 車輛平滑跟隨手指滑動位置
+        f1Group.position.x += (targetX - f1Group.position.x) * 0.12;
+        f1Group.rotation.z = (f1Group.position.x - targetX) * 0.12; // 轉彎傾側
 
-        // 相機同步跟隨車輛
-        camera.position.x = f1Group.position.x * 0.5;
-        camera.lookAt(f1Group.position.x, f1Group.position.y + 0.5, f1Group.position.y + 3);
+        // 時速錶數值動態跳動
+        let targetKmH = Math.round(currentSpeed * 280);
+        displaySpeedNum += (targetKmH - displaySpeedNum) * 0.1;
+        speedNumElem.innerText = Math.round(displaySpeedNum);
+
+        // 相機動感追尾
+        camera.position.x = f1Group.position.x * 0.4;
+        camera.lookAt(f1Group.position.x, 0.4, 3);
 
         renderer.render(scene, camera);
     }
 
     animate();
 
-    // 視窗自動適應
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // 3秒後彈出第一條成語題
+    // 3秒後彈出第一條題
     setTimeout(triggerQuiz, 3000);
 </script>
 
