@@ -3,175 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>成語極速賽車</title>
+    <title>成語極速賽車 3D</title>
     <style>
         body {
             margin: 0;
-            padding: 0;
-            background: #1a1a1a;
-            color: #fff;
+            overflow: hidden;
+            background: #000;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            color: white;
+            user-select: none;
+        }
+        #canvas-container {
+            width: 100vw;
             height: 100vh;
-            overflow: hidden;
+            display: block;
         }
-        #game-container {
-            width: 400px;
-            height: 600px;
-            background: #333;
-            border: 4px solid #555;
-            position: relative;
-            overflow: hidden;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-        }
-        /* 賽道背景 */
-        .road {
-            width: 100%;
-            height: 200%;
-            background: repeating-linear-gradient(
-                to bottom,
-                #444 0px,
-                #444 40px,
-                #555 40px,
-                #555 80px
-            );
-            position: absolute;
-            top: -100%;
-            animation: moveRoad 1s linear infinite;
-        }
-        @keyframes moveRoad {
-            0% { top: -100%; }
-            100% { top: 0%; }
-        }
-        /* 玩家車輛 */
-        #car {
-            width: 50px;
-            height: 90px;
-            background: #ff3b30;
-            position: absolute;
-            bottom: 30px;
-            left: 175px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        /* 頂部狀態列 */
+        /* 頂部狀態列 (HUD) */
         #hud {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
+            top: 20px;
+            left: 20px;
+            right: 20px;
             display: flex;
             justify-content: space-between;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: bold;
             z-index: 10;
-            background: rgba(0,0,0,0.6);
-            padding: 8px 12px;
-            border-radius: 6px;
+            pointer-events: none;
         }
-        /* 問答彈窗 */
+        .hud-panel {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        /* 答題彈窗 (仿熱門遊戲問答設計) */
         #quiz-box {
             position: absolute;
-            bottom: 0;
-            width: 100%;
-            background: rgba(20, 20, 20, 0.95);
-            border-top: 3px solid #007aff;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 480px;
+            background: rgba(20, 25, 35, 0.95);
+            border: 2px solid #00d2ff;
+            border-radius: 16px;
             padding: 20px;
             box-sizing: border-box;
             display: none;
             z-index: 20;
-            border-radius: 16px 16px 0 0;
+            box-shadow: 0 10px 30px rgba(0,210,255,0.4);
+        }
+        .status-badge {
+            background: #ff3b30;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+            font-weight: bold;
         }
         .question-text {
-            font-size: 16px;
+            font-size: 17px;
             margin-bottom: 15px;
             font-weight: bold;
+            line-height: 1.4;
         }
         .option-btn {
             display: block;
             width: 100%;
-            padding: 10px;
-            margin-bottom: 8px;
-            background: #2c2c2e;
-            border: 1px solid #3a3a3c;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: #2c3e50;
+            border: 1px solid #34495e;
             color: white;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 15px;
+            font-size: 16px;
             text-align: left;
-            transition: background 0.2s;
+            transition: all 0.2s;
         }
         .option-btn:hover {
-            background: #3a3a3c;
+            background: #00d2ff;
+            color: #000;
+            font-weight: bold;
         }
     </style>
+    <!-- 直接透過 CDN 引入 Three.js，免安裝任何 plugin -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-    <h2>🚗 成語極速賽車 (2D Prototype)</h2>
-    <div id="game-container">
-        <div class="road" id="road"></div>
-        
-        <div id="hud">
-            <span id="score-text">分數: 0</span>
-            <span id="speed-text">速度: 120 km/h</span>
-        </div>
+    <div id="hud">
+        <div class="hud-panel" id="score-display">分數: 0</div>
+        <div class="hud-panel" id="speed-display">速度: 120 km/h</div>
+    </div>
 
-        <div id="car">🏎️</div>
+    <div id="canvas-container"></div>
 
-        <!-- 問答對話框 -->
-        <div id="quiz-box">
-            <div class="question-text" id="q-text">題目載入中...</div>
-            <div id="options-container"></div>
-        </div>
+    <!-- 答題互動介面 -->
+    <div id="quiz-box">
+        <div id="quiz-status" class="status-badge">⚡ 成語挑戰！</div>
+        <div class="question-text" id="q-text">載入中...</div>
+        <div id="options-container"></div>
     </div>
 
 <script>
+    // --- 1. Three.js 3D 場景初始化 ---
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0b0b1a); // 深色科幻夜空背景
+
+    // 攝影機 (車尾視角)
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.set(0, 3.5, -5);
+    camera.lookAt(0, 0.8, 4);
+
+    // 渲染器
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // 燈光
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    dirLight.position.set(5, 10, -5);
+    scene.add(dirLight);
+
+    // --- 2. 建立 3D 賽道與跑車 ---
+    // 賽道地M
+    const roadGeo = new THREE.PlaneGeometry(10, 300);
+    const roadMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1a, roughness: 0.9 });
+    const road = new THREE.Mesh(roadGeo, roadMat);
+    road.rotation.x = -Math.PI / 2;
+    scene.add(road);
+
+    // 賽道兩旁裝飾線 (增加速度感)
+    const lineGeo = new THREE.BoxGeometry(0.2, 0.1, 300);
+    const lineMat = new THREE.MeshBasicMaterial({ color: 0x00d2ff });
+    const leftLine = new THREE.Mesh(lineGeo, lineMat);
+    leftLine.position.set(-4.8, 0.05, 0);
+    scene.add(leftLine);
+
+    const rightLine = new THREE.Mesh(lineGeo, lineMat);
+    rightLine.position.set(4.8, 0.05, 0);
+    scene.add(rightLine);
+
+    // 玩家 3D 賽車模型 (簡易組合)
+    const carGroup = new THREE.Group();
+    
+    // 車身
+    const bodyGeo = new THREE.BoxGeometry(1.6, 0.5, 2.8);
+    const bodyMat = new THREE.MeshStandardMaterial({ color: 0xff2a2a, metalness: 0.6, roughness: 0.3 });
+    const carBody = new THREE.Mesh(bodyGeo, bodyMat);
+    carBody.position.y = 0.3;
+    carGroup.add(carBody);
+
+    // 車頂/擋風玻璃
+    const roofGeo = new THREE.BoxGeometry(1.2, 0.4, 1.4);
+    const roofMat = new THREE.MeshStandardMaterial({ color: 0x111111, metalness: 0.9 });
+    const carRoof = new THREE.Mesh(roofGeo, roofMat);
+    carRoof.position.set(0, 0.65, -0.1);
+    carGroup.add(carRoof);
+
+    carGroup.position.set(0, 0, 0);
+    scene.add(carGroup);
+
+    // --- 3. 成語題庫與遊戲邏輯 ---
     const questions = [
         {
-            q: "下列哪一個成語的寫法是**正確**的？",
+            q: "以下邊個成語嘅寫法係「正確」嘅？",
             options: ["A. 走投無路", "B. 走頭無路", "C. 走途無路"],
             answer: 0
         },
         {
-            q: "「刻舟求劍」比喻做事方法怎麼樣？",
-            options: ["A. 機智靈活", "B. 墨守成規、不知變通", "C. 高瞻遠矚"],
+            q: "「刻舟求劍」比喻一個人處事有咩問題？",
+            options: ["A. 過度急躁", "B. 墨守成規、不知變通", "C. 盲目自信"],
             answer: 1
         },
         {
-            q: "以下邊個成語係形容做事專心致志？",
-            options: ["A. 三心兩意", "B. 心猿意馬", "C. 全神貫注"],
+            q: "以下邊個成語係形容做事專心致志，全神貫注？",
+            options: ["A. 心猿意馬", "B. 三心兩意", "C. 專心致志"],
             answer: 2
         }
     ];
 
+    let currentSpeed = 0.4;
     let score = 0;
+    let isPaused = false;
     let currentQIndex = 0;
-    const road = document.getElementById('road');
+
     const quizBox = document.getElementById('quiz-box');
     const qText = document.getElementById('q-text');
     const optionsContainer = document.getElementById('options-container');
-    const scoreText = document.getElementById('score-text');
-    const speedText = document.getElementById('speed-text');
+    const scoreDisplay = document.getElementById('score-display');
+    const speedDisplay = document.getElementById('speed-display');
 
-    // 設定賽道速度
-    function setSpeed(duration) {
-        road.style.animationDuration = duration + 's';
-    }
-
-    // 隨機觸發成語題目
     function triggerQuiz() {
-        setSpeed(3); // 減慢速度等玩家答題
-        speedText.innerText = "速度: 60 km/h (思考中)";
+        isPaused = true;
+        currentSpeed = 0.08; // 答題時慢速行駛
+        speedDisplay.innerText = "速度: 60 km/h (思考中)";
         
         const q = questions[currentQIndex];
         qText.innerText = q.q;
@@ -188,30 +224,59 @@
         quizBox.style.display = 'block';
     }
 
-    // 檢查答案
     function checkAnswer(isCorrect) {
         quizBox.style.display = 'none';
+        isPaused = false;
         
         if (isCorrect) {
             score += 100;
-            speedText.innerText = "加速中！ 🚀 180 km/h";
-            setSpeed(0.4); // 爆發高速
-            alert("答對！獲得 +80% 加速衝刺！");
+            currentSpeed = 1.2; // 答對爆發加速！
+            speedDisplay.innerText = "加速中！ 🚀 180 km/h";
+            document.getElementById('quiz-status').innerText = "答對！+80% 加速";
+            document.getElementById('quiz-status').style.background = "#28a745";
         } else {
-            speedText.innerText = "答錯減速！ 🐢 80 km/h";
-            setSpeed(2);
-            alert("哎呀！答錯咗，架車慢咗落嚟！");
+            currentSpeed = 0.2;
+            speedDisplay.innerText = "答錯減速 🐢 80 km/h";
+            document.getElementById('quiz-status').innerText = "哎呀！答錯咗";
+            document.getElementById('quiz-status').style.background = "#dc3545";
         }
 
-        scoreText.innerText = "分數: " + score;
+        scoreDisplay.innerText = "分數: " + score;
         currentQIndex = (currentQIndex + 1) % questions.length;
 
-        // 5秒後再出下一條題
-        setTimeout(triggerQuiz, 4000);
+        // 5秒後自動觸發下一條題目
+        setTimeout(triggerQuiz, 5000);
     }
 
-    // 遊戲開始後 2 秒彈出第一條題
-    setTimeout(triggerQuiz, 2000);
+    // --- 4. 動畫渲染循環 ---
+    function animate() {
+        requestAnimationFrame(animate);
+
+        if (!isPaused) {
+            // 賽道向後移動製造前進感
+            road.position.z -= currentSpeed;
+            if (road.position.z < -100) {
+                road.position.z = 0;
+            }
+            
+            // 輕微車身晃動特效
+            carGroup.position.x = Math.sin(Date.now() * 0.003) * 0.05;
+        }
+
+        renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // 視窗自動適應大小
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // 遊戲開始後 3 秒彈出第一條題
+    setTimeout(triggerQuiz, 3000);
 </script>
 
 </body>
