@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多科目中英單字朗讀與溫習產生器</title>
+  <style>
+    :root {
+      --bg-outer: #fdf6e7;
+      --bg-card: #fffdf8;
+      --border-dark: #4a3520;
+      --accent-yellow: #f4b41a;
+      --accent-blue: #4a90e2;
+      --accent-green: #4caf50;
+      --accent-red: #e05348;
+      --text-main: #3b2818;
+      --text-muted: #7a6552;
+      --highlight-bg: #fff3cd;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: "PingFang HK", "Microsoft JhengHei", "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: var(--bg-outer);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    /* 主容器仿照圖片卡片風格 */
+    .app-container {
+      width: 100%;
+      max-width: 1120px;
+      background: var(--bg-card);
+      border: 4px solid var(--border-dark);
+      border-radius: 20px;
+      box-shadow: 0 8px 0 var(--border-dark);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* 頂部標題列 */
+    .header {
+      text-align: center;
+      border-bottom: 2px dashed #d6c5b3;
+      padding-bottom: 14px;
+    }
+
+    .header h1 {
+      margin: 0 0 6px 0;
+      font-size: 1.6rem;
+      color: #c84b31;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .header p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* 雙欄主體佈局 */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 850px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 左側控制與輸入區 */
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .section-label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    /* 科目按鈕列 */
+    .subject-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .subject-btn {
+      padding: 10px 4px;
+      border: 2px solid var(--border-dark);
+      border-radius: 10px;
+      background: #fff;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-main);
+    }
+
+    .subject-btn:hover {
+      background: #fef0cd;
+    }
+
+    .subject-btn.active {
+      background: var(--accent-yellow);
+      box-shadow: 0 3px 0 var(--border-dark);
+      transform: translateY(-2px);
+    }
+
+    /* 輸入框樣式 */
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2px solid var(--border-dark);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      background: #fff;
+      color: var(--text-main);
+    }
+
+    input[type="text"]:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+    }
+
+    textarea {
+      height: 190px;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .helper-text {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-top: 4px;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border: 2px solid var(--border-dark);
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 3px 0 var(--border-dark);
+      transition: transform 0.1s;
+    }
+
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--border-dark);
+    }
+
+    .btn-primary {
+      background: var(--accent-yellow);
+      color: var(--text-main);
+      flex: 1;
+    }
+
+    .btn-secondary {
+      background: #f3ece1;
+      color: var(--text-main);
+    }
+
+    .btn-save {
+      background: var(--accent-green);
+      color: #fff;
+    }
+
+    /* 已儲存 Topic 歷史選單 */
+    .saved-topics-box {
+      background: #f7efe2;
+      border: 2px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .saved-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    /* 右側單字卡清單區 */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      border: 2px solid var(--border-dark);
+      border-radius: 14px;
+      background: #faf4e8;
+      padding: 14px;
+      height: 620px;
+    }
+
+    .list-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e3d6c3;
+    }
+
+    .badge-subject {
+      background: var(--border-dark);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: bold;
+    }
+
+    .word-list-container {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+    }
+
+    /* 單字卡片設計 */
+    .word-card {
+      background: #fff;
+      border: 2px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .word-card.speaking {
+      background: var(--highlight-bg);
+      border-color: #d97706;
+      box-shadow: 0 0 0 3px rgba(244, 180, 26, 0.35);
+    }
+
+    .word-index {
+      background: #f3ece1;
+      border: 1.5px solid var(--border-dark);
+      border-radius: 8px;
+      min-width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .word-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .word-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .word-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #b83b24;
+    }
+
+    .phonetic {
+      font-size: 0.85rem;
+      color: #666;
+      font-weight: normal;
+      margin-left: 6px;
+    }
+
+    .audio-btns {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .mini-btn {
+      padding: 4px 8px;
+      border: 1.5px solid var(--border-dark);
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .mini-btn:hover {
+      background: #f0e6d6;
+    }
+
+    .mini-btn.uk { background: #e8f1fc; color: #1d4ed8; }
+    .mini-btn.hk { background: #fef3c7; color: #b45309; }
+    .mini-btn.cambridge { background: #e6f4ea; color: #137333; text-decoration: none; }
+
+    /* 可直接點擊修改的中英解釋欄位 */
+    .editable-field {
+      font-size: 0.92rem;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px dashed transparent;
+      cursor: text;
+    }
+
+    .editable-field:hover {
+      border-color: #bcaaa4;
+      background: #fcfaf5;
+    }
+
+    .editable-field:focus {
+      outline: none;
+      border: 1px solid var(--accent-blue);
+      background: #fff;
+    }
+
+    .zh-meaning {
+      font-weight: 700;
+      color: #2c3e50;
+    }
+
+    .en-meaning {
+      font-size: 0.86rem;
+      color: #555;
+      line-height: 1.4;
+    }
+
+    .delete-word-btn {
+      background: none;
+      border: none;
+      color: #999;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 2px 6px;
+    }
+
+    .delete-word-btn:hover {
+      color: var(--accent-red);
+    }
+
+    /* 底部連續朗讀控制列（含 Play / Pause / Stop） */
+    .player-bar {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 2px solid #e3d6c3;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .player-controls {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-play { background: var(--accent-yellow); }
+    .btn-pause { background: var(--accent-blue); color: #fff; }
+    .btn-stop { background: var(--accent-red); color: #fff; }
+
+    .status-bar {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #137333;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <!-- 頂部標題 -->
+  <div class="header">
+    <h1>📚 多科目中英單字卡與雙語朗讀器</h1>
+    <p>① 選擇科目並輸入 Topic &rarr; ② 批量貼上單字（自動抓取中英解釋） &rarr; ③ 支援 UK 英文及廣東話朗讀（可暫停 / 停止）</p>
+  </div>
+
+  <div class="main-grid">
+    <!-- 左側輸入與設定區 -->
+    <div class="left-panel">
+      <div>
+        <span class="section-label">1. 選擇科目 (Subject)</span>
+        <div class="subject-tabs" id="subjectTabs">
+          <button class="subject-btn active" data-subject="English">English</button>
+          <button class="subject-btn" data-subject="Math">Math</button>
+          <button class="subject-btn" data-subject="History">History</button>
+          <button class="subject-btn" data-subject="Science">Science</button>
+          <button class="subject-btn" data-subject="Geo">Geo</button>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px;">
+        <div>
+          <span class="section-label">2. 主題名稱 (Topic) *</span>
+          <input type="text" id="topicInput" placeholder="例如：Unit 3 Ecosystem / Algebra">
+        </div>
+        <div>
+          <span class="section-label">範圍 / 備註 (選填)</span>
+          <input type="text" id="scopeInput" placeholder="例如：Ch.4 P.12-15">
+        </div>
+      </div>
+
+      <div>
+        <span class="section-label">3. 批量貼上單字 (一次可貼多個，一行一個或逗號分隔)</span>
+        <textarea id="bulkInput" placeholder="請貼上英文單字，例如：&#10;photosynthesis&#10;equation&#10;revolution&#10;peninsula&#10;或者直接貼上：&#10;habitat 棲息地"></textarea>
+        <div class="helper-text">
+          支援自動查詢 <b>英文解釋</b> 與 <b>繁體中文解釋</b>，並附上 <b>Cambridge Dictionary</b> 連結。
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn btn-primary" id="generateBtn">✨ 辨識並生成卡片</button>
+        <button class="btn btn-secondary" id="sampleBtn">📋 匯入範例</button>
+        <button class="btn btn-save" id="saveTopicBtn">💾 儲存到此科目</button>
+      </div>
+
+      <div class="status-bar" id="statusBar"></div>
+
+      <!-- 已儲存的 Topic 記錄 -->
+      <div class="saved-topics-box">
+        <span class="section-label" style="margin-bottom: 4px;">📂 已儲存的溫習清單 (<span id="currentSubjectLabel">English</span>)</span>
+        <div class="saved-row">
+          <select id="savedTopicsSelect">
+            <option value="">-- 選擇已儲存的 Topic 載入 --</option>
+          </select>
+          <button class="btn btn-secondary" id="loadTopicBtn" style="padding: 6px 12px;">載入</button>
+          <button class="btn btn-stop" id="deleteTopicBtn" style="padding: 6px 12px;">刪除</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右側單字清單與朗讀區 -->
+    <div class="right-panel">
+      <div class="list-header">
+        <div>
+          <strong>字詞清單（點擊文字可直接修改）</strong>
+          <div style="font-size: 0.8rem; color: var(--text-muted);" id="displayTopicTitle">尚未設定 Topic</div>
+        </div>
+        <span class="badge-subject" id="badgeSubject">English</span>
+      </div>
+
+      <div class="word-list-container" id="wordListContainer">
+        <div style="text-align: center; color: #999; margin-top: 120px;">
+          請在左側貼上單字並點擊「✨ 辨識並生成卡片」
+        </div>
+      </div>
+
+      <!-- 朗讀播放器（含 Pause / Stop） -->
+      <div class="player-bar">
+        <div style="font-weight: 700; font-size: 0.9rem;">
+          共 <span id="wordCount">0</span> 個單字
+        </div>
+        <div class="player-controls">
+          <button class="btn btn-play" id="playAllBtn">▶ 全部連續朗讀 (英+粵)</button>
+          <button class="btn btn-pause" id="pauseBtn">⏸ 暫停 / 繼續</button>
+          <button class="btn btn-stop" id="stopBtn">⏹ 停止</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 狀態管理
+  let currentSubject = 'English';
+  let wordsData = []; // { word, phonetic, enDef, zhDef }
+  let isPlayingAll = false;
+  let isPaused = false;
+  let currentPlayIndex = 0;
+
+  // DOM 元素
+  const subjectBtns = document.querySelectorAll('.subject-btn');
+  const topicInput = document.getElementById('topicInput');
+  const scopeInput = document.getElementById('scopeInput');
+  const bulkInput = document.getElementById('bulkInput');
+  const generateBtn = document.getElementById('generateBtn');
+  const sampleBtn = document.getElementById('sampleBtn');
+  const saveTopicBtn = document.getElementById('saveTopicBtn');
+  const statusBar = document.getElementById('statusBar');
+  const wordListContainer = document.getElementById('wordListContainer');
+  const wordCountEl = document.getElementById('wordCount');
+  const badgeSubject = document.getElementById('badgeSubject');
+  const currentSubjectLabel = document.getElementById('currentSubjectLabel');
+  const displayTopicTitle = document.getElementById('displayTopicTitle');
+  const savedTopicsSelect = document.getElementById('savedTopicsSelect');
+  const loadTopicBtn = document.getElementById('loadTopicBtn');
+  const deleteTopicBtn = document.getElementById('deleteTopicBtn');
+
+  const playAllBtn = document.getElementById('playAllBtn');
+  const pauseBtn = document.getElementById('pauseBtn');
+  const stopBtn = document.getElementById('stopBtn');
+
+  // 初始化載入已儲存清單
+  updateSavedTopicsDropdown();
+
+  // 1. 切換科目
+  subjectBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      subjectBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentSubject = btn.dataset.subject;
+      badgeSubject.textContent = currentSubject;
+      currentSubjectLabel.textContent = currentSubject;
+      updateSavedTopicsDropdown();
+    });
+  });
+
+  // 2. 匯入各科目範例單字
+  const subjectSamples = {
+    English: "eloquent\nmeticulous\nambiguous\nresilience\npragmatic",
+    Math: "hypotenuse\nquadratic\nperpendicular\ncoefficient\ninteger",
+    History: "sovereignty\nindustrialization\narmistice\ndynasty\ncolonization",
+    Science: "photosynthesis\ncatalyst\nequilibrium\nchromosome\noxidation",
+    Geo: "peninsula\ntectonic\nprecipitation\nerosion\narchipelago"
+  };
+
+  sampleBtn.addEventListener('click', () => {
+    bulkInput.value = subjectSamples[currentSubject] || subjectSamples.English;
+    if (!topicInput.value.trim()) {
+      topicInput.value = `${currentSubject} Core Vocabulary`;
+    }
+    statusBar.textContent = `已載入 ${currentSubject} 範例單字，請按「辨識並生成卡片」。`;
+  });
+
+  // 3. 解析輸入文字並查詢中英文解釋
+  generateBtn.addEventListener('click', async () => {
+    const rawText = bulkInput.value.trim();
+    if (!rawText) {
+      alert("請先輸入或貼上英文單字！");
+      return;
+    }
+
+    stopSpeech();
+    generateBtn.disabled = true;
+    generateBtn.textContent = "⏳ 正在查詢中英解釋...";
+    statusBar.textContent = "正在從詞典庫獲取英文與繁體中文解釋，請稍候...";
+
+    // 支援換行或逗號分隔
+    const lines = rawText.split(/[\n,，]+/).map(s => s.trim()).filter(Boolean);
+    const parsedItems = [];
+
+    for (let line of lines) {
+      // 去除開頭編號如 "1. "
+      line = line.replace(/^\d+[\.\)、]\s*/, '');
+      // 檢查是否已經自帶中文 (例如: "apple 蘋果" 或 "蘋果 apple")
+      const matchEnZh = line.match(/^([a-zA-Z\s\-']+?)\s+([^\x00-\x7F].*)$/);
+      const matchZhEn = line.match(/^([^\x00-\x7F].*?)\s+([a-zA-Z\s\-']+)$/);
+
+      if (matchEnZh) {
+        parsedItems.push({ word: matchEnZh[1].trim(), presetZh: matchEnZh[2].trim() });
+      } else if (matchZhEn) {
+        parsedItems.push({ word: matchZhEn[2].trim(), presetZh: matchZhEn[1].trim() });
+      } else {
+        parsedItems.push({ word: line.trim(), presetZh: "" });
+      }
+    }
+
+    const newWordsData = [];
+    for (let i = 0; i < parsedItems.length; i++) {
+      const item = parsedItems[i];
+      statusBar.textContent = `正在處理 (${i + 1}/${parsedItems.length}): ${item.word}...`;
+      const details = await fetchWordDetails(item.word, item.presetZh);
+      newWordsData.push(details);
+    }
+
+    wordsData = newWordsData;
+    renderWordCards();
+    updateHeaderDisplay();
+
+    generateBtn.disabled = false;
+    generateBtn.textContent = "✨ 辨識並生成卡片";
+    statusBar.textContent = `✓ 已成功辨識並生成 ${wordsData.length} 個單字卡！`;
+  });
+
+  // 查詢英文解釋 (Free Dictionary API) 與 繁體中文翻譯 (MyMemory API)
+  async function fetchWordDetails(word, presetZh) {
+    let phonetic = "";
+    let enDef = "Click to add English definition...";
+    let zhDef = presetZh || "";
+
+    // 1) 抓取英文釋義與音標
+    try {
+      const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+      if (res.ok) {
+        const data = await res.json();
+        const entry = data[0];
+        phonetic = entry.phonetic || (entry.phonetics.find(p => p.text)?.text) || "";
+        const meaning = entry.meanings[0];
+        if (meaning && meaning.definitions[0]) {
+          enDef = `(${meaning.partOfSpeech}) ${meaning.definitions[0].definition}`;
+        }
+      }
+    } catch (e) {
+      console.warn("Dictionary fetch failed for:", word);
+    }
+
+    // 2) 若無預設中文，抓取繁體中文解釋
+    if (!zhDef) {
+      try {
+        const transRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|zh-TW`);
+        if (transRes.ok) {
+          const transData = await transRes.json();
+          if (transData.responseData && transData.responseData.translatedText) {
+            zhDef = transData.responseData.translatedText;
+          }
+        }
+      } catch (e) {
+        zhDef = "（請點擊此處手動補充中文解釋）";
+      }
+    }
+
+    return {
+      word,
+      phonetic,
+      enDef,
+      zhDef: zhDef || "（請點擊補充中文）"
+    };
+  }
+
+  // 4. 渲染右側單字卡
+  function renderWordCards() {
+    wordCountEl.textContent = wordsData.length;
+    if (wordsData.length === 0) {
+      wordListContainer.innerHTML = `<div style="text-align: center; color: #999; margin-top: 120px;">目前清單沒有單字</div>`;
+      return;
+    }
+
+    wordListContainer.innerHTML = "";
+    wordsData.forEach((item, index) => {
+      // Cambridge Dictionary 英漢雙解官方查詢網址
+      const cambridgeUrl = `https://dictionary.cambridge.org/dictionary/english-chinese-traditional/${encodeURIComponent(item.word.toLowerCase().replace(/\s+/g, '-'))}`;
+
+      const card = document.createElement('div');
+      card.className = 'word-card';
+      card.id = `card-${index}`;
+      card.innerHTML = `
+        <div class="word-index">${index + 1}</div>
+        <div class="word-content">
+          <div class="word-top-row">
+            <div>
+              <span class="word-title" contenteditable="true" onblur="updateWordField(${index}, 'word', this.innerText)">${escapeHtml(item.word)}</span>
+              <span class="phonetic">${escapeHtml(item.phonetic)}</span>
+            </div>
+            <div class="audio-btns">
+              <button class="mini-btn uk" onclick="speakSingle('${escapeQuotes(item.word)}', 'en-GB', ${index})" title="British English 發音">🇬🇧 UK 英文</button>
+              <button class="mini-btn hk" onclick="speakSingle('${escapeQuotes(item.zhDef)}', 'zh-HK', ${index})" title="廣東話發音">🇭🇰 廣東話</button>
+              <a class="mini-btn cambridge" href="${cambridgeUrl}" target="_blank" rel="noopener noreferrer" title="開啟劍橋詞典查看詳細解釋">📖 Cambridge</a>
+            </div>
+          </div>
+          <div class="editable-field zh-meaning" contenteditable="true" onblur="updateWordField(${index}, 'zhDef', this.innerText)">${escapeHtml(item.zhDef)}</div>
+          <div class="editable-field en-meaning" contenteditable="true" onblur="updateWordField(${index}, 'enDef', this.innerText)">${escapeHtml(item.enDef)}</div>
+        </div>
+        <button class="delete-word-btn" onclick="deleteWord(${index})" title="刪除此單字">✕</button>
+      `;
+      wordListContainer.appendChild(card);
+    });
+  }
+
+  function updateWordField(index, field, value) {
+    if (wordsData[index]) {
+      wordsData[index][field] = value.trim();
+    }
+  }
+
+  function deleteWord(index) {
+    stopSpeech();
+    wordsData.splice(index, 1);
+    renderWordCards();
+  }
+
+  function updateHeaderDisplay() {
+    const topic = topicInput.value.trim() || "未命名 Topic";
+    const scope = scopeInput.value.trim();
+    displayTopicTitle.textContent = scope ? `${topic} (${scope})` : topic;
+  }
+
+  // 5. 語音朗讀功能（支援 British Accent `en-GB`、廣東話 `zh-HK`、Pause 與 Stop）
+  function getBestVoice(langCode) {
+    const voices = window.speechSynthesis.getVoices();
+    if (langCode === 'en-GB') {
+      return voices.find(v => v.lang === 'en-GB' && v.name.includes('Google')) ||
+             voices.find(v => v.lang === 'en-GB' || v.lang === 'en_GB') ||
+             voices.find(v => v.lang.startsWith('en'));
+    } else if (langCode === 'zh-HK') {
+      return voices.find(v => v.lang === 'zh-HK' || v.lang === 'zh_HK') ||
+             voices.find(v => v.name.includes('Cantonese') || v.name.includes('Hong Kong')) ||
+             voices.find(v => v.lang.startsWith('zh'));
+    }
+    return null;
+  }
+
+  // 確保瀏覽器載入語音包
+  window.speechSynthesis.onvoiceschanged = () => {
+    window.speechSynthesis.getVoices();
+  };
+
+  function highlightCard(index) {
+    document.querySelectorAll('.word-card').forEach(c => c.classList.remove('speaking'));
+    if (index >= 0) {
+      const target = document.getElementById(`card-${index}`);
+      if (target) {
+        target.classList.add('speaking');
+        target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }
+
+  // 單字獨立發音
+  function speakSingle(text, lang, index) {
+    stopSpeech();
+    highlightCard(index);
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = lang;
+    const voice = getBestVoice(lang);
+    if (voice) utter.voice = voice;
+    utter.rate = 0.92;
+    utter.onend = () => highlightCard(-1);
+    window.speechSynthesis.speak(utter);
+  }
+
+  // 全部連續朗讀（先讀 UK 英文，再讀廣東話中文解釋）
+  playAllBtn.addEventListener('click', () => {
+    if (wordsData.length === 0) {
+      alert("清單中沒有單字可以朗讀！");
+      return;
+    }
+    stopSpeech();
+    isPlayingAll = true;
+    isPaused = false;
+    currentPlayIndex = 0;
+    pauseBtn.textContent = "⏸ 暫停";
+    playSequence(currentPlayIndex);
+  });
+
+  function playSequence(index) {
+    if (!isPlayingAll || index >= wordsData.length) {
+      stopSpeech();
+      statusBar.textContent = "✓ 全部單字朗讀完畢。";
+      return;
+    }
+
+    currentPlayIndex = index;
+    highlightCard(index);
+    const item = wordsData[index];
+    statusBar.textContent = `🔊 正在朗讀 (${index + 1}/${wordsData.length}): ${item.word}`;
+
+    // 第一段：British English
+    const utterEn = new SpeechSynthesisUtterance(item.word);
+    utterEn.lang = 'en-GB';
+    const ukVoice = getBestVoice('en-GB');
+    if (ukVoice) utterEn.voice = ukVoice;
+    utterEn.rate = 0.9;
+
+    utterEn.onend = () => {
+      if (!isPlayingAll) return;
+      // 停頓 350ms 後讀廣東話解釋
+      setTimeout(() => {
+        if (!isPlayingAll) return;
+        const utterZh = new SpeechSynthesisUtterance(item.zhDef);
+        utterZh.lang = 'zh-HK';
+        const hkVoice = getBestVoice('zh-HK');
+        if (hkVoice) utterZh.voice = hkVoice;
+        utterZh.rate = 0.95;
+
+        utterZh.onend = () => {
+          if (!isPlayingAll) return;
+          setTimeout(() => {
+            playSequence(index + 1);
+          }, 500);
+        };
+        window.speechSynthesis.speak(utterZh);
+      }, 350);
+    };
+
+    window.speechSynthesis.speak(utterEn);
+  }
+
+  // 暫停 / 繼續功能 (Pause / Resume)
+  pauseBtn.addEventListener('click', () => {
+    if (!window.speechSynthesis.speaking && !isPaused) return;
+
+    if (!isPaused) {
+      window.speechSynthesis.pause();
+      isPaused = true;
+      pauseBtn.textContent = "▶ 繼續朗讀";
+      statusBar.textContent = "⏸ 已暫停朗讀（點擊「繼續朗讀」恢復）";
+    } else {
+      window.speechSynthesis.resume();
+      isPaused = false;
+      pauseBtn.textContent = "⏸ 暫停";
+      statusBar.textContent = "🔊 繼續朗讀中...";
+    }
+  });
+
+  // 停止功能 (Stop)
+  function stopSpeech() {
+    isPlayingAll = false;
+    isPaused = false;
+    window.speechSynthesis.cancel();
+    pauseBtn.textContent = "⏸ 暫停 / 繼續";
+    highlightCard(-1);
+  }
+
+  stopBtn.addEventListener('click', () => {
+    stopSpeech();
+    statusBar.textContent = "⏹ 已停止朗讀。";
+  });
+
+  // 6. 儲存與讀取功能 (按 Subject 與 Topic 分類存在 LocalStorage)
+  const STORAGE_KEY = "multi_subject_vocab_app_v1";
+
+  function getStorageData() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    } catch {
+      return {};
+    }
+  }
+
+  saveTopicBtn.addEventListener('click', () => {
+    const topic = topicInput.value.trim();
+    if (!topic) {
+      alert("請先輸入「主題名稱 (Topic)」再儲存！");
+      topicInput.focus();
+      return;
+    }
+    if (wordsData.length === 0) {
+      alert("請先生成至少一個單字卡再儲存！");
+      return;
+    }
+
+    const db = getStorageData();
+    if (!db[currentSubject]) db[currentSubject] = {};
+
+    db[currentSubject][topic] = {
+      scope: scopeInput.value.trim(),
+      words: wordsData,
+      updatedAt: new Date().toLocaleDateString()
+    };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+    updateSavedTopicsDropdown();
+    savedTopicsSelect.value = topic;
+    updateHeaderDisplay();
+    statusBar.textContent = `💾 已將「${topic}」儲存至【${currentSubject}】科目！`;
+  });
+
+  function updateSavedTopicsDropdown() {
+    const db = getStorageData();
+    const subjectTopics = db[currentSubject] || {};
+    savedTopicsSelect.innerHTML = `<option value="">-- 選擇已儲存的 Topic 載入 --</option>`;
+
+    Object.keys(subjectTopics).forEach(topicName => {
+      const count = subjectTopics[topicName].words.length;
+      const opt = document.createElement('option');
+      opt.value = topicName;
+      opt.textContent = `${topicName} (${count}字)`;
+      savedTopicsSelect.appendChild(opt);
+    });
+  }
+
+  loadTopicBtn.addEventListener('click', () => {
+    const selectedTopic = savedTopicsSelect.value;
+    if (!selectedTopic) {
+      alert("請先從下拉選單選擇一個 Topic！");
+      return;
+    }
+    const db = getStorageData();
+    const record = db[currentSubject]?.[selectedTopic];
+    if (record) {
+      stopSpeech();
+      topicInput.value = selectedTopic;
+      scopeInput.value = record.scope || "";
+      wordsData = JSON.parse(JSON.stringify(record.words));
+      bulkInput.value = wordsData.map(w => `${w.word} ${w.zhDef}`).join('\n');
+      renderWordCards();
+      updateHeaderDisplay();
+      statusBar.textContent = `📂 已載入【${currentSubject}】-「${selectedTopic}」`;
+    }
+  });
+
+  deleteTopicBtn.addEventListener('click', () => {
+    const selectedTopic = savedTopicsSelect.value;
+    if (!selectedTopic) return;
+    if (confirm(`確定要刪除【${currentSubject}】下的「${selectedTopic}」嗎？`)) {
+      const db = getStorageData();
+      if (db[currentSubject]) {
+        delete db[currentSubject][selectedTopic];
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+        updateSavedTopicsDropdown();
+        statusBar.textContent = `🗑️ 已刪除「${selectedTopic}」`;
+      }
+    }
+  });
+
+  // 工具函式：防止 XSS
+  function escapeHtml(str) {
+    if (!str) return "";
+    return str.replace(/[&<>"']/g, m => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[m]));
+  }
+
+  function escapeQuotes(str) {
+    if (!str) return "";
+    return str.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+  }
+</script>
+
+</body>
+</html>
