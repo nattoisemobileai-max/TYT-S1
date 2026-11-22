@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>成語動畫學習室｜逐個動畫學成語</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      background: #f7f3ea;
+      color: #1c1917;
+    }
+    .font-serif-tc {
+      font-family: 'Noto Serif TC', serif;
+    }
+    /* Stage 1: Character Pop-in */
+    @keyframes charPop {
+      0% { opacity: 0; transform: scale(0.55) translateY(16px); }
+      70% { opacity: 1; transform: scale(1.06) translateY(-2px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .char-pop {
+      animation: charPop 0.48s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    /* Stage 2: Red Hand-Drawn Circle SVG */
+    @keyframes drawCircle {
+      to { stroke-dashoffset: 0; }
+    }
+    .red-circle-stroke {
+      stroke-dasharray: 340;
+      stroke-dashoffset: 340;
+      animation: drawCircle 0.75s ease-out forwards;
+    }
+    /* Stage 3-5: Reveal Slide-Up */
+    @keyframes revealUp {
+      0% { opacity: 0; transform: translateY(14px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .reveal-up {
+      animation: revealUp 0.45s ease-out forwards;
+    }
+    .marker-highlight {
+      background-image: linear-gradient(120deg, #fde68a 0%, #fcd34d 100%);
+      background-repeat: no-repeat;
+      background-position: 0 85%;
+      background-size: 100% 42%;
+      padding: 0 3px;
+      border-radius: 3px;
+    }
+    /* Tian-zi-ge calligraphy box */
+    .tianzige {
+      background-image:
+        linear-gradient(to right, transparent 49.5%, #e7decb 49.5%, #e7decb 50.5%, transparent 50.5%),
+        linear-gradient(to bottom, transparent 49.5%, #e7decb 49.5%, #e7decb 50.5%, transparent 50.5%);
+    }
+    /* Active speaking highlight */
+    .speaking-ring {
+      box-shadow: 0 0 0 3px #10b981;
+      border-radius: 1rem;
+      transition: box-shadow 0.25s ease;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Control Header -->
+  <header class="bg-[#1c1917] text-[#faf6ee] border-b-4 border-[#b91c1c] sticky top-0 z-30 shadow-md">
+    <div class="max-w-5xl mx-auto px-4 py-3 space-y-2.5">
+      <div class="flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-lg bg-[#b91c1c] flex items-center justify-center font-serif-tc font-black text-lg">詞</span>
+          <div>
+            <h1 class="font-serif-tc text-base sm:text-lg font-bold leading-tight">成語動畫學習室</h1>
+            <p class="text-[11px] text-[#d6cbb7]">逐字放大 · 紅圈正字 · 詞語高亮 · 解釋用法 · 例句配圖</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <button id="play-anim-btn" type="button" class="px-3.5 py-1.5 rounded-lg bg-[#b91c1c] hover:bg-[#991b1b] text-white text-xs sm:text-sm font-bold transition shadow">
+            ▶ 自動播放動畫
+          </button>
+          <button id="next-stage-btn" type="button" class="px-3 py-1.5 rounded-lg bg-[#d97706] hover:bg-[#b45309] text-white text-xs sm:text-sm font-semibold transition">
+            下一步動畫
+          </button>
+          <button id="replay-btn" type="button" class="px-3 py-1.5 rounded-lg bg-stone-700 hover:bg-stone-600 text-xs sm:text-sm font-medium transition">
+            ↺ 重播本詞
+          </button>
+          <button id="speak-btn" type="button" class="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-xs sm:text-sm font-medium transition">
+            🔊 廣東話讀（含配詞/近反義）
+          </button>
+          <button id="pause-speak-btn" type="button" class="hidden px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs sm:text-sm font-medium transition">
+            ⏸ 暫停讀音
+          </button>
+          <button id="stop-speak-btn" type="button" class="hidden px-2.5 py-1.5 rounded-lg bg-rose-700 hover:bg-rose-600 text-white text-xs sm:text-sm font-medium transition">
+            ⏹ 停止
+          </button>
+        </div>
+      </div>
+
+      <!-- Group Tabs -->
+      <div class="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-stone-700">
+        <div class="flex flex-wrap gap-1.5" id="group-tabs">
+          <button type="button" data-grp="all" class="grp-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-[#faf6ee] text-[#1c1917]">全部 (36)</button>
+          <button type="button" data-grp="p14_15" class="grp-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-700 text-stone-200 hover:bg-stone-600">P14-15</button>
+          <button type="button" data-grp="p16_17" class="grp-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-700 text-stone-200 hover:bg-stone-600">P16-17</button>
+          <button type="button" data-grp="p18_19" class="grp-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-700 text-stone-200 hover:bg-stone-600">P18-19</button>
+          <button type="button" data-grp="p20_21" class="grp-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-700 text-stone-200 hover:bg-stone-600">P20-21</button>
+          <button type="button" data-grp="p22" class="grp-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-700 text-stone-200 hover:bg-stone-600">P22</button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="prev-idiom-btn" type="button" class="px-2.5 py-1 rounded-md bg-stone-700 hover:bg-stone-600 text-xs font-semibold">← 上一個</button>
+          <select id="idiom-select" aria-label="選擇成語" class="bg-stone-800 text-white border border-stone-600 rounded-md px-2 py-1 text-xs"></select>
+          <button id="next-idiom-btn" type="button" class="px-2.5 py-1 rounded-md bg-stone-700 hover:bg-stone-600 text-xs font-semibold">下一個 →</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-5xl w-full mx-auto px-4 py-6 space-y-5">
+
+    <!-- 5-Stage Progress Indicator -->
+    <div class="grid grid-cols-5 gap-1.5 text-center text-[11px] sm:text-xs font-semibold">
+      <button type="button" data-jump-stage="1" class="stage-pill py-1.5 px-1 rounded-xl border transition">① 超大成語</button>
+      <button type="button" data-jump-stage="2" class="stage-pill py-1.5 px-1 rounded-xl border transition">② 紅圈錯別字</button>
+      <button type="button" data-jump-stage="3" class="stage-pill py-1.5 px-1 rounded-xl border transition">③ 高亮配詞</button>
+      <button type="button" data-jump-stage="4" class="stage-pill py-1.5 px-1 rounded-xl border transition">④ 解釋與用法</button>
+      <button type="button" data-jump-stage="5" class="stage-pill py-1.5 px-1 rounded-xl border transition">⑤ 例句與圖片</button>
+    </div>
+
+    <!-- Main Stage Card -->
+    <section class="bg-[#fffdf8] border-2 border-[#e5dccb] rounded-3xl p-5 sm:p-8 shadow-sm space-y-6">
+
+      <!-- STAGE 1 & 2: SUPER LARGE IDIOM + RED CIRCLE FOR TYPOS -->
+      <div id="stage-1-2-box" class="text-center space-y-4 p-2 transition">
+        <div class="flex items-center justify-center gap-2 text-xs text-stone-500 font-semibold">
+          <span id="idiom-index-badge" class="px-2.5 py-0.5 rounded-full bg-stone-200 text-stone-700">第 1 / 36 個</span>
+          <span id="idiom-page-badge" class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900">P.14</span>
+          <span id="speaking-status-badge" class="hidden px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 animate-pulse">🔊 正在朗讀中...</span>
+        </div>
+
+        <!-- 4 Super Large Characters -->
+        <div id="chars-stage" class="grid grid-cols-4 gap-2 sm:gap-4 max-w-2xl mx-auto py-2 items-end">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Stage 2: Red Typo Alert Banner -->
+        <div id="stage-2-box" class="hidden max-w-xl mx-auto">
+          <div id="typo-alert-card" class="reveal-up rounded-2xl px-4 py-3 border text-sm font-medium"></div>
+        </div>
+      </div>
+
+      <!-- STAGE 3: HIGHLIGHT COLLOCATIONS (辨義 + 近義詞 + 反義詞) -->
+      <div id="stage-3-box" class="hidden reveal-up border-t border-[#efe7d8] pt-5 space-y-3 p-2 transition">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-5 rounded-full bg-amber-500"></span>
+          <h2 class="font-serif-tc font-bold text-lg sm:text-xl text-stone-900">搭配詞語與詞素高亮</h2>
+        </div>
+        <div id="collocations-content" class="grid sm:grid-cols-3 gap-3.5 text-base sm:text-lg"></div>
+      </div>
+
+      <!-- STAGE 4: EXPLANATION & USAGE -->
+      <div id="stage-4-box" class="hidden reveal-up border-t border-[#efe7d8] pt-5 space-y-3 p-2 transition">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-5 rounded-full bg-[#b91c1c]"></span>
+          <h2 class="font-serif-tc font-bold text-lg sm:text-xl text-stone-900">解釋（析義）與用法</h2>
+        </div>
+        <div id="meaning-usage-content" class="grid sm:grid-cols-12 gap-3 text-sm"></div>
+      </div>
+
+      <!-- STAGE 5: EXAMPLE SENTENCE + ILLUSTRATION -->
+      <div id="stage-5-box" class="hidden reveal-up border-t border-[#efe7d8] pt-5 space-y-3 p-2 transition">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-5 rounded-full bg-emerald-600"></span>
+          <h2 class="font-serif-tc font-bold text-lg sm:text-xl text-stone-900">例句與情境圖片</h2>
+        </div>
+        <div id="example-image-content" class="grid md:grid-cols-12 gap-4 items-center bg-[#faf6ee] border border-[#e5dccb] rounded-2xl p-4"></div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+    // ==================== COMPLETE 36 IDIOMS DATASET (P14 - P22) ====================
+    const IDIOMS = [
+      // P14-15
+      {
+        id: 1, grp: 'p14_15', page: 'P.14', word: '人窮志短',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '窮：窮困、困厄；志：志向；短：短小',
+        syn: ['因貧失志'], ant: ['壯志凌雲'],
+        meaning: '指人在困厄之時，會喪失遠大的志向。',
+        sentiment: '貶義', target: '用於人',
+        example: '所謂人窮志短，有些人連三餐都顧不上，哪敢說要創業呢？',
+        svgIcon: '💸😔'
+      },
+      {
+        id: 2, grp: 'p14_15', page: 'P.14', word: '人聲鼎沸',
+        pron: { 3: '費' }, typoIdx: [3], typoNote: '「沸」不能寫成「佛」或「弗」（正音：費）',
+        morphemes: '鼎：古代煮食器具；沸：沸騰',
+        syn: [], ant: ['鴉雀無聲', '萬籟俱寂', '萬籟無聲'],
+        meaning: '形容人多勢眾，喧嘩熱烈，像水在鼎裏煮沸一般。',
+        sentiment: '中性詞', target: '用於環境',
+        example: '假日的郊野公園，到處是遊人，人聲鼎沸。',
+        svgIcon: '🗣️🔥'
+      },
+      {
+        id: 3, grp: 'p14_15', page: 'P.14', word: '入不敷出',
+        pron: { 2: '夫' }, typoIdx: [2], typoNote: '「敷」不能寫成「數」（正音：夫）',
+        morphemes: '敷：足夠',
+        syn: ['捉襟見肘'], ant: ['綽綽有餘'],
+        meaning: '指收入抵不上支出。',
+        sentiment: '貶義', target: '用於人',
+        example: '遇上金融海嘯，叔叔工廠的訂單急遽下降，入不敷出，最後只能申請破產。',
+        svgIcon: '📉💳'
+      },
+      {
+        id: 4, grp: 'p14_15', page: 'P.14', word: '入鄉隨俗',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '隨：跟從；俗：風俗、習慣',
+        syn: ['入境問俗', '因地制宜'], ant: [],
+        meaning: '比喻能適應環境，隨遇而安。',
+        sentiment: '中性', target: '用於人',
+        example: '某快餐店懂得入鄉隨俗，配合不同地區的飲食習慣來推出食品，所以在各地均很受歡迎。',
+        svgIcon: '🌏🍜'
+      },
+      {
+        id: 5, grp: 'p14_15', page: 'P.15', word: '八面玲瓏',
+        pron: { 3: '龍' }, typoIdx: [2, 3], typoNote: '「玲」不能寫成「鈴」；「瓏」不能寫成「龍」',
+        morphemes: '玲瓏：靈活、精巧',
+        syn: ['面面俱圓', '左右逢源'], ant: ['處處碰壁'],
+        meaning: '形容人言行手段，十分巧妙，處世圓融。',
+        sentiment: '中性詞', target: '用於人',
+        example: '趙太太是八面玲瓏的人，她廣結善緣，誰也不得罪。',
+        svgIcon: '🤝✨'
+      },
+      {
+        id: 6, grp: 'p14_15', page: 'P.15', word: '刁鑽古怪',
+        pron: { 0: '丟' }, typoIdx: [1], typoNote: '「鑽」不能寫成「讚」（「刁」讀「丟」）',
+        morphemes: '刁鑽：狡猾、主意多',
+        syn: ['怪裡怪氣'], ant: ['平易近人'],
+        meaning: '形容人行為狡猾、性情奇怪。',
+        sentiment: '貶義', target: '用於人',
+        example: '他為人刁鑽古怪，總想出一些奇怪的主意，卻不能得到大家認同。',
+        svgIcon: '🤨💡'
+      },
+      {
+        id: 7, grp: 'p14_15', page: 'P.15', word: '力不從心',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '從：跟從',
+        syn: ['力不所及', '無能為力'], ant: ['得心應手', '力所能及'],
+        meaning: '指心裡想做某件事，可是力量不足夠。',
+        sentiment: '貶義', target: '用於人',
+        example: '這件事對我來說太難了，所以做起來力不從心，需要別人幫忙。',
+        svgIcon: '🏋️💦'
+      },
+      {
+        id: 8, grp: 'p14_15', page: 'P.15', word: '力竭聲嘶',
+        pron: { 1: '揭', 3: '西' }, typoIdx: [1, 3], typoNote: '「竭」不能寫作「歇」；「嘶」不能寫作「斯」或「撕」',
+        morphemes: '竭：耗盡；嘶：聲音沙啞',
+        syn: [], ant: [],
+        meaning: '形容人拼命喊叫，力氣用完，連聲音也變得沙啞。',
+        sentiment: '中性詞', target: '用於人',
+        example: '在運動場上，大家都力竭聲嘶地為健兒打氣，場面好不熱鬧！',
+        svgIcon: '📣😫'
+      },
+
+      // P16-17
+      {
+        id: 9, grp: 'p16_17', page: 'P.16', word: '力敵勢均',
+        pron: {}, typoIdx: [3], typoNote: '「均」不能寫成「勻」',
+        morphemes: '勢：情勢；均：均勻',
+        syn: ['旗鼓相當'], ant: [],
+        meaning: '形容雙方實力相當，難分高下。',
+        sentiment: '中性詞', target: '用於人',
+        example: '籃球場上兩隊力敵勢均，未到最後一刻，還不知鹿死誰手呢！',
+        svgIcon: '🏀⚖️'
+      },
+      {
+        id: 10, grp: 'p16_17', page: 'P.16', word: '十惡不赦',
+        pron: { 3: '卸' }, typoIdx: [3], typoNote: '「赦」不能寫作「敖」（正音：卸）',
+        morphemes: '惡：罪惡、罪過；赦：饒恕',
+        syn: ['罪惡滔天'], ant: ['罰不當罪'],
+        meaning: '指罪大惡極，難以饒恕。',
+        sentiment: '貶義', target: '用於人',
+        example: '這個罪犯搶劫、擄掠、放火，真是十惡不赦，一定要將他繩之於法！',
+        svgIcon: '⛓️⚖️'
+      },
+      {
+        id: 11, grp: 'p16_17', page: 'P.16', word: '十萬火急',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '形容事態十分緊急',
+        syn: ['急如星火'], ant: ['從容不迫'],
+        meaning: '形容事態十分緊急。',
+        sentiment: '中性詞', target: '用於事情',
+        example: '公司的電腦網絡一下子都癱瘓了，電腦技術員正十萬火急地修復系統。',
+        svgIcon: '🚨🔥'
+      },
+      {
+        id: 12, grp: 'p16_17', page: 'P.16', word: '三令五申',
+        pron: {}, typoIdx: [1, 3], typoNote: '「令」不能寫作「今」；「申」不能寫作「伸」',
+        morphemes: '令：命令；申：表達',
+        syn: ['耳提面命'], ant: ['不言之教'],
+        meaning: '指再三叮嚀。',
+        sentiment: '褒義', target: '用於人',
+        example: '由於事關重大，曾警司三令五申，所有隊員必須嚴守秘密。',
+        svgIcon: '📢📋'
+      },
+      {
+        id: 13, grp: 'p16_17', page: 'P.17', word: '三思而行',
+        pron: { 0: 'saam3' }, typoIdx: [], typoNote: '',
+        morphemes: '三：再三，表示多次；思：考慮',
+        syn: [], ant: ['草率從事'],
+        meaning: '指反覆考慮後再行動。',
+        sentiment: '褒義', target: '用於人',
+        example: '凡事都要三思而行，假如魯莽行事，最終只會後悔莫及。',
+        svgIcon: '🤔💭'
+      },
+      {
+        id: 14, grp: 'p16_17', page: 'P.17', word: '三頭六臂',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '臂：胳臂',
+        syn: ['神通廣大'], ant: ['黔驢技窮'],
+        meaning: '比喻人神通廣大，本領高強。',
+        sentiment: '褒義', target: '用於人',
+        example: '母親簡直是三頭六臂，白天要上班，晚上回家又要照顧我們兄弟姊妹。',
+        svgIcon: '💪🦸'
+      },
+      {
+        id: 15, grp: 'p16_17', page: 'P.17', word: '上行下效',
+        pron: { 1: '衡' }, typoIdx: [3], typoNote: '「效」不能寫作「郊」（「行」讀「衡」）',
+        morphemes: '效：仿效，跟著做',
+        syn: ['言傳身教'], ant: [],
+        meaning: '指在上位的人怎麼做，下面的人也跟著怎麼做。',
+        sentiment: '褒義', target: '用於人',
+        example: '為人父母若談吐有禮，必有上行下效的效果，子女也會懂得以禮待人。',
+        svgIcon: '👣🌱'
+      },
+      {
+        id: 16, grp: 'p16_17', page: 'P.17', word: '亡羊補牢',
+        pron: {}, typoIdx: [0], typoNote: '「亡」不能寫作「芒」或「忘」',
+        morphemes: '亡：丟失；牢：飼養牲畜的圈欄',
+        syn: ['知錯能改'], ant: ['時不我與', '知錯不改'],
+        meaning: '比喻犯錯後及時更正，尚能補救。',
+        sentiment: '褒義', target: '用於人',
+        example: '大錯已經鑄成，即使現在你想亡羊補牢也來不及了。',
+        svgIcon: '🐑🔨'
+      },
+
+      // P18-19
+      {
+        id: 17, grp: 'p18_19', page: 'P.18', word: '千里迢迢',
+        pron: { 2: '條', 3: '條' }, typoIdx: [2, 3], typoNote: '「迢」不能寫作「紹」（正音：條）',
+        morphemes: '迢迢：遙遠',
+        syn: ['跋山涉水', '不遠千里'], ant: ['近在咫尺', '咫尺天涯'],
+        meaning: '形容路途十分遙遠。',
+        sentiment: '中性詞', target: '用於人',
+        example: '我們坐了整整三天的火車，千里迢迢來到這個美麗的地方，覺得再辛苦也是值得的。',
+        svgIcon: '🚂⛰️'
+      },
+      {
+        id: 18, grp: 'p18_19', page: 'P.18', word: '千恩萬謝',
+        pron: {}, typoIdx: [1], typoNote: '「恩」不能寫作「思」',
+        morphemes: '恩：感恩；謝：道謝',
+        syn: [], ant: [],
+        meaning: '一再表示謝意。',
+        sentiment: '褒義', target: '用於人',
+        example: '救援人員在瓦礫堆中救出一個孩子，母親對救援人員千恩萬謝，幾乎要跪在地上了。',
+        svgIcon: '🙏❤️'
+      },
+      {
+        id: 19, grp: 'p18_19', page: 'P.18', word: '千鈞一髮',
+        pron: { 1: '軍' }, typoIdx: [1, 3], typoNote: '「鈞」不能寫作「均」（正音：軍）；「髮」不能寫作「發」',
+        morphemes: '鈞：古代重量單位，一鈞等於三十斤',
+        syn: ['危如累卵', '危在旦夕'], ant: ['安如泰山'],
+        meaning: '千鈞重量吊在一根頭髮上，比喻情況十分危急。',
+        sentiment: '中性詞', target: '用於事情',
+        example: '在這千鈞一髮的關頭，消防員奮不顧身，衝進火場救出被困的小孩。',
+        svgIcon: '🚒⚡'
+      },
+      {
+        id: 20, grp: 'p18_19', page: 'P.18', word: '千載難逢',
+        pron: { 1: '宰' }, typoIdx: [1, 3], typoNote: '「載」不能寫作「栽」（正音：宰）；「逢」不能寫作「縫」',
+        morphemes: '載：年；逢：遇到',
+        syn: ['百年不遇'], ant: ['屢見不鮮'],
+        meaning: '指一千年也很難遇到一次，形容機會極難得。',
+        sentiment: '褒義', target: '用於事情',
+        example: '能與世界冠軍切磋球技，真是千載難逢的好機會！',
+        svgIcon: '🏆🌟'
+      },
+      {
+        id: 21, grp: 'p18_19', page: 'P.19', word: '口蜜腹劍',
+        pron: {}, typoIdx: [1, 2], typoNote: '「蜜」不能寫作「密」；「腹」不能寫作「複」或「復」',
+        morphemes: '蜜：甜蜜；腹：肚子',
+        syn: ['笑裏藏刀', '兩面三刀'], ant: ['心口如一', '表裏如一'],
+        meaning: '形容人嘴上說得好聽，心裏卻十分陰險惡毒。',
+        sentiment: '貶義', target: '用於人',
+        example: '他這個人口蜜腹劍，表面上對你很好，背後卻經常說你壞話。',
+        svgIcon: '🍯🗡️'
+      },
+      {
+        id: 22, grp: 'p18_19', page: 'P.19', word: '口誅筆伐',
+        pron: { 1: '朱' }, typoIdx: [1, 3], typoNote: '「誅」不能寫作「珠」（正音：朱）；「伐」不能寫作「代」',
+        morphemes: '誅：聲討、譴責；伐：討伐、攻擊',
+        syn: ['群起攻之'], ant: ['歌功頌德'],
+        meaning: '指從口頭和書面上對壞人壞事進行揭露和聲討。',
+        sentiment: '中性詞', target: '用於人或事情',
+        example: '這種危害公眾安全的行為，理應受到社會大眾的口誅筆伐。',
+        svgIcon: '🗣️✍️'
+      },
+      {
+        id: 23, grp: 'p18_19', page: 'P.19', word: '大公無私',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '公：公正；私：私心',
+        syn: ['鐵面無私', '公而忘私'], ant: ['假公濟私', '損公肥私'],
+        meaning: '指辦事公正，完全沒有私心。',
+        sentiment: '褒義', target: '用於人',
+        example: '包拯為官大公無私，深得百姓愛戴。',
+        svgIcon: '⚖️🛡️'
+      },
+      {
+        id: 24, grp: 'p18_19', page: 'P.19', word: '大庭廣眾',
+        pron: {}, typoIdx: [1], typoNote: '「庭」不能寫作「廷」或「蜓」',
+        morphemes: '庭：院子、場所；眾：眾人',
+        syn: ['眾目睽睽', '稠人廣眾'], ant: ['人跡罕至', '荒無人煙'],
+        meaning: '指聚集了很多人的公開場合。',
+        sentiment: '中性詞', target: '用於環境',
+        example: '在圖書館等大庭廣眾之下，我們應該保持安靜，切勿大聲喧嘩。',
+        svgIcon: '🏛️👥'
+      },
+
+      // P20-21
+      {
+        id: 25, grp: 'p20_21', page: 'P.20', word: '大驚小怪',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '驚：驚慌；怪：責怪、奇怪',
+        syn: ['少見多怪'], ant: ['見怪不怪', '泰然自若'],
+        meaning: '形容對沒甚麼了不起的事情過分驚慌。',
+        sentiment: '貶義', target: '用於人',
+        example: '不過是下了一點毛毛雨罷了，你用不著如此大驚小怪。',
+        svgIcon: '😱🌦️'
+      },
+      {
+        id: 26, grp: 'p20_21', page: 'P.20', word: '大顯身手',
+        pron: {}, typoIdx: [1], typoNote: '「顯」不能寫作「現」',
+        morphemes: '顯：表現、展示；身手：本領',
+        syn: ['大展鴻圖', '一展所長'], ant: ['束手無策'],
+        meaning: '指充分表現出自己的本領和才能。',
+        sentiment: '褒義', target: '用於人',
+        example: '這次學校舉辦才藝大賽，正是你大顯身手的好時機。',
+        svgIcon: '🎨🌟'
+      },
+      {
+        id: 27, grp: 'p20_21', page: 'P.20', word: '山珍海錯',
+        pron: {}, typoIdx: [3], typoNote: '「錯」不能寫作「措」',
+        morphemes: '珍：珍貴的食物；錯：各種各樣',
+        syn: ['山珍海味', '珍饈百味'], ant: ['粗茶淡飯', '家常便飯'],
+        meaning: '指山野和海裏出產的各種珍貴食物。',
+        sentiment: '褒義', target: '用於事物',
+        example: '過年時，奶奶準備了一桌山珍海錯，讓全家人大飽口福。',
+        svgIcon: '🦞🍲'
+      },
+      {
+        id: 28, grp: 'p20_21', page: 'P.20', word: '川流不息',
+        pron: {}, typoIdx: [0], typoNote: '「川」不能寫作「穿」或「州」',
+        morphemes: '川：河流；息：停止',
+        syn: ['絡繹不絕', '車水馬龍'], ant: ['門可羅雀', '鴉雀無聲'],
+        meaning: '形容行人、車馬等像水流一樣連續不斷。',
+        sentiment: '中性詞', target: '用於人或事物',
+        example: '繁華的商業街上，每天都車水馬龍，行人川流不息。',
+        svgIcon: '🚗🌊'
+      },
+      {
+        id: 29, grp: 'p20_21', page: 'P.21', word: '不求甚解',
+        pron: { 2: '審' }, typoIdx: [2], typoNote: '「甚」不能寫作「其」（正音：審）',
+        morphemes: '甚：很、深入；解：理解',
+        syn: ['囫圇吞棗', '一知半解'], ant: ['追根究底', '字斟句酌'],
+        meaning: '原指讀書只領會精神實質，不咬文嚼字；現多指學習或工作不認真，只求略懂皮毛，不深入理解。',
+        sentiment: '貶義', target: '用於人',
+        example: '我們讀書應該深入思考，切忌不求甚解，否則很難真正掌握知識。',
+        svgIcon: '📖❓'
+      },
+      {
+        id: 30, grp: 'p20_21', page: 'P.21', word: '不折不扣',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '折、扣：減損',
+        syn: ['名副其實', '貨真價實'], ant: ['名不副實'],
+        meaning: '指沒有一點折扣，表示完全、十足的意思。',
+        sentiment: '中性詞', target: '用於人或事物',
+        example: '他每天都堅持練習書法兩小時，是個不折不扣的書法迷。',
+        svgIcon: '💯🖌️'
+      },
+      {
+        id: 31, grp: 'p20_21', page: 'P.21', word: '不屈不撓',
+        pron: { 3: '鬧' }, typoIdx: [3], typoNote: '「撓」不能寫作「饒」或「燒」（正音：鬧）',
+        morphemes: '屈：屈服；撓：彎曲',
+        syn: ['百折不撓', '堅強不屈'], ant: ['卑躬屈膝', '逆來順受'],
+        meaning: '形容在惡勢力和困難面前意志十分堅強，絕不屈服。',
+        sentiment: '褒義', target: '用於人',
+        example: '運動員憑著不屈不撓的精神，最終克服傷患，奪得金牌。',
+        svgIcon: '⛰️✊'
+      },
+      {
+        id: 32, grp: 'p20_21', page: 'P.21', word: '不省人事',
+        pron: { 1: '醒' }, typoIdx: [], typoNote: '注意多音字：「省」在此讀作「醒」',
+        morphemes: '省：知覺、明白；人事：人世間的事，指知覺',
+        syn: ['昏迷不醒'], ant: ['神志清醒'],
+        meaning: '指昏迷過去，失去知覺。',
+        sentiment: '中性詞', target: '用於人',
+        example: '他因為中暑而突然暈倒，不省人事，同學們連忙把他送到醫務室。',
+        svgIcon: '😵🚑'
+      },
+
+      // P22
+      {
+        id: 33, grp: 'p22', page: 'P.22', word: '不計其數',
+        pron: {}, typoIdx: [1], typoNote: '「計」不能寫作「記」',
+        morphemes: '計：計算；其：它的',
+        syn: ['數以萬計', '多如牛毛'], ant: ['屈指可數', '寥寥無幾'],
+        meaning: '指沒法計算數目，形容數量極多。',
+        sentiment: '中性詞', target: '用於人或事物',
+        example: '博物館裏珍藏著不計其數的歷史文物，令人目不暇給。',
+        svgIcon: '🔢✨'
+      },
+      {
+        id: 34, grp: 'p22', page: 'P.22', word: '不倫不類',
+        pron: {}, typoIdx: [1], typoNote: '「倫」不能寫作「論」或「輪」',
+        morphemes: '倫：同類；類：種類',
+        syn: ['非驢非馬', '四不像'], ant: ['中規中矩', '恰如其分'],
+        meaning: '指既不像這一類，也不像那一類，形容事物沒有條理或打扮怪異。',
+        sentiment: '貶義', target: '用於人或事物',
+        example: '這篇文章寫得文白夾雜，顯得不倫不類，讓人難以閱讀。',
+        svgIcon: '🎭❓'
+      },
+      {
+        id: 35, grp: 'p22', page: 'P.22', word: '不恥下問',
+        pron: {}, typoIdx: [1], typoNote: '「恥」不能寫作「耻」或「止」',
+        morphemes: '恥：羞恥；下問：向地位或學問比自己低的人請教',
+        syn: ['虛懷若谷', '謙虛好學'], ant: ['剛愎自用', '自以為是'],
+        meaning: '指不以向地位比自己低、學問比自己差的人請教為恥辱，形容謙虛好學。',
+        sentiment: '褒義', target: '用於人',
+        example: '孔子提倡不恥下問的學習態度，鼓勵我們隨時向身邊的人虛心請教。',
+        svgIcon: '🙇‍♂️📚'
+      },
+      {
+        id: 36, grp: 'p22', page: 'P.22', word: '不脛而走',
+        pron: { 1: '徑' }, typoIdx: [1], typoNote: '「脛」不能寫作「徑」或「經」（正音：徑）',
+        morphemes: '脛：小腿；走：跑',
+        syn: ['不翼而飛', '風行一時'], ant: ['無人問津', '鮮為人知'],
+        meaning: '沒有小腿卻能跑，比喻事物不用推廣，就能迅速傳播開去。',
+        sentiment: '中性詞', target: '用於事情',
+        example: '這間小店蛋撻香脆可口的消息不脛而走，每天都有大批顧客排隊購買。',
+        svgIcon: '📣🥧'
+      }
+    ];
+
+    // ==================== STATE & DOM ====================
+    let currentGroup = 'all';
+    let filteredIdioms = [...IDIOMS];
+    let currentIndex = 0;
+    let currentStage = 1;
+    let animTimer = null;
+
+    const charsStage = document.getElementById('chars-stage');
+    const stage12Box = document.getElementById('stage-1-2-box');
+    const stage2Box = document.getElementById('stage-2-box');
+    const typoAlertCard = document.getElementById('typo-alert-card');
+    const stage3Box = document.getElementById('stage-3-box');
+    const collocationsContent = document.getElementById('collocations-content');
+    const stage4Box = document.getElementById('stage-4-box');
+    const meaningUsageContent = document.getElementById('meaning-usage-content');
+    const stage5Box = document.getElementById('stage-5-box');
+    const exampleImageContent = document.getElementById('example-image-content');
+    const idiomSelect = document.getElementById('idiom-select');
+    const speakingStatusBadge = document.getElementById('speaking-status-badge');
+
+    // ==================== RENDER FUNCTIONS ====================
+    function populateSelect() {
+      idiomSelect.innerHTML = '';
+      filteredIdioms.forEach((item, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = `${item.id}. ${item.word} (${item.page})`;
+        idiomSelect.appendChild(opt);
+      });
+      idiomSelect.value = currentIndex;
+    }
+
+    function renderIdiom() {
+      const item = filteredIdioms[currentIndex];
+      document.getElementById('idiom-index-badge').textContent = `第 ${currentIndex + 1} / ${filteredIdioms.length} 個`;
+      document.getElementById('idiom-page-badge').textContent = item.page;
+      idiomSelect.value = currentIndex;
+
+      // Stage 1: Render 4 super-large characters
+      charsStage.innerHTML = '';
+      [...item.word].forEach((ch, idx) => {
+        const pronText = item.pron[idx] ? `(${item.pron[idx]})` : '';
+        const isTypo = item.typoIdx.includes(idx);
+
+        const cell = document.createElement('div');
+        cell.className = 'flex flex-col items-center';
+        cell.innerHTML = `
+          <div class="h-6 text-xs sm:text-sm font-bold text-[#b91c1c] mb-1">${pronText}</div>
+          <div class="relative w-20 h-20 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-2xl bg-white border-2 border-[#d6cbb7] tianzige shadow-sm flex items-center justify-center char-pop" style="animation-delay: ${idx * 90}ms">
+            <span class="font-serif-tc font-black text-5xl sm:text-7xl md:text-8xl text-stone-900 select-none">${ch}</span>
+            ${isTypo ? `
+              <svg class="typo-svg hidden absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 120 120">
+                <ellipse cx="60" cy="60" rx="50" ry="52" fill="none" stroke="#dc2626" stroke-width="5.5" stroke-linecap="round" class="red-circle-stroke" />
+              </svg>
+            ` : ''}
+          </div>
+        `;
+        charsStage.appendChild(cell);
+      });
+
+      // Stage 2: Typo Note
+      if (item.typoNote) {
+        typoAlertCard.className = 'reveal-up rounded-2xl px-4 py-3 border-2 border-red-300 bg-red-50 text-red-900 text-sm sm:text-base font-semibold';
+        typoAlertCard.innerHTML = `⭕ <strong>易錯字與正音提示：</strong>${item.typoNote}`;
+      } else {
+        typoAlertCard.className = 'reveal-up rounded-2xl px-4 py-3 border border-emerald-200 bg-emerald-50 text-emerald-900 text-sm font-medium';
+        typoAlertCard.innerHTML = `✅ 本成語四個字均為常見正字，注意筆順與結構即可！`;
+      }
+
+      // Stage 3: Collocations & Morphemes
+      const synHTML = item.syn.length
+        ? item.syn.map(s => `<span class="inline-block px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 font-bold text-sm mr-1.5 mb-1">${s}</span>`).join('')
+        : '<span class="text-stone-400 text-sm">（無特別近義詞）</span>';
+
+      const antHTML = item.ant.length
+        ? item.ant.map(a => `<span class="inline-block px-2.5 py-1 rounded-lg bg-rose-100 text-rose-900 font-bold text-sm mr-1.5 mb-1">${a}</span>`).join('')
+        : '<span class="text-stone-400 text-sm">（無特別反義詞）</span>';
+
+      collocationsContent.innerHTML = `
+        <div class="bg-amber-50/80 border border-amber-200 rounded-2xl p-4 space-y-1.5">
+          <div class="text-xs font-bold uppercase tracking-wider text-amber-800">詞素拆解（配詞解釋）</div>
+          <p class="text-stone-800 text-sm sm:text-base font-medium leading-relaxed">${item.morphemes}</p>
+        </div>
+        <div class="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-4 space-y-1.5">
+          <div class="text-xs font-bold uppercase tracking-wider text-emerald-800">近義詞配搭</div>
+          <div>${synHTML}</div>
+        </div>
+        <div class="bg-rose-50/70 border border-rose-200 rounded-2xl p-4 space-y-1.5">
+          <div class="text-xs font-bold uppercase tracking-wider text-rose-800">反義詞配搭</div>
+          <div>${antHTML}</div>
+        </div>
+      `;
+
+      // Stage 4: Meaning & Usage
+      meaningUsageContent.innerHTML = `
+        <div class="sm:col-span-8 bg-stone-50 border border-stone-200 rounded-2xl p-4 space-y-1">
+          <div class="text-xs font-bold text-stone-500">成語解釋（析義）</div>
+          <p class="text-base sm:text-lg font-semibold text-stone-900 leading-relaxed">${item.meaning}</p>
+        </div>
+        <div class="sm:col-span-4 bg-stone-50 border border-stone-200 rounded-2xl p-4 flex flex-col justify-center space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-stone-500">感情色彩</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold ${item.sentiment.includes('褒') ? 'bg-emerald-100 text-emerald-800' : item.sentiment.includes('貶') ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'}">${item.sentiment}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-stone-500">適用對象</span>
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-100 text-sky-900">${item.target}</span>
+          </div>
+        </div>
+      `;
+
+      // Stage 5: Example + Illustration
+      const highlightedExample = item.example.replace(
+        new RegExp(item.word, 'g'),
+        `<span class="marker-highlight font-bold text-[#b91c1c]">${item.word}</span>`
+      );
+
+      exampleImageContent.innerHTML = `
+        <div class="md:col-span-8 space-y-2">
+          <div class="text-xs font-bold text-emerald-800">情境例句示範</div>
+          <p class="text-base sm:text-xl text-stone-900 leading-relaxed font-medium">「${highlightedExample}」</p>
+        </div>
+        <div class="md:col-span-4 flex flex-col items-center justify-center bg-white border border-[#e5dccb] rounded-2xl p-4 text-center">
+          <div class="text-5xl sm:text-6xl mb-2 select-none">${item.svgIcon || '📖✨'}</div>
+          <div class="text-xs font-bold text-stone-500">${item.word} · 情境記憶圖</div>
+        </div>
+      `;
+
+      applyStageVisibility();
+    }
+
+    function applyStageVisibility() {
+      // Stage 2: red circles + alert
+      document.querySelectorAll('.typo-svg').forEach(svg => {
+        svg.classList.toggle('hidden', currentStage < 2);
+      });
+      stage2Box.classList.toggle('hidden', currentStage < 2);
+      stage3Box.classList.toggle('hidden', currentStage < 3);
+      stage4Box.classList.toggle('hidden', currentStage < 4);
+      stage5Box.classList.toggle('hidden', currentStage < 5);
+
+      // Update stage pills
+      document.querySelectorAll('.stage-pill').forEach(pill => {
+        const st = Number(pill.dataset.jumpStage);
+        if (st === currentStage) {
+          pill.className = 'stage-pill py-1.5 px-1 rounded-xl border-2 border-[#b91c1c] bg-[#b91c1c] text-white font-bold transition shadow-sm';
+        } else if (st < currentStage) {
+          pill.className = 'stage-pill py-1.5 px-1 rounded-xl border border-amber-300 bg-amber-100 text-amber-900 font-semibold transition';
+        } else {
+          pill.className = 'stage-pill py-1.5 px-1 rounded-xl border border-stone-300 bg-white text-stone-400 transition';
+        }
+      });
+    }
+
+    function clearAutoAnim() {
+      if (animTimer) {
+        clearInterval(animTimer);
+        animTimer = null;
+      }
+    }
+
+    function startAutoAnimation() {
+      clearAutoAnim();
+      currentStage = 1;
+      renderIdiom();
+      animTimer = setInterval(() => {
+        if (currentStage < 5) {
+          currentStage++;
+          applyStageVisibility();
+        } else {
+          clearAutoAnim();
+        }
+      }, 1300);
+    }
+
+    // ==================== CANTONESE SPEECH SYNTHESIS (WITH COLLOCATIONS, SYNONYMS & ANTONYMS) ====================
+    const speakBtn = document.getElementById('speak-btn');
+    const pauseSpeakBtn = document.getElementById('pause-speak-btn');
+    const stopSpeakBtn = document.getElementById('stop-speak-btn');
+
+    function clearSpeakingHighlights() {
+      [stage12Box, stage3Box, stage4Box, stage5Box].forEach(el => el.classList.remove('speaking-ring'));
+      speakingStatusBadge.classList.add('hidden');
+    }
+
+    function resetSpeechButtons() {
+      speakBtn.classList.remove('hidden');
+      pauseSpeakBtn.classList.add('hidden');
+      stopSpeakBtn.classList.add('hidden');
+      pauseSpeakBtn.textContent = '⏸ 暫停讀音';
+      clearSpeakingHighlights();
+    }
+
+    function getCantoneseVoice() {
+      const voices = window.speechSynthesis.getVoices();
+      return (
+        voices.find(v => v.lang.toLowerCase().includes('zh-hk')) ||
+        voices.find(v => v.name.includes('Cantonese') || v.name.includes('Sin-Ji') || v.name.includes('HiuGaai') || v.name.includes('HiuMaan')) ||
+        voices.find(v => v.lang.toLowerCase().includes('zh'))
+      );
+    }
+
+    function formatMorphemesForSpeech(raw) {
+      // 把「窮：窮困、困厄；志：志向」轉為更自然易聽的廣東話斷句
+      return raw
+        .replace(/：/g, '，即係')
+        .replace(/；/g, '。')
+        .replace(/、/g, '、');
+    }
+
+    function speakCurrentIdiom() {
+      if (!('speechSynthesis' in window)) {
+        alert('你的瀏覽器暫不支援語音朗讀功能。');
+        return;
+      }
+
+      clearAutoAnim();
+      window.speechSynthesis.cancel();
+
+      const item = filteredIdioms[currentIndex];
+      const voice = getCantoneseVoice();
+
+      // 組合分段朗讀序列，並同步對應動畫階段與視覺高亮
+      const segments = [
+        {
+          stage: 1,
+          box: stage12Box,
+          text: `成語：${item.word}。`
+        },
+        {
+          stage: 3,
+          box: stage3Box,
+          text: `配詞拆解：${formatMorphemesForSpeech(item.morphemes)}。`
+        }
+      ];
+
+      // 加入近義詞朗讀
+      if (item.syn && item.syn.length > 0) {
+        segments.push({
+          stage: 3,
+          box: stage3Box,
+          text: `近義詞有：${item.syn.join('、')}。`
+        });
+      } else {
+        segments.push({
+          stage: 3,
+          box: stage3Box,
+          text: `呢個成語冇特別嘅近義詞。`
+        });
+      }
+
+      // 加入反義詞朗讀
+      if (item.ant && item.ant.length > 0) {
+        segments.push({
+          stage: 3,
+          box: stage3Box,
+          text: `反義詞有：${item.ant.join('、')}。`
+        });
+      } else {
+        segments.push({
+          stage: 3,
+          box: stage3Box,
+          text: `呢個成語冇特別嘅反義詞。`
+        });
+      }
+
+      // 加入解釋與例句
+      segments.push(
+        {
+          stage: 4,
+          box: stage4Box,
+          text: `解釋：${item.meaning} 屬於${item.sentiment}，${item.target}。`
+        },
+        {
+          stage: 5,
+          box: stage5Box,
+          text: `例句：${item.example}`
+        }
+      );
+
+      speakBtn.classList.add('hidden');
+      pauseSpeakBtn.classList.remove('hidden');
+      stopSpeakBtn.classList.remove('hidden');
+      speakingStatusBadge.classList.remove('hidden');
+
+      let segIndex = 0;
+
+      function playNextSegment() {
+        if (segIndex >= segments.length) {
+          resetSpeechButtons();
+          return;
+        }
+
+        const seg = segments[segIndex];
+        if (currentStage < seg.stage) {
+          currentStage = seg.stage;
+          applyStageVisibility();
+        }
+
+        clearSpeakingHighlights();
+        speakingStatusBadge.classList.remove('hidden');
+        seg.box.classList.add('speaking-ring');
+
+        const utter = new SpeechSynthesisUtterance(seg.text);
+        utter.lang = 'zh-HK';
+        if (voice) utter.voice = voice;
+        utter.rate = 0.92;
+        utter.pitch = 1.0;
+
+        utter.onend = () => {
+          segIndex++;
+          playNextSegment();
+        };
+
+        utter.onerror = () => {
+          resetSpeechButtons();
+        };
+
+        window.speechSynthesis.speak(utter);
+      }
+
+      playNextSegment();
+    }
+
+    // ==================== EVENT LISTENERS ====================
+    document.getElementById('play-anim-btn').addEventListener('click', startAutoAnimation);
+
+    document.getElementById('next-stage-btn').addEventListener('click', () => {
+      clearAutoAnim();
+      if (currentStage < 5) {
+        currentStage++;
+        applyStageVisibility();
+      }
+    });
+
+    document.getElementById('replay-btn').addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      resetSpeechButtons();
+      startAutoAnimation();
+    });
+
+    speakBtn.addEventListener('click', speakCurrentIdiom);
+
+    pauseSpeakBtn.addEventListener('click', () => {
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        pauseSpeakBtn.textContent = '⏸ 暫停讀音';
+      } else {
+        window.speechSynthesis.pause();
+        pauseSpeakBtn.textContent = '▶ 繼續讀音';
+      }
+    });
+
+    stopSpeakBtn.addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      resetSpeechButtons();
+    });
+
+    document.querySelectorAll('.stage-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        clearAutoAnim();
+        currentStage = Number(btn.dataset.jumpStage);
+        applyStageVisibility();
+      });
+    });
+
+    document.querySelectorAll('.grp-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        window.speechSynthesis.cancel();
+        resetSpeechButtons();
+        clearAutoAnim();
+
+        currentGroup = btn.dataset.grp;
+        document.querySelectorAll('.grp-btn').forEach(b => {
+          b.className = 'grp-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-700 text-stone-200 hover:bg-stone-600';
+        });
+        btn.className = 'grp-btn px-2.5 py-1 rounded-md text-xs font-semibold bg-[#faf6ee] text-[#1c1917]';
+
+        filteredIdioms = currentGroup === 'all'
+          ? [...IDIOMS]
+          : IDIOMS.filter(i => i.grp === currentGroup);
+
+        currentIndex = 0;
+        currentStage = 1;
+        populateSelect();
+        renderIdiom();
+      });
+    });
+
+    idiomSelect.addEventListener('change', (e) => {
+      window.speechSynthesis.cancel();
+      resetSpeechButtons();
+      clearAutoAnim();
+      currentIndex = Number(e.target.value);
+      currentStage = 1;
+      renderIdiom();
+    });
+
+    document.getElementById('prev-idiom-btn').addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      resetSpeechButtons();
+      clearAutoAnim();
+      currentIndex = (currentIndex - 1 + filteredIdioms.length) % filteredIdioms.length;
+      currentStage = 1;
+      renderIdiom();
+    });
+
+    document.getElementById('next-idiom-btn').addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      resetSpeechButtons();
+      clearAutoAnim();
+      currentIndex = (currentIndex + 1) % filteredIdioms.length;
+      currentStage = 1;
+      renderIdiom();
+    });
+
+    // Preload voices on Chrome/Safari
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => getCantoneseVoice();
+    }
+
+    // Init
+    populateSelect();
+    renderIdiom();
+  </script>
+</body>
+</html>
