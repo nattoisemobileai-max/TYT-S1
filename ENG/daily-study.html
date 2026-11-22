@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DSE Sprint · HKDSE English Language Challenge & Practice Hub</title>
+  <title>Eng F1@ · Secondary English Challenge & Practice Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -23,8 +23,9 @@
               800: '#182454',
               700: '#233475',
             },
-            amber: {
-              450: '#f59e0b',
+            bbc: {
+              blue: '#1a4ba3',
+              dark: '#12387d',
             }
           }
         }
@@ -40,7 +41,6 @@
     .font-display {
       font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
     }
-    /* Custom scrollbar for split panes */
     ::-webkit-scrollbar {
       width: 6px;
       height: 6px;
@@ -55,7 +55,6 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #94a3b8;
     }
-    /* Interactive vocabulary highlight */
     .vocab-term {
       border-bottom: 2px dashed #4f46e5;
       background-color: rgba(79, 70, 229, 0.08);
@@ -68,7 +67,6 @@
       background-color: rgba(79, 70, 229, 0.18);
       color: #312e81;
     }
-    /* Flashcard 3D flip */
     .perspective-1000 {
       perspective: 1000px;
     }
@@ -82,7 +80,6 @@
     .rotate-y-180 {
       transform: rotateY(180deg);
     }
-    /* Subtle pulse animation */
     @keyframes floatSlow {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-3px); }
@@ -96,92 +93,6 @@
 
   <!-- Toast / Message Box (Replaces alert) -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
-
-  <!-- ========================================================= -->
-  <!-- INITIAL SETUP / ONBOARDING WELCOME PAGE (HKDSE & S1–S3)   -->
-  <!-- ========================================================= -->
-  <div id="setup-screen" class="min-h-screen bg-gradient-to-br from-navy-950 via-navy-900 to-indigo-950 text-white flex flex-col justify-between p-4 sm:p-8">
-    <div class="max-w-5xl w-full mx-auto space-y-6 sm:space-y-8 my-auto">
-      <!-- Top Exam Crest Header -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-indigo-800/60 pb-5">
-        <div class="flex items-center gap-3.5">
-          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/25 text-navy-950 font-display font-extrabold text-xl shrink-0">
-            5**
-          </div>
-          <div>
-            <div class="flex flex-wrap items-center gap-2">
-              <span class="font-display font-extrabold text-xl sm:text-2xl tracking-tight text-white">DSE Sprint</span>
-              <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-400/20 text-amber-300 border border-amber-400/40">HKDSE & Secondary English</span>
-            </div>
-            <p class="text-xs sm:text-sm text-indigo-200 mt-0.5">HKDSE & Secondary School English Language Exam Practice Studio</p>
-          </div>
-        </div>
-        <button id="setup-resume-btn" onclick="enterPracticeHub(false)" class="hidden self-start sm:self-auto px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs sm:text-sm font-semibold text-indigo-100 transition">
-          Return to Hub →
-        </button>
-      </div>
-
-      <!-- Setup Card Container -->
-      <div class="bg-white text-slate-900 rounded-3xl shadow-2xl border border-indigo-200/30 p-6 sm:p-8 lg:p-10 space-y-8">
-        <div class="space-y-1.5">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-bold uppercase tracking-wider">
-            🎯 Step 1 of 2 · Personalize Your Exam Paper
-          </span>
-          <h1 class="font-display font-extrabold text-2xl sm:text-3xl text-slate-900">
-            Configure Your Form Level & Exam Topics
-          </h1>
-          <p class="text-sm text-slate-600 max-w-3xl">
-            Every reading passage, proofreading drill, writing prompt, and speaking task is tailored to <strong>Hong Kong secondary school</strong> internal exam standards and <strong>HKEAA HKDSE</strong> assessment frameworks.
-          </p>
-        </div>
-
-        <!-- Step 1: Form Level / Difficulty Selector -->
-        <div class="space-y-3">
-          <div class="flex items-center justify-between">
-            <label class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700">
-              1. Select Form Level / Difficulty
-            </label>
-            <span class="text-xs font-semibold text-indigo-600" id="setup-level-hint">Selected: DSE (Senior Secondary B2)</span>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5" id="setup-level-grid">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-
-        <!-- Step 2: Topic Selector -->
-        <div class="space-y-3">
-          <div class="flex flex-wrap items-center justify-between gap-2">
-            <label class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700">
-              2. Choose Exam Passage Topics <span class="font-normal text-slate-500">(Select one or multiple)</span>
-            </label>
-            <button onclick="selectAllSetupTopics()" class="text-xs font-bold text-indigo-600 hover:text-indigo-800 px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 transition">
-              Select All / Mixed DSE Themes
-            </button>
-          </div>
-
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3" id="setup-topic-grid">
-            <!-- Populated by JS -->
-          </div>
-        </div>
-
-        <!-- Action Footer -->
-        <div class="pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div class="text-xs sm:text-sm text-slate-600 bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200/80">
-            <span class="font-bold text-slate-800">Active Paper Blueprint:</span>
-            <span id="setup-blueprint-summary" class="text-indigo-700 font-semibold ml-1">DSE · Mixed DSE Topics</span>
-          </div>
-          <button onclick="enterPracticeHub(true)" class="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-navy-800 to-navy-900 hover:from-indigo-700 hover:to-navy-950 text-white font-display font-bold text-sm sm:text-base shadow-lg shadow-indigo-600/25 transition transform active:scale-[0.99] cursor-pointer text-center">
-            Start Personalized Practice →
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <p class="text-center text-xs text-indigo-300/80 mt-6">
-      Aligned with Hong Kong Junior & Senior Secondary English Curriculum and HKEAA HKDSE Papers 1–4.
-    </p>
-  </div>
 
   <!-- Vocabulary Tooltip Modal / Popover -->
   <div id="vocab-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4" onclick="closeVocabModal(event)">
@@ -197,7 +108,7 @@
       </div>
       <p class="mt-3 text-slate-700 text-sm leading-relaxed" id="vocab-def">Definition goes here.</p>
       <div class="mt-4 p-3 rounded-xl bg-amber-50/80 border border-amber-200/70">
-        <p class="text-xs font-semibold text-amber-800 uppercase tracking-wider mb-1">DSE Exam Usage Example</p>
+        <p class="text-xs font-semibold text-amber-800 uppercase tracking-wider mb-1">Eng F1@ Exam Usage Example</p>
         <p class="text-sm text-slate-800 italic" id="vocab-example">"Example sentence"</p>
       </div>
       <div class="mt-4 flex justify-end">
@@ -206,31 +117,51 @@
     </div>
   </div>
 
-  <!-- Top Navigation & Gamified Header -->
-  <header id="main-header" class="hidden bg-navy-900 text-white sticky top-0 z-40 shadow-lg border-b border-indigo-900/60">
+  <!-- Top Navigation & Gamified Header (Direct Entry, No Onboarding Gate) -->
+  <header id="main-header" class="bg-navy-900 text-white sticky top-0 z-40 shadow-lg border-b border-indigo-900/60">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex flex-wrap items-center justify-between py-3.5 gap-3">
         <!-- Brand Logo -->
         <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('daily')">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-500/20 text-navy-950 font-display font-extrabold text-xl">
-            5**
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-md shadow-amber-500/20 text-navy-950 font-display font-extrabold text-base">
+            F1@
           </div>
           <div>
             <div class="flex items-center gap-2">
-              <span class="font-display font-extrabold text-lg sm:text-xl tracking-tight text-white">DSE Sprint</span>
-              <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">HKDSE · S1–S6</span>
+              <span class="font-display font-extrabold text-lg sm:text-xl tracking-tight text-white">Eng F1@</span>
+              <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-bold bg-indigo-500/30 text-indigo-200 border border-indigo-400/30">S1–S6 Practice</span>
             </div>
             <p class="text-xs text-slate-300 hidden sm:block">Daily Exam Challenge & Practice Hub</p>
           </div>
         </div>
 
-        <!-- Gamified Stats & Active Level/Topic Badge -->
-        <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
-          <!-- Customize Level & Topic Button -->
-          <button onclick="openSetupScreen()" class="flex items-center gap-2 bg-indigo-600/40 hover:bg-indigo-600/60 border border-indigo-400/50 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-amber-300 transition cursor-pointer" title="Change Form Level (S1-DSE) or Exam Topic">
-            <span>⚙️</span>
-            <span id="header-active-profile">DSE · Mixed Topics</span>
-          </button>
+        <!-- Inline Quick Level & Topic Dropdowns + Gamified Stats -->
+        <div class="flex items-center gap-2 sm:gap-2.5 flex-wrap">
+          <!-- Form Level Quick Selector -->
+          <div class="flex items-center bg-navy-800/90 border border-indigo-700/60 rounded-xl px-2.5 py-1.5">
+            <label for="quick-level-select" class="text-[11px] uppercase tracking-wider font-semibold text-indigo-300 mr-1.5">Form</label>
+            <select id="quick-level-select" onchange="changeFormLevel(this.value)" class="bg-transparent text-xs sm:text-sm font-bold text-amber-300 focus:outline-none cursor-pointer">
+              <option value="S1" class="bg-navy-900 text-white">S1</option>
+              <option value="S2" class="bg-navy-900 text-white">S2</option>
+              <option value="S3" class="bg-navy-900 text-white">S3</option>
+              <option value="S4-S6" class="bg-navy-900 text-amber-300">S4–S6</option>
+            </select>
+          </div>
+
+          <!-- Topic Quick Selector -->
+          <div class="flex items-center bg-navy-800/90 border border-indigo-700/60 rounded-xl px-2.5 py-1.5">
+            <label for="quick-topic-select" class="text-[11px] uppercase tracking-wider font-semibold text-indigo-300 mr-1.5 hidden sm:inline">Topic</label>
+            <select id="quick-topic-select" onchange="changeExamTopic(this.value)" class="bg-transparent text-xs sm:text-sm font-bold text-white focus:outline-none cursor-pointer max-w-[140px] sm:max-w-[180px]">
+              <option value="social" class="bg-navy-900 text-white">Social Issues</option>
+              <option value="science" class="bg-navy-900 text-white">Science & Tech</option>
+              <option value="sports" class="bg-navy-900 text-white">Sports & Wellness</option>
+              <option value="pilography" class="bg-navy-900 text-white">Biography</option>
+              <option value="local_culture" class="bg-navy-900 text-white">Local Culture (HK)</option>
+              <option value="global_culture" class="bg-navy-900 text-white">Global Culture</option>
+              <option value="history" class="bg-navy-900 text-white">History & Heritage</option>
+              <option value="other_topics" class="bg-navy-900 text-white">Environment & Work</option>
+            </select>
+          </div>
 
           <!-- Target Grade Selector -->
           <div class="hidden md:flex items-center bg-navy-800/90 border border-indigo-700/60 rounded-xl px-2.5 py-1.5">
@@ -264,11 +195,14 @@
         </div>
       </div>
 
-      <!-- Paper Navigation Tabs -->
-      <nav class="flex items-center gap-1.5 overflow-x-auto pb-3 pt-1 no-scrollbar" aria-label="HKDSE Papers">
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1.5 overflow-x-auto pb-3 pt-1 no-scrollbar" aria-label="Eng F1@ Papers">
         <button data-tab="daily" onclick="switchTab('daily')" class="tab-btn active shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center gap-2 bg-amber-400 text-navy-950 shadow-sm">
-          <span>⚡ Daily Sprint</span>
+          <span>⚡ 每日挑戰 Daily Sprint</span>
           <span id="daily-status-dot" class="w-2 h-2 rounded-full bg-navy-950"></span>
+        </button>
+        <button data-tab="bbc6min" onclick="switchTab('bbc6min')" class="tab-btn shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center gap-1.5 text-indigo-200 hover:bg-navy-800 hover:text-white">
+          <span>🎧 Listen and Catch · BBC 6 Min</span>
         </button>
         <button data-tab="paper1" onclick="switchTab('paper1')" class="tab-btn shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center gap-1.5 text-indigo-200 hover:bg-navy-800 hover:text-white">
           <span>📖 Paper 1: Reading</span>
@@ -277,13 +211,13 @@
           <span>✍️ Paper 2: Writing</span>
         </button>
         <button data-tab="paper3" onclick="switchTab('paper3')" class="tab-btn shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center gap-1.5 text-indigo-200 hover:bg-navy-800 hover:text-white">
-          <span>🎧 Paper 3: Integrated</span>
+          <span>📋 Paper 3: Integrated</span>
         </button>
         <button data-tab="paper4" onclick="switchTab('paper4')" class="tab-btn shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center gap-1.5 text-indigo-200 hover:bg-navy-800 hover:text-white">
           <span>🎙️ Paper 4: Speaking</span>
         </button>
         <button data-tab="drills" onclick="switchTab('drills')" class="tab-btn shrink-0 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center gap-1.5 text-indigo-200 hover:bg-navy-800 hover:text-white">
-          <span>🧩 Proofreading & Vocab</span>
+          <span>🧩 Proofreading & Flashcards</span>
         </button>
       </nav>
     </div>
@@ -294,7 +228,7 @@
     <div class="bg-white rounded-3xl shadow-2xl border border-slate-200 max-w-2xl w-full p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between border-b border-slate-100 pb-4">
         <div>
-          <h2 class="font-display font-bold text-xl sm:text-2xl text-slate-900">Your HKDSE Readiness Dashboard</h2>
+          <h2 class="font-display font-bold text-xl sm:text-2xl text-slate-900">Your Eng F1@ Readiness Dashboard</h2>
           <p class="text-sm text-slate-500">Target Grade: <span id="modal-target-grade" class="font-bold text-indigo-600">Level 5**</span> · Local progress saved automatically</p>
         </div>
         <button onclick="toggleStatsModal()" class="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition">
@@ -369,7 +303,7 @@
   </div>
 
   <!-- Main Workspace Container -->
-  <main id="main-workspace" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+  <main id="main-workspace" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
 
     <!-- ========================================================= -->
     <!-- SECTION 1: DAILY CHALLENGE (MIXED SPRINT)                 -->
@@ -382,19 +316,19 @@
           <div class="space-y-2 max-w-2xl">
             <div class="flex flex-wrap items-center gap-2">
               <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/20 border border-amber-300/30 text-amber-300 text-xs font-bold uppercase tracking-wider">
-                <span>📅 HKDSE & Secondary Challenge</span>
+                <span>📅 Eng F1@ Daily Challenge</span>
                 <span>·</span>
                 <span id="today-date-badge">Challenge #142</span>
               </span>
               <span id="daily-level-pill" class="px-3 py-1 rounded-full bg-indigo-500/30 border border-indigo-400/40 text-indigo-100 text-xs font-bold">
-                DSE Level · Mixed Topics
+                S4–S6 Level · Social Issues
               </span>
             </div>
             <h1 class="font-display font-extrabold text-2xl sm:text-3xl lg:text-4xl tracking-tight leading-tight">
               5-Minute Exam Workout
             </h1>
             <p class="text-indigo-100 text-sm sm:text-base leading-relaxed" id="daily-hero-desc">
-              Tailored to your selected Form Level and Topics. Complete 5 rapid-fire questions covering <span class="text-amber-300 font-semibold">Grammar in Context</span>, <span class="text-amber-300 font-semibold">Proofreading</span>, and <span class="text-amber-300 font-semibold">Exam Vocabulary</span> to extend your streak.
+              Complete 5 rapid-fire questions covering <span class="text-amber-300 font-semibold">Grammar in Context</span>, <span class="text-amber-300 font-semibold">Proofreading</span>, and <span class="text-amber-300 font-semibold">Exam Vocabulary</span> to extend your streak.
             </p>
           </div>
 
@@ -423,15 +357,11 @@
               <button onclick="generateAISprintQuiz()" id="ai-sprint-gen-btn" class="text-xs font-bold px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition">
                 ✨ AI Fresh Set
               </button>
-              <div class="flex items-center gap-1.5" id="sprint-dots">
-                <!-- Populated by JS -->
-              </div>
+              <div class="flex items-center gap-1.5" id="sprint-dots"></div>
             </div>
           </div>
 
-          <div id="sprint-question-container" class="space-y-5">
-            <!-- Dynamic question rendered here -->
-          </div>
+          <div id="sprint-question-container" class="space-y-5"></div>
 
           <div class="mt-6 pt-5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
             <button onclick="prevSprintQ()" id="sprint-prev-btn" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 font-semibold text-sm transition disabled:opacity-40">
@@ -453,7 +383,7 @@
           <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6">
             <div class="flex items-center gap-2.5 mb-3">
               <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-base">💡</span>
-              <h3 class="font-display font-bold text-base text-slate-900">HKEAA Marker's Tip</h3>
+              <h3 class="font-display font-bold text-base text-slate-900">Eng F1@ Marker's Tip</h3>
             </div>
             <p class="text-sm text-slate-600 leading-relaxed">
               In <strong>Paper 1 Summary Cloze</strong>, always check the grammatical part of speech required by the blank. Even if you find the exact idea in the passage, you must often transform a <em>verb</em> into a <em>gerund or noun</em> to fit the summary syntax!
@@ -465,25 +395,25 @@
           </div>
 
           <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 space-y-3">
-            <h3 class="font-display font-bold text-base text-slate-900">Jump to Full Paper Practice</h3>
+            <h3 class="font-display font-bold text-base text-slate-900">Jump to Full Practice</h3>
+            <button onclick="switchTab('bbc6min')" class="w-full text-left p-3.5 rounded-2xl border border-blue-200 bg-blue-50/40 hover:border-blue-400 hover:bg-blue-50 transition flex items-center justify-between group">
+              <div>
+                <p class="font-semibold text-sm text-blue-900">🎧 Listen and Catch · BBC 6 Min</p>
+                <p class="text-xs text-blue-700">Daily BBC 6 Minute English audio + quiz</p>
+              </div>
+              <span class="text-blue-700 font-bold">→</span>
+            </button>
             <button onclick="switchTab('paper1')" class="w-full text-left p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/40 transition flex items-center justify-between group">
               <div>
-                <p class="font-semibold text-sm text-slate-900 group-hover:text-indigo-700">Paper 1 · Reading Part B2</p>
-                <p class="text-xs text-slate-500">MC, T/F/NG, Referencing & Summary Cloze</p>
+                <p class="font-semibold text-sm text-slate-900 group-hover:text-indigo-700">📖 Paper 1 · Reading + Audio</p>
+                <p class="text-xs text-slate-500">UK/US narration + MC, T/F/NG & Cloze</p>
               </div>
               <span class="text-indigo-600 font-bold">→</span>
             </button>
             <button onclick="switchTab('paper2')" class="w-full text-left p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/40 transition flex items-center justify-between group">
               <div>
-                <p class="font-semibold text-sm text-slate-900 group-hover:text-indigo-700">Paper 2 · AI Essay Grader</p>
-                <p class="text-xs text-slate-500">Part A & B with HKEAA 7-point rubric</p>
-              </div>
-              <span class="text-indigo-600 font-bold">→</span>
-            </button>
-            <button onclick="switchTab('paper4')" class="w-full text-left p-3.5 rounded-2xl border border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/40 transition flex items-center justify-between group">
-              <div>
-                <p class="font-semibold text-sm text-slate-900 group-hover:text-indigo-700">Paper 4 · Speaking Simulator</p>
-                <p class="text-xs text-slate-500">10-min prep + AI Group Interaction</p>
+                <p class="font-semibold text-sm text-slate-900 group-hover:text-indigo-700">✍️ Paper 2 · AI Essay Grader</p>
+                <p class="text-xs text-slate-500">Part A & B with 7-point rubric</p>
               </div>
               <span class="text-indigo-600 font-bold">→</span>
             </button>
@@ -493,13 +423,98 @@
     </section>
 
     <!-- ========================================================= -->
-    <!-- SECTION 2: PAPER 1 - READING (SPLIT-SCREEN LAYOUT)        -->
+    <!-- SECTION 1B: LISTEN AND CATCH · BBC LEARNING ENGLISH 6 MIN -->
+    <!-- ========================================================= -->
+    <section id="tab-bbc6min" class="tab-panel hidden space-y-6">
+      <!-- Royal Blue Banner matching EmmyDSE Listen and Catch style -->
+      <div class="bg-[#1a4ba3] rounded-3xl p-6 sm:p-10 text-white shadow-xl">
+        <div class="max-w-4xl space-y-2.5">
+          <p class="text-amber-300 font-bold text-xs sm:text-sm tracking-wide">Listen and Catch · BBC Learning English 6 Minute English</p>
+          <h1 class="font-display font-extrabold text-3xl sm:text-4xl tracking-tight text-white">Listen and Catch</h1>
+          <p class="text-blue-100 text-sm sm:text-base leading-relaxed">
+            每日精選 BBC Learning English 6 Minute English 真實英文題材，邊聽邊答題：選擇題考你明唔明，填充考你聽唔聽到細節，最後仲有生字表同 Flash cards。支援英式（British）及美式（US）發音朗讀！
+          </p>
+        </div>
+      </div>
+
+      <!-- Daily BBC 6 Minute English Episode Feed -->
+      <div class="space-y-3" id="bbc-episode-list">
+        <!-- Populated by renderBbcEpisodeList() -->
+      </div>
+
+      <!-- Active BBC 6 Minute English Interactive Practice Player -->
+      <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 space-y-6" id="bbc-active-workspace">
+        <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-lg bg-blue-100 text-blue-800 text-xs font-bold" id="bbc-active-date">11 月 23 日（星期一）</span>
+              <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-800 text-xs font-bold">BBC Learning English · 6 Minute English</span>
+            </div>
+            <h2 class="font-display font-bold text-xl sm:text-2xl text-slate-900 mt-1.5" id="bbc-active-title">點樣面對壓力？Overwhelm、Burnout 同 Doomscrolling</h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5" id="bbc-active-subtitle">BBC Learning English · 6 Minute English — How to deal with modern stress</p>
+          </div>
+
+          <!-- Accent Toggle for BBC Audio -->
+          <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+            <button onclick="setReadingAccent('en-GB')" class="accent-btn-gb px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-indigo-700 shadow-2xs transition cursor-pointer">
+              🇬🇧 British Accent
+            </button>
+            <button onclick="setReadingAccent('en-US')" class="accent-btn-us px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer">
+              🇺🇸 US Accent
+            </button>
+          </div>
+        </div>
+
+        <!-- Audio Player Bar (EmmyDSE Light Blue Box Style) -->
+        <div class="rounded-2xl bg-[#e6f4ff] border border-sky-200/80 p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <p class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+              <span>🎧</span>
+              <span>撳 ▶ 聽 BBC 6 Minute English 精華朗讀（可以一邊聽一邊答題）</span>
+            </p>
+            <button onclick="toggleBbcTranscript()" id="bbc-transcript-toggle" class="text-xs font-bold text-blue-700 hover:underline">
+              顯示 / 隱藏原文 Transcript
+            </button>
+          </div>
+
+          <div class="bg-white rounded-full px-4 py-2.5 shadow-2xs border border-sky-100 flex flex-wrap items-center gap-3">
+            <button onclick="playAudioText('bbc')" class="w-8 h-8 rounded-full bg-[#1a4ba3] hover:bg-[#12387d] text-white flex items-center justify-center text-xs font-bold transition cursor-pointer" title="Play">
+              ▶
+            </button>
+            <button onclick="pauseAudioText()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold transition cursor-pointer" title="Pause">
+              ⏸
+            </button>
+            <button onclick="stopAudioText()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-700 flex items-center justify-center text-xs font-bold transition cursor-pointer" title="Stop">
+              ⏹
+            </button>
+            <span id="bbc-audio-time" class="text-xs font-mono font-semibold text-slate-600 tabular-nums">0:00 / 1:15</span>
+            <div class="flex-1 min-w-[100px] h-2 bg-slate-200 rounded-full overflow-hidden">
+              <div id="bbc-audio-progress" class="h-full bg-[#1a4ba3] rounded-full transition-all duration-200" style="width: 0%"></div>
+            </div>
+            <span id="bbc-audio-status" class="text-[11px] font-bold text-blue-700 hidden sm:inline">Ready · UK</span>
+          </div>
+
+          <!-- Optional Transcript Box -->
+          <div id="bbc-transcript-box" class="hidden p-4 rounded-xl bg-white/90 border border-sky-200 text-sm text-slate-800 leading-relaxed space-y-2">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- BBC Listening Comprehension Questions & Key Vocab -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6" id="bbc-quiz-area">
+          <!-- Populated by renderBbcEpisodeDetail() -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- SECTION 2: PAPER 1 - READING (SPLIT-SCREEN + AUDIO BAR)   -->
     <!-- ========================================================= -->
     <section id="tab-paper1" class="tab-panel hidden space-y-5">
       <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200/80 shadow-sm">
         <div>
           <div class="flex flex-wrap items-center gap-2">
-            <span id="p1-level-badge" class="px-2.5 py-0.5 rounded-lg bg-indigo-100 text-indigo-800 text-xs font-bold">PAPER 1 · DSE PART B2</span>
+            <span id="p1-level-badge" class="px-2.5 py-0.5 rounded-lg bg-indigo-100 text-indigo-800 text-xs font-bold">PAPER 1 · S4–S6</span>
             <span id="p1-topic-badge" class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-800 text-xs font-bold">Social Issues</span>
             <span class="text-xs text-slate-500 font-medium" id="p1-time-rec">Recommended time: 18 mins</span>
           </div>
@@ -517,13 +532,66 @@
 
       <!-- Split Screen Layout -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <!-- Left Pane: Passage with Paragraph Numbers & Interactive Vocab -->
-        <article id="p1-passage-pane" class="lg:col-span-6 bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 lg:max-h-[75vh] lg:overflow-y-auto space-y-5 leading-relaxed text-slate-800 text-[15px]">
-          <!-- Dynamically populated by renderPaper1Content() -->
-        </article>
+        <!-- Left Pane: EmmyDSE-style Reading Audio Bar + Passage -->
+        <div class="lg:col-span-6 bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 lg:max-h-[78vh] lg:overflow-y-auto space-y-5">
+          <!-- EmmyDSE Reading Header & Audio Narration Box -->
+          <div class="space-y-3">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-lg bg-[#1a4ba3] text-white font-display font-extrabold text-sm flex items-center justify-center">A</span>
+              <h3 class="font-display font-bold text-lg text-[#1a4ba3]">Reading 閱讀</h3>
+            </div>
+            <p class="text-sm italic text-slate-600">Read the passage and answer the questions.</p>
 
-        <!-- Right Pane: DSE-Style Questions -->
-        <div class="lg:col-span-6 bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 lg:max-h-[75vh] lg:overflow-y-auto space-y-6">
+            <!-- Light-Blue Audio Player Box matching attached screenshot -->
+            <div class="rounded-2xl bg-[#e6f4ff] border border-sky-200/80 p-4 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <p class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-1.5">
+                  <span>🎧</span>
+                  <span>撳 ▶ 聽文章朗讀（可以一邊聽一邊讀）</span>
+                </p>
+
+                <!-- British & US Accent Toggle -->
+                <div class="flex items-center gap-1 bg-white/80 p-1 rounded-xl border border-sky-200">
+                  <button onclick="setReadingAccent('en-GB')" class="accent-btn-gb px-2.5 py-1 rounded-lg text-[11px] font-bold bg-[#1a4ba3] text-white transition cursor-pointer">
+                    🇬🇧 British
+                  </button>
+                  <button onclick="setReadingAccent('en-US')" class="accent-btn-us px-2.5 py-1 rounded-lg text-[11px] font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer">
+                    🇺🇸 US
+                  </button>
+                </div>
+              </div>
+
+              <!-- Pill Audio Control Bar with Play, Pause & Stop -->
+              <div class="bg-white rounded-full px-3.5 py-2 shadow-2xs border border-sky-100 flex flex-wrap items-center gap-2.5">
+                <button onclick="playAudioText('paper1')" class="w-8 h-8 rounded-full bg-[#1a4ba3] hover:bg-[#12387d] text-white flex items-center justify-center text-xs font-bold transition cursor-pointer" title="Play">
+                  ▶
+                </button>
+                <button onclick="pauseAudioText()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold transition cursor-pointer" title="Pause">
+                  ⏸
+                </button>
+                <button onclick="stopAudioText()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-700 flex items-center justify-center text-xs font-bold transition cursor-pointer" title="Stop">
+                  ⏹
+                </button>
+                <span id="p1-audio-time" class="text-xs font-mono font-semibold text-slate-600 tabular-nums">0:00 / 1:25</span>
+                <div class="flex-1 min-w-[80px] h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                  <div id="p1-audio-progress" class="h-full bg-[#1a4ba3] rounded-full transition-all duration-200" style="width: 0%"></div>
+                </div>
+                <select id="reading-rate-select" onchange="updateReadingRate(this.value)" class="text-[11px] font-bold text-slate-600 bg-slate-100 rounded-lg px-2 py-1 focus:outline-none cursor-pointer" title="Playback Speed">
+                  <option value="0.85">0.85x</option>
+                  <option value="1" selected>1.0x</option>
+                  <option value="1.15">1.15x</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <article id="p1-passage-pane" class="space-y-5 leading-relaxed text-slate-800 text-[15px] pt-2">
+            <!-- Dynamically populated by renderPaper1Content() -->
+          </article>
+        </div>
+
+        <!-- Right Pane: Questions -->
+        <div class="lg:col-span-6 bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 lg:max-h-[78vh] lg:overflow-y-auto space-y-6">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <h3 class="font-display font-bold text-lg text-slate-900">Questions (10 Marks)</h3>
             <span id="p1-score-badge" class="hidden px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Score: 0/10</span>
@@ -540,11 +608,10 @@
     <!-- SECTION 3: PAPER 2 - WRITING (AI GRADER & CRITERIA)       -->
     <!-- ========================================================= -->
     <section id="tab-paper2" class="tab-panel hidden space-y-6">
-      <!-- Part A / Part B Selector & Prompt Card -->
       <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8">
         <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-5">
           <div>
-            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600" id="p2-header-sub">HKDSE & Secondary Paper 2 · Writing Studio</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600" id="p2-header-sub">Eng F1@ Paper 2 · Writing Studio</span>
             <h2 class="font-display font-bold text-xl sm:text-2xl text-slate-900 mt-0.5">Essay Drafting & AI Band Evaluator</h2>
           </div>
           <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-xl">
@@ -555,16 +622,15 @@
               Part B (Topic Essay)
             </button>
             <button onclick="selectWritingPrompt('partB_school')" id="btn-partB_school" class="px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition">
-              Part B (Speech / Letter)
+              Part B (Proposal)
             </button>
           </div>
         </div>
 
-        <!-- Prompt Box -->
         <div class="p-5 rounded-2xl bg-indigo-50/70 border border-indigo-200/80 space-y-2">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-bold uppercase tracking-wider text-indigo-800" id="writing-prompt-tag">Part A · Compulsory Task (Speech / Proposal)</span>
-            <span class="text-xs font-semibold text-indigo-700" id="writing-target-words">Target: 200 words</span>
+            <span class="text-xs font-bold uppercase tracking-wider text-indigo-800" id="writing-prompt-tag">Part A · Compulsory Task (Assembly Speech)</span>
+            <span class="text-xs font-semibold text-indigo-700" id="writing-target-words">Target: ~200 words</span>
           </div>
           <p class="text-sm sm:text-base text-slate-800 leading-relaxed font-medium" id="writing-prompt-text">
             You are Chris Wong, Chairperson of the Student Union. Your school is considering banning smartphones completely on campus during school hours. Write a speech to be delivered at the morning assembly expressing your views on this proposal and suggesting practical alternatives.
@@ -572,9 +638,7 @@
         </div>
       </div>
 
-      <!-- Writing Workspace Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Editor Column -->
         <div class="lg:col-span-7 bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 flex flex-col">
           <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-100">
             <div class="flex items-center gap-4">
@@ -591,28 +655,23 @@
             </button>
           </div>
 
-          <textarea id="essay-editor" oninput="updateWordCount()" rows="14" placeholder="Begin drafting your HKDSE response here. Focus on clear topic sentences, cohesive devices (e.g., Furthermore, Conversely, Notwithstanding), and varied sentence structures..." class="w-full flex-1 p-4 rounded-2xl bg-slate-50/60 border border-slate-200 text-slate-900 text-sm sm:text-[15px] leading-relaxed focus:outline-none focus:bg-white focus:border-indigo-500 resize-y"></textarea>
+          <textarea id="essay-editor" oninput="updateWordCount()" rows="14" placeholder="Begin drafting your Eng F1@ response here. Focus on clear topic sentences, cohesive devices (e.g., Furthermore, Conversely, Notwithstanding), and varied sentence structures..." class="w-full flex-1 p-4 rounded-2xl bg-slate-50/60 border border-slate-200 text-slate-900 text-sm sm:text-[15px] leading-relaxed focus:outline-none focus:bg-white focus:border-indigo-500 resize-y"></textarea>
 
           <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
             <button onclick="clearEssay()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs sm:text-sm font-semibold transition">
               Clear Draft
             </button>
             <button onclick="evaluateEssayWithAI()" id="ai-grade-btn" class="px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-navy-800 hover:from-indigo-700 hover:to-navy-900 text-white font-bold text-sm shadow-md transition flex items-center gap-2">
-              <span>🤖 Grade with HKEAA AI Examiner</span>
+              <span>🤖 Grade with AI Examiner</span>
             </button>
           </div>
 
-          <!-- AI Grading Result Box -->
-          <div id="ai-essay-feedback" class="hidden mt-6 p-5 rounded-2xl bg-slate-900 text-white space-y-4">
-            <!-- Populated dynamically -->
-          </div>
+          <div id="ai-essay-feedback" class="hidden mt-6 p-5 rounded-2xl bg-slate-900 text-white space-y-4"></div>
         </div>
 
-        <!-- Right Column: HKEAA Rubric Checklist & Lexical Upgrade Bank -->
         <div class="lg:col-span-5 space-y-6">
-          <!-- HKEAA 7-Point Criteria Checklist -->
           <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 space-y-3">
-            <h3 class="font-display font-bold text-base text-slate-900">HKEAA Marking Criteria Checklist</h3>
+            <h3 class="font-display font-bold text-base text-slate-900">Marking Criteria Checklist</h3>
             <p class="text-xs text-slate-500">Tick off each requirement before submitting for AI grading:</p>
             <div class="space-y-2.5 text-sm pt-1">
               <label class="flex items-start gap-2.5 cursor-pointer">
@@ -621,7 +680,7 @@
               </label>
               <label class="flex items-start gap-2.5 cursor-pointer">
                 <input type="checkbox" class="mt-1 rounded text-indigo-600" />
-                <span><strong>Language (L):</strong> Wide range of vocabulary, accurate tenses, and complex clauses (participle/inversion).</span>
+                <span><strong>Language (L):</strong> Wide range of vocabulary, accurate tenses, and complex clauses.</span>
               </label>
               <label class="flex items-start gap-2.5 cursor-pointer">
                 <input type="checkbox" class="mt-1 rounded text-indigo-600" />
@@ -629,20 +688,17 @@
               </label>
               <label class="flex items-start gap-2.5 cursor-pointer">
                 <input type="checkbox" class="mt-1 rounded text-indigo-600" />
-                <span><strong>Tone & Register:</strong> Appropriate audience awareness (e.g., persuasive yet respectful for assembly).</span>
+                <span><strong>Tone & Register:</strong> Appropriate audience awareness (e.g., persuasive yet respectful).</span>
               </label>
             </div>
           </div>
 
-          <!-- High-Level Vocabulary Upgrade Bank -->
           <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 space-y-3">
             <div class="flex items-center justify-between">
               <h3 class="font-display font-bold text-base text-slate-900">Band 5** Lexical Upgrade Bank</h3>
               <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Click to Copy</span>
             </div>
-            <div class="space-y-2 text-xs" id="vocab-upgrade-list">
-              <!-- Populated by JS -->
-            </div>
+            <div class="space-y-2 text-xs" id="vocab-upgrade-list"></div>
           </div>
         </div>
       </div>
@@ -655,7 +711,7 @@
       <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8">
         <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
           <div>
-            <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-800 text-xs font-bold">PAPER 3 · PART B2 INTEGRATED SKILLS</span>
+            <span class="px-2.5 py-0.5 rounded-lg bg-amber-100 text-amber-800 text-xs font-bold">PAPER 3 · INTEGRATED SKILLS</span>
             <h2 class="font-display font-bold text-xl sm:text-2xl text-slate-900 mt-1">Data File Synthesis & Tape-Script Note-Taking Trainer</h2>
             <p class="text-sm text-slate-500 mt-0.5">Extract key points from the Data File (Email + Meeting Transcript) and synthesize a formal response.</p>
           </div>
@@ -665,27 +721,15 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mt-6">
-          <!-- Simulated Data File -->
           <div class="lg:col-span-6 space-y-4">
-            <h3 class="font-display font-bold text-sm uppercase tracking-wider text-slate-500">Data File Extracts (<span id="p3-context-label">DSE Level</span>)</h3>
-
-            <!-- DF 1: Email -->
-            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs sm:text-sm" id="p3-df1-box">
-              <!-- Dynamically rendered -->
-            </div>
-
-            <!-- DF 2: Tape-script snippet -->
-            <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-200/80 space-y-2 text-xs sm:text-sm" id="p3-df2-box">
-              <!-- Dynamically rendered -->
-            </div>
+            <h3 class="font-display font-bold text-sm uppercase tracking-wider text-slate-500">Data File Extracts (<span id="p3-context-label">S4–S6 Level</span>)</h3>
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-xs sm:text-sm" id="p3-df1-box"></div>
+            <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-200/80 space-y-2 text-xs sm:text-sm" id="p3-df2-box"></div>
           </div>
 
-          <!-- Student Synthesis Box -->
           <div class="lg:col-span-6 flex flex-col space-y-4">
             <h3 class="font-display font-bold text-sm uppercase tracking-wider text-slate-500">Your Synthesized Response</h3>
-            <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/70 text-xs text-amber-900" id="p3-task-instruction">
-              <!-- Dynamically rendered -->
-            </div>
+            <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/70 text-xs text-amber-900" id="p3-task-instruction"></div>
             <textarea id="p3-synthesis-input" rows="10" placeholder="Write your formal notice / email here, covering all 5 key information points..." class="w-full flex-1 p-4 rounded-2xl bg-white border border-slate-300 text-sm leading-relaxed focus:outline-none focus:border-indigo-500"></textarea>
             <div id="p3-feedback-box" class="hidden p-4 rounded-2xl bg-slate-900 text-white text-xs sm:text-sm space-y-2"></div>
           </div>
@@ -698,7 +742,6 @@
     <!-- ========================================================= -->
     <section id="tab-paper4" class="tab-panel hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Left: Prompt & 10-Minute Prep Scratchpad -->
         <div class="lg:col-span-6 bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 space-y-5">
           <div class="flex items-center justify-between border-b border-slate-100 pb-4">
             <div>
@@ -712,16 +755,13 @@
             </div>
           </div>
 
-          <div class="p-4 rounded-2xl bg-purple-50/70 border border-purple-200/80 space-y-2 text-sm" id="p4-prompt-box">
-            <!-- Dynamically rendered based on selected Level & Topic -->
-          </div>
+          <div class="p-4 rounded-2xl bg-purple-50/70 border border-purple-200/80 space-y-2 text-sm" id="p4-prompt-box"></div>
 
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Note Card Scratchpad (Point-Form Ideas)</label>
             <textarea rows="6" placeholder="• Point 1 (Benefit): 24/7 instant grammar feedback, personalized drills...&#10;• Point 2 (Risk): Plagiarism, weakening independent critical thinking...&#10;• Rebuttal / Compromise: AI as a 'coach', not a 'ghostwriter'..." class="w-full p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm focus:outline-none focus:border-purple-500"></textarea>
           </div>
 
-          <!-- Useful Discourse Markers -->
           <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
             <p class="text-xs font-bold uppercase tracking-wider text-slate-600">Band 5** Group Interaction Discourse Markers</p>
             <div class="flex flex-wrap gap-1.5 text-xs">
@@ -733,7 +773,6 @@
           </div>
         </div>
 
-        <!-- Right: Interactive AI Groupmates & 1-Min Individual Response -->
         <div class="lg:col-span-6 bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 flex flex-col justify-between space-y-5">
           <div class="space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -743,7 +782,6 @@
               </span>
             </div>
 
-            <!-- Chat Log -->
             <div id="speaking-chat-log" class="space-y-3 max-h-[300px] overflow-y-auto p-3 rounded-2xl bg-slate-50 border border-slate-200/70 text-sm">
               <div class="p-3 rounded-xl bg-white border border-slate-200 shadow-2xs">
                 <p class="text-xs font-bold text-indigo-700 mb-1">Candidate A (Chloe) · Opening Turn</p>
@@ -751,7 +789,6 @@
               </div>
             </div>
 
-            <!-- User Turn Input -->
             <div class="space-y-2">
               <label class="text-xs font-bold text-slate-600">Your Turn (Type what you would say aloud in the exam):</label>
               <textarea id="speaking-user-turn" rows="3" placeholder="e.g., Thank you, Chloe. I completely agree that instant feedback is invaluable, especially for Paper 2 writing. However, I'm slightly concerned that..." class="w-full p-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-indigo-500"></textarea>
@@ -766,7 +803,6 @@
             </div>
           </div>
 
-          <!-- Individual Response Box -->
           <div id="ir-box" class="hidden p-4 rounded-2xl bg-navy-900 text-white space-y-2 text-xs sm:text-sm">
             <div class="flex items-center justify-between">
               <span class="font-bold text-amber-400">Examiner's 1-Minute Individual Response Question:</span>
@@ -784,11 +820,10 @@
     <!-- ========================================================= -->
     <section id="tab-drills" class="tab-panel hidden space-y-6">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <!-- Left: Classic HKDSE Proofreading Drill -->
         <div class="lg:col-span-7 bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 space-y-5">
           <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
             <div>
-              <span class="px-2.5 py-0.5 rounded-lg bg-rose-100 text-rose-800 text-xs font-bold">PAPER 1 PART B2 · PROOFREADING</span>
+              <span class="px-2.5 py-0.5 rounded-lg bg-rose-100 text-rose-800 text-xs font-bold">PAPER 1 · PROOFREADING</span>
               <h2 class="font-display font-bold text-xl text-slate-900 mt-1">Spot & Correct the Line Error</h2>
               <p class="text-xs text-slate-500 mt-0.5">Each numbered line contains <strong>one grammatical error</strong> (wrong word, extra word, or missing word).</p>
             </div>
@@ -797,32 +832,26 @@
             </button>
           </div>
 
-          <div class="space-y-3 text-sm" id="proofreading-lines">
-            <!-- Populated by JS -->
-          </div>
+          <div class="space-y-3 text-sm" id="proofreading-lines"></div>
         </div>
 
-        <!-- Right: Interactive DSE Collocations & Idioms Flashcards -->
         <div class="lg:col-span-5 bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-8 flex flex-col justify-between space-y-5">
           <div>
             <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-5">
               <div>
                 <span class="px-2.5 py-0.5 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold">LEXICAL RESOURCE</span>
-                <h2 class="font-display font-bold text-xl text-slate-900 mt-1">DSE Idioms & Collocations</h2>
+                <h2 class="font-display font-bold text-xl text-slate-900 mt-1">Eng F1@ Idioms & Collocations</h2>
               </div>
               <span class="text-xs font-bold text-slate-500" id="flashcard-counter">1 / 6</span>
             </div>
 
-            <!-- 3D Flip Card -->
             <div class="perspective-1000 w-full h-64 cursor-pointer" onclick="flipFlashcard()">
               <div id="flashcard-inner" class="relative w-full h-full transform-style-3d">
-                <!-- Front -->
                 <div class="absolute inset-0 backface-hidden rounded-2xl bg-gradient-to-br from-navy-900 to-indigo-800 text-white p-6 flex flex-col items-center justify-center text-center shadow-lg border border-indigo-700">
                   <span class="text-[11px] uppercase tracking-widest font-bold text-amber-300 mb-2" id="fc-category">Academic Collocation</span>
                   <h3 class="font-display font-extrabold text-2xl sm:text-3xl leading-snug" id="fc-front">a double-edged sword</h3>
-                  <p class="text-xs text-indigo-200 mt-4">Tap card to reveal meaning & DSE usage ↻</p>
+                  <p class="text-xs text-indigo-200 mt-4">Tap card to reveal meaning & usage ↻</p>
                 </div>
-                <!-- Back -->
                 <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl bg-amber-50 border-2 border-amber-300 text-slate-900 p-6 flex flex-col justify-center text-center shadow-lg">
                   <p class="text-xs font-bold uppercase tracking-wider text-amber-800 mb-1">Meaning</p>
                   <p class="font-semibold text-sm sm:text-base text-slate-900 mb-3" id="fc-meaning">Something that has both favorable and unfavorable consequences.</p>
@@ -849,10 +878,10 @@
   </main>
 
   <!-- Minimalist Academic Footer -->
-  <footer id="main-footer" class="hidden border-t border-slate-200 bg-white mt-12">
+  <footer id="main-footer" class="border-t border-slate-200 bg-white mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
-      <p><strong>DSE Sprint</strong> · Built for Hong Kong Secondary School & HKDSE English Language Candidates.</p>
-      <p>Aligned with HKEAA Paper 1–4 Assessment Frameworks · Practice daily for Level 5**.</p>
+      <p><strong>Eng F1@</strong> · Built for Hong Kong Secondary School English Language Learners (S1–S6).</p>
+      <p>Aligned with Secondary Papers 1–4 & Daily BBC 6 Minute English · Practice daily for Level 5**.</p>
     </div>
   </footer>
 
@@ -864,66 +893,29 @@
     // 0. SECONDARY FORM LEVELS + TOPICS CATALOG
     // -----------------------------------------------------------
     const FORM_LEVELS = [
-      {
-        id: 'S1',
-        badge: 'Form 1 · Junior',
-        title: 'S1 Foundation',
-        subtitle: 'Secondary 1 Exam Prep',
-        desc: 'Core tenses, prepositions, everyday school & Hong Kong community vocabulary, narrative & descriptive comprehension.',
-        wordGoalA: 120,
-        wordGoalB: 160,
-        recMins: 12
-      },
-      {
-        id: 'S2',
-        badge: 'Form 2 · Junior',
-        title: 'S2 Intermediate',
-        subtitle: 'Secondary 2 Exam Prep',
-        desc: 'Conditionals, comparatives, reported speech, feature articles, formal emails & guided summary cloze.',
-        wordGoalA: 150,
-        wordGoalB: 220,
-        recMins: 15
-      },
-      {
-        id: 'S3',
-        badge: 'Form 3 · Pre-DSE',
-        title: 'S3 Bridge to DSE',
-        subtitle: 'Secondary 3 Exam Prep',
-        desc: 'Passive voice, relative clauses, argumentative essays, T/F/NG inference & HKEAA-style proofreading.',
-        wordGoalA: 180,
-        wordGoalB: 280,
-        recMins: 16
-      },
-      {
-        id: 'DSE',
-        badge: 'S4–S6 · HKDSE B2',
-        title: 'HKDSE Exam Rigor',
-        subtitle: 'HKEAA Papers 1–4',
-        desc: 'Authentic Part B2 passages, complex syntax & inversion, Data File synthesis, and Band 5** analytical writing.',
-        wordGoalA: 200,
-        wordGoalB: 400,
-        recMins: 18
-      }
+      { id: 'S1', wordGoalA: 120, wordGoalB: 160, recMins: 12 },
+      { id: 'S2', wordGoalA: 150, wordGoalB: 220, recMins: 15 },
+      { id: 'S3', wordGoalA: 180, wordGoalB: 280, recMins: 16 },
+      { id: 'S4-S6', wordGoalA: 200, wordGoalB: 400, recMins: 18 }
     ];
 
     const EXAM_TOPICS = [
-      { id: 'science', label: 'Science & Tech', icon: '🔬', desc: 'AI, green energy, biotech & space' },
-      { id: 'social', label: 'Social Issues', icon: '🏙️', desc: 'Youth wellbeing, aging & housing' },
-      { id: 'sports', label: 'Sports & Wellness', icon: '🏅', desc: 'HK athletes, esports & resilience' },
-      { id: 'pilography', label: 'Biography (Pilography)', icon: '📜', desc: 'Inspiring pioneers & life stories' },
-      { id: 'local_culture', label: 'Local Culture (HK)', icon: '🏮', desc: 'HK heritage, festivals & community' },
-      { id: 'global_culture', label: 'Global Culture', icon: '🌍', desc: 'World traditions & cultural exchange' },
-      { id: 'history', label: 'History & Heritage', icon: '🏛️', desc: 'HK landmarks, Silk Road & museums' },
-      { id: 'other_dse', label: 'Other DSE Themes', icon: '🎭', desc: 'Workplace, Pop Culture & Environment' }
+      { id: 'social', label: 'Social Issues' },
+      { id: 'science', label: 'Science & Tech' },
+      { id: 'sports', label: 'Sports & Wellness' },
+      { id: 'pilography', label: 'Biography' },
+      { id: 'local_culture', label: 'Local Culture (HK)' },
+      { id: 'global_culture', label: 'Global Culture' },
+      { id: 'history', label: 'History & Heritage' },
+      { id: 'other_topics', label: 'Environment & Work' }
     ];
 
     // -----------------------------------------------------------
     // 1. STATE & LOCALSTORAGE PERSISTENCE
     // -----------------------------------------------------------
     const DEFAULT_STATE = {
-      hasConfigured: false,
-      formLevel: 'DSE',
-      selectedTopics: ['social', 'local_culture'],
+      formLevel: 'S4-S6',
+      primaryTopic: 'social',
       streak: 4,
       xp: 420,
       targetGrade: 'Level 5**',
@@ -938,7 +930,7 @@
 
     function loadState() {
       try {
-        const saved = localStorage.getItem('dse_sprint_hk_v2');
+        const saved = localStorage.getItem('eng_f1_at_hub_v1');
         return saved ? { ...DEFAULT_STATE, ...JSON.parse(saved) } : { ...DEFAULT_STATE };
       } catch (e) {
         return { ...DEFAULT_STATE };
@@ -947,7 +939,7 @@
 
     function saveState() {
       try {
-        localStorage.setItem('dse_sprint_hk_v2', JSON.stringify(appState));
+        localStorage.setItem('eng_f1_at_hub_v1', JSON.stringify(appState));
       } catch (e) {
         // Ignore storage errors
       }
@@ -955,126 +947,26 @@
     }
 
     function getPrimaryTopicId() {
-      if (!appState.selectedTopics || appState.selectedTopics.length === 0) return 'social';
-      return appState.selectedTopics[0];
+      return appState.primaryTopic || 'social';
     }
 
     function getTopicsSummaryLabel() {
-      if (!appState.selectedTopics || appState.selectedTopics.length === 0) return 'Mixed Topics';
-      if (appState.selectedTopics.length === EXAM_TOPICS.length) return 'All DSE Topics';
-      if (appState.selectedTopics.length === 1) {
-        const found = EXAM_TOPICS.find(t => t.id === appState.selectedTopics[0]);
-        return found ? found.label : 'Custom Topic';
-      }
-      const first = EXAM_TOPICS.find(t => t.id === appState.selectedTopics[0]);
-      return `${first ? first.label : 'Topic'} +${appState.selectedTopics.length - 1}`;
+      const found = EXAM_TOPICS.find(t => t.id === appState.primaryTopic);
+      return found ? found.label : 'Social Issues';
     }
 
-    // -----------------------------------------------------------
-    // 1B. SETUP / ONBOARDING SCREEN LOGIC
-    // -----------------------------------------------------------
-    function renderSetupScreen() {
-      const levelGrid = document.getElementById('setup-level-grid');
-      levelGrid.innerHTML = FORM_LEVELS.map(lvl => {
-        const active = appState.formLevel === lvl.id;
-        return `
-          <button type="button" onclick="selectSetupLevel('${lvl.id}')" class="text-left p-4 rounded-2xl border-2 transition flex flex-col justify-between gap-2 cursor-pointer ${
-            active
-              ? 'border-indigo-600 bg-indigo-50/80 shadow-md ring-2 ring-indigo-600/20'
-              : 'border-slate-200 bg-white hover:border-indigo-300 hover:bg-slate-50/70'
-          }">
-            <div>
-              <div class="flex items-center justify-between gap-1 mb-1.5">
-                <span class="px-2 py-0.5 rounded-md text-[11px] font-bold ${
-                  active ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-600'
-                }">${lvl.badge}</span>
-                <span class="w-4 h-4 rounded-full border flex items-center justify-center ${
-                  active ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-slate-300'
-                }">${active ? '✓' : ''}</span>
-              </div>
-              <h3 class="font-display font-extrabold text-base sm:text-lg text-slate-900">${lvl.title}</h3>
-              <p class="text-[11px] font-semibold text-indigo-700 mb-1.5">${lvl.subtitle}</p>
-            </div>
-            <p class="text-xs text-slate-600 leading-relaxed">${lvl.desc}</p>
-          </button>
-        `;
-      }).join('');
-
-      const topicGrid = document.getElementById('setup-topic-grid');
-      topicGrid.innerHTML = EXAM_TOPICS.map(top => {
-        const active = appState.selectedTopics.includes(top.id);
-        return `
-          <button type="button" onclick="toggleSetupTopic('${top.id}')" class="text-left p-3.5 rounded-2xl border-2 transition cursor-pointer ${
-            active
-              ? 'border-amber-500 bg-amber-50/80 shadow-xs'
-              : 'border-slate-200 bg-white hover:border-indigo-300'
-          }">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xl">${top.icon}</span>
-              <span class="text-xs font-bold ${active ? 'text-amber-700' : 'text-slate-300'}">${active ? '✓ Selected' : '+'}</span>
-            </div>
-            <p class="font-display font-bold text-xs sm:text-sm text-slate-900">${top.label}</p>
-            <p class="text-[11px] text-slate-500 mt-0.5 leading-snug">${top.desc}</p>
-          </button>
-        `;
-      }).join('');
-
-      const lvlObj = FORM_LEVELS.find(l => l.id === appState.formLevel) || FORM_LEVELS[3];
-      document.getElementById('setup-level-hint').textContent = `Selected: ${lvlObj.title} (${lvlObj.subtitle})`;
-      document.getElementById('setup-blueprint-summary').textContent = `${appState.formLevel} · ${getTopicsSummaryLabel()}`;
-
-      if (appState.hasConfigured) {
-        document.getElementById('setup-resume-btn').classList.remove('hidden');
-      }
+    function changeFormLevel(val) {
+      appState.formLevel = val;
+      saveState();
+      applyPersonalizedExamContent();
+      showToast(`Switched difficulty to ${val}`, 'info');
     }
 
-    function selectSetupLevel(lvlId) {
-      appState.formLevel = lvlId;
-      renderSetupScreen();
-    }
-
-    function toggleSetupTopic(topicId) {
-      const idx = appState.selectedTopics.indexOf(topicId);
-      if (idx > -1) {
-        if (appState.selectedTopics.length > 1) {
-          appState.selectedTopics.splice(idx, 1);
-        } else {
-          showToast('Please keep at least one topic selected.', 'info');
-          return;
-        }
-      } else {
-        appState.selectedTopics.push(topicId);
-      }
-      renderSetupScreen();
-    }
-
-    function selectAllSetupTopics() {
-      appState.selectedTopics = EXAM_TOPICS.map(t => t.id);
-      renderSetupScreen();
-      showToast('All 8 HKDSE exam themes selected!', 'success');
-    }
-
-    function enterPracticeHub(applyChanges) {
-      if (applyChanges) {
-        appState.hasConfigured = true;
-        saveState();
-        applyPersonalizedExamContent();
-        showToast(`Loaded ${appState.formLevel} practice paper (${getTopicsSummaryLabel()})!`, 'success');
-      }
-      document.getElementById('setup-screen').classList.add('hidden');
-      document.getElementById('main-header').classList.remove('hidden');
-      document.getElementById('main-workspace').classList.remove('hidden');
-      document.getElementById('main-footer').classList.remove('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function openSetupScreen() {
-      renderSetupScreen();
-      document.getElementById('setup-screen').classList.remove('hidden');
-      document.getElementById('main-header').classList.add('hidden');
-      document.getElementById('main-workspace').classList.add('hidden');
-      document.getElementById('main-footer').classList.add('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    function changeExamTopic(val) {
+      appState.primaryTopic = val;
+      saveState();
+      applyPersonalizedExamContent();
+      showToast(`Loaded topic: ${getTopicsSummaryLabel()}`, 'info');
     }
 
     function syncHeaderUI() {
@@ -1082,10 +974,9 @@
       document.getElementById('xp-count').textContent = appState.xp;
       document.getElementById('target-grade').value = appState.targetGrade;
       document.getElementById('modal-target-grade').textContent = appState.targetGrade;
+      document.getElementById('quick-level-select').value = appState.formLevel;
+      document.getElementById('quick-topic-select').value = appState.primaryTopic;
 
-      const profileSummary = `${appState.formLevel} · ${getTopicsSummaryLabel()}`;
-      const headerBadge = document.getElementById('header-active-profile');
-      if (headerBadge) headerBadge.textContent = profileSummary;
       const dailyPill = document.getElementById('daily-level-pill');
       if (dailyPill) dailyPill.textContent = `${appState.formLevel} Level · ${getTopicsSummaryLabel()}`;
 
@@ -1117,18 +1008,441 @@
     function resetProgress() {
       appState = { ...DEFAULT_STATE };
       saveState();
+      applyPersonalizedExamContent();
       toggleStatsModal();
       showToast('Progress reset to default.', 'info');
     }
 
     // -----------------------------------------------------------
-    // 4. LEVEL- & TOPIC-ADAPTED DAILY SPRINT BANK (S1, S2, S3, DSE)
+    // 2. SPEECH SYNTHESIS AUDIO ENGINE (BRITISH & US ACCENTS)
+    // -----------------------------------------------------------
+    let currentAccent = 'en-GB';
+    let currentRate = 1.0;
+    let activeAudioMode = null;
+    let audioProgressInterval = null;
+    let audioElapsed = 0;
+    let audioTotalEst = 85;
+    let isAudioPaused = false;
+
+    function setReadingAccent(langTag) {
+      currentAccent = langTag;
+      document.querySelectorAll('.accent-btn-gb').forEach(btn => {
+        if (langTag === 'en-GB') {
+          btn.className = 'accent-btn-gb px-2.5 py-1 rounded-lg text-[11px] font-bold bg-[#1a4ba3] text-white transition cursor-pointer';
+        } else {
+          btn.className = 'accent-btn-gb px-2.5 py-1 rounded-lg text-[11px] font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer';
+        }
+      });
+      document.querySelectorAll('.accent-btn-us').forEach(btn => {
+        if (langTag === 'en-US') {
+          btn.className = 'accent-btn-us px-2.5 py-1 rounded-lg text-[11px] font-bold bg-[#1a4ba3] text-white transition cursor-pointer';
+        } else {
+          btn.className = 'accent-btn-us px-2.5 py-1 rounded-lg text-[11px] font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer';
+        }
+      });
+      const bbcStatus = document.getElementById('bbc-audio-status');
+      if (bbcStatus) bbcStatus.textContent = `Ready · ${langTag === 'en-GB' ? 'British (UK)' : 'US'}`;
+      showToast(`Voice accent switched to ${langTag === 'en-GB' ? 'British English (UK)' : 'American English (US)'}`, 'info');
+      if (activeAudioMode) {
+        const mode = activeAudioMode;
+        stopAudioText();
+        playAudioText(mode);
+      }
+    }
+
+    function updateReadingRate(val) {
+      currentRate = parseFloat(val) || 1.0;
+      if (activeAudioMode) {
+        const mode = activeAudioMode;
+        stopAudioText();
+        playAudioText(mode);
+      }
+    }
+
+    function formatSec(sec) {
+      const m = Math.floor(sec / 60);
+      const s = String(Math.floor(sec % 60)).padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function pickBestVoice(langTag) {
+      if (!('speechSynthesis' in window)) return null;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) return null;
+      const exact = voices.find(v => v.lang === langTag && (v.name.includes('Google') || v.name.includes('Natural') || v.name.includes('Daniel') || v.name.includes('Samantha')));
+      if (exact) return exact;
+      return voices.find(v => v.lang.toLowerCase().startsWith(langTag.toLowerCase())) || null;
+    }
+
+    function playAudioText(mode) {
+      if (!('speechSynthesis' in window)) {
+        showToast('Audio narration is not supported in this browser.', 'error');
+        return;
+      }
+
+      if (isAudioPaused && activeAudioMode === mode && window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        isAudioPaused = false;
+        startAudioTicker(mode);
+        return;
+      }
+
+      stopAudioText();
+      activeAudioMode = mode;
+
+      let textToSpeak = '';
+      if (mode === 'paper1') {
+        const cleanParagraphs = currentPaper1Data.paragraphs.map(p => p.replace(/<[^>]+>/g, ''));
+        textToSpeak = `${currentPaper1Data.title}. ${cleanParagraphs.join(' ')}`;
+      } else if (mode === 'bbc') {
+        const ep = BBC_6MIN_EPISODES[selectedBbcIdx];
+        textToSpeak = `${ep.englishTitle}. ${ep.transcript.join(' ')}`;
+      }
+
+      const wordCount = textToSpeak.split(/\s+/).length;
+      audioTotalEst = Math.max(15, Math.round((wordCount / 2.4) / currentRate));
+      audioElapsed = 0;
+
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.lang = currentAccent;
+      utterance.rate = currentRate;
+      const chosenVoice = pickBestVoice(currentAccent);
+      if (chosenVoice) utterance.voice = chosenVoice;
+
+      utterance.onend = () => {
+        stopAudioText();
+      };
+      utterance.onerror = () => {
+        stopAudioText();
+      };
+
+      window.speechSynthesis.speak(utterance);
+      startAudioTicker(mode);
+    }
+
+    function startAudioTicker(mode) {
+      if (audioProgressInterval) clearInterval(audioProgressInterval);
+      const timeEl = document.getElementById(mode === 'paper1' ? 'p1-audio-time' : 'bbc-audio-time');
+      const barEl = document.getElementById(mode === 'paper1' ? 'p1-audio-progress' : 'bbc-audio-progress');
+      const statusEl = document.getElementById('bbc-audio-status');
+      if (statusEl && mode === 'bbc') {
+        statusEl.textContent = `Playing · ${currentAccent === 'en-GB' ? 'UK' : 'US'}`;
+      }
+
+      audioProgressInterval = setInterval(() => {
+        if (!isAudioPaused && audioElapsed < audioTotalEst) {
+          audioElapsed += 0.25;
+          const pct = Math.min(100, (audioElapsed / audioTotalEst) * 100);
+          if (timeEl) timeEl.textContent = `${formatSec(audioElapsed)} / ${formatSec(audioTotalEst)}`;
+          if (barEl) barEl.style.width = `${pct}%`;
+        }
+      }, 250);
+    }
+
+    function pauseAudioText() {
+      if ('speechSynthesis' in window && window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+        isAudioPaused = true;
+        if (audioProgressInterval) clearInterval(audioProgressInterval);
+        const statusEl = document.getElementById('bbc-audio-status');
+        if (statusEl) statusEl.textContent = 'Paused';
+        showToast('Audio paused.', 'info');
+      }
+    }
+
+    function stopAudioText() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (audioProgressInterval) {
+        clearInterval(audioProgressInterval);
+        audioProgressInterval = null;
+      }
+      isAudioPaused = false;
+      activeAudioMode = null;
+      audioElapsed = 0;
+
+      const p1Time = document.getElementById('p1-audio-time');
+      const p1Bar = document.getElementById('p1-audio-progress');
+      if (p1Time) p1Time.textContent = '0:00 / 1:25';
+      if (p1Bar) p1Bar.style.width = '0%';
+
+      const bbcTime = document.getElementById('bbc-audio-time');
+      const bbcBar = document.getElementById('bbc-audio-progress');
+      const bbcStatus = document.getElementById('bbc-audio-status');
+      if (bbcTime) bbcTime.textContent = '0:00 / 1:15';
+      if (bbcBar) bbcBar.style.width = '0%';
+      if (bbcStatus) bbcStatus.textContent = `Ready · ${currentAccent === 'en-GB' ? 'UK' : 'US'}`;
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+
+    // -----------------------------------------------------------
+    // 3. BBC LEARNING ENGLISH 6 MINUTE ENGLISH DAILY FEED
+    // -----------------------------------------------------------
+    const BBC_6MIN_EPISODES = [
+      {
+        id: 'bbc-1',
+        date: '11 月 23 日（星期一）',
+        duration: '6:00',
+        badge: 'Stress & Mental Health',
+        cantoneseTitle: '點樣面對壓力？Overwhelm、Burnout 同 Doomscrolling',
+        englishTitle: 'How to deal with modern stress: Overwhelm, Burnout and Doomscrolling',
+        sourceLine: 'BBC Learning English · 6 Minute English — Mental Health & Digital Habits',
+        thumbGradient: 'from-rose-600 via-indigo-800 to-slate-900',
+        thumbTag: 'Why are we all so stressed?',
+        transcript: [
+          'Hello and welcome to 6 Minute English from BBC Learning English. Today we are talking about why modern life feels so overwhelming, and what psychologists recommend to prevent burnout.',
+          'Many people start their mornings by doomscrolling—continuously reading bad news on their smartphones before even getting out of bed. Experts say this habit floods our brains with stress hormones.',
+          'Instead of trying to eliminate every worry at once, therapists suggest taking micro-breaks away from screens and naming our emotions clearly, a technique known as affect labelling.'
+        ],
+        mcQuestion: '1. According to the BBC 6 Minute English report, what is "doomscrolling"?',
+        mcOptions: [
+          'A. Turning off all smartphone notifications before sleeping',
+          'B. Continuously reading negative news on a phone',
+          'C. Writing down your emotions in a paper diary'
+        ],
+        mcAnswer: 1,
+        clozeSentence: 'Therapists recommend taking short breaks from screens and naming our emotions clearly, a method called affect (2) ________.',
+        clozeAnswer: 'labelling',
+        vocab: [
+          { word: 'doomscrolling', pos: 'noun', meaning: 'Spending excessive screen time absorbing negative news online.' },
+          { word: 'burnout', pos: 'noun', meaning: 'Physical or mental exhaustion caused by prolonged stress or overwork.' },
+          { word: 'overwhelming', pos: 'adjective', meaning: 'So intense or difficult that it is hard to deal with.' }
+        ]
+      },
+      {
+        id: 'bbc-2',
+        date: '11 月 21 日（星期六）',
+        duration: '6:00',
+        badge: 'Science & AI',
+        cantoneseTitle: '人工智能識唔識幽默感？AI Comedy 同 Punchline',
+        englishTitle: 'Can artificial intelligence really be funny? AI Comedy & Punchlines',
+        sourceLine: 'BBC Learning English · 6 Minute English — Technology & Language',
+        thumbGradient: 'from-sky-600 via-blue-800 to-navy-950',
+        thumbTag: 'Can AI tell a good joke?',
+        transcript: [
+          'Welcome to 6 Minute English. Have you ever asked a chatbot to tell you a joke? While AI can write essays and computer code in seconds, humour remains surprisingly difficult for machines.',
+          'Linguists explain that a great punchline relies on shared cultural experiences, timing, and unexpected wordplay. Large language models predict the most probable next word, whereas comedy thrives on surprise.',
+          'Still, stand-up comedians are experimenting with AI as a brainstorming partner to test premises before performing live on stage.'
+        ],
+        mcQuestion: '1. Why do linguists say humour is difficult for AI models?',
+        mcOptions: [
+          'A. AI predicts probable words, whereas jokes depend on surprise and cultural context.',
+          'B. Chatbots are not allowed to learn foreign languages.',
+          'C. Stand-up comedians refuse to use computers.'
+        ],
+        mcAnswer: 0,
+        clozeSentence: 'Comedians sometimes use AI as a brainstorming partner to test joke (2) ________ before performing live.',
+        clozeAnswer: 'premises',
+        vocab: [
+          { word: 'punchline', pos: 'noun', meaning: 'The final phrase of a joke that makes it funny.' },
+          { word: 'wordplay', pos: 'noun', meaning: 'Clever and witty use of the multiple meanings of words.' },
+          { word: 'premise', pos: 'noun', meaning: 'The basic idea or situation on which a comedy routine is built.' }
+        ]
+      },
+      {
+        id: 'bbc-3',
+        date: '11 月 19 日（星期四）',
+        duration: '6:00',
+        badge: 'Environment & Cities',
+        cantoneseTitle: '海綿城市點樣防洪？Sponge Cities 同 Urban Runoff',
+        englishTitle: 'How "Sponge Cities" absorb extreme rainfall and prevent urban flooding',
+        sourceLine: 'BBC Learning English · 6 Minute English — Climate & Urban Design',
+        thumbGradient: 'from-emerald-600 via-teal-800 to-slate-900',
+        thumbTag: 'What is a sponge city?',
+        transcript: [
+          'In today’s 6 Minute English, we explore how rapidly growing cities are redesigning concrete streets to cope with torrential rainstorms.',
+          'Traditional asphalt roads prevent rainwater from soaking into the earth, creating dangerous flash floods. By contrast, sponge cities incorporate permeable pavements, rooftop gardens, and restored wetlands.',
+          'These green spaces act like giant sponges, filtering rainwater naturally and cooling dense neighbourhoods during summer heatwaves.'
+        ],
+        mcQuestion: '1. What is the main problem with traditional asphalt roads during heavy rain?',
+        mcOptions: [
+          'A. They absorb too much groundwater.',
+          'B. They block rainwater from soaking into the ground, causing floods.',
+          'C. They make cities colder during summer.'
+        ],
+        mcAnswer: 1,
+        clozeSentence: 'Sponge cities use permeable pavements, rooftop gardens, and restored (2) ________ to absorb rainwater.',
+        clozeAnswer: 'wetlands',
+        vocab: [
+          { word: 'permeable', pos: 'adjective', meaning: 'Allowing liquids or gases to pass through it.' },
+          { word: 'torrential', pos: 'adjective', meaning: 'Falling rapidly and in copious quantities (of rain).' },
+          { word: 'flash flood', pos: 'noun', meaning: 'A sudden local flood caused by heavy rain.' }
+        ]
+      },
+      {
+        id: 'bbc-4',
+        date: '11 月 17 日（星期二）',
+        duration: '6:00',
+        badge: 'Psychology & Learning',
+        cantoneseTitle: '點解手寫筆記記性好啲？Retention 同 Muscle Memory',
+        englishTitle: 'Why writing by hand boosts memory retention better than typing',
+        sourceLine: 'BBC Learning English · 6 Minute English — Education & Neuroscience',
+        thumbGradient: 'from-amber-500 via-orange-700 to-navy-900',
+        thumbTag: 'Pen vs. Keyboard for Memory',
+        transcript: [
+          'Laptops and tablets are everywhere in modern classrooms, yet brain scans suggest that putting pen to paper activates wider neural networks linked to learning.',
+          'When students type lecture notes, they often transcribe every word verbatim without processing the meaning. Handwriting is slower, forcing the brain to summarize and paraphrase key concepts.',
+          'Researchers conclude that combining digital organization with handwritten revision summaries leads to stronger long-term retention.'
+        ],
+        mcQuestion: '1. According to researchers, why does handwriting help students remember better?',
+        mcOptions: [
+          'A. It is much faster than typing on a keyboard.',
+          'B. It forces the brain to summarize and paraphrase ideas rather than copying verbatim.',
+          'C. Brain scans cannot measure typing activity.'
+        ],
+        mcAnswer: 1,
+        clozeSentence: 'When typing notes, students often copy every word (2) ________ without deeply processing the meaning.',
+        clozeAnswer: 'verbatim',
+        vocab: [
+          { word: 'verbatim', pos: 'adverb / adj', meaning: 'In exactly the same words as were used originally.' },
+          { word: 'retention', pos: 'noun', meaning: 'The continued ability to remember information.' },
+          { word: 'paraphrase', pos: 'verb', meaning: 'Express the meaning of something using different words.' }
+        ]
+      }
+    ];
+
+    let selectedBbcIdx = 0;
+
+    function renderBbcEpisodeList() {
+      const listEl = document.getElementById('bbc-episode-list');
+      if (!listEl) return;
+
+      listEl.innerHTML = BBC_6MIN_EPISODES.map((ep, idx) => {
+        const isSelected = idx === selectedBbcIdx;
+        return `
+          <div onclick="selectBbcEpisode(${idx})" class="bg-white rounded-2xl border-2 transition p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center gap-4 cursor-pointer ${
+            isSelected
+              ? 'border-[#1a4ba3] shadow-md bg-blue-50/30'
+              : 'border-slate-200/90 hover:border-blue-300 shadow-2xs'
+          }">
+            <!-- Thumbnail Card matching screenshot -->
+            <div class="relative w-full sm:w-44 h-24 rounded-xl bg-gradient-to-br ${ep.thumbGradient} p-3 flex flex-col justify-between text-white shrink-0 overflow-hidden">
+              <span class="text-[11px] font-extrabold leading-tight drop-shadow-xs">${ep.thumbTag}</span>
+              <div class="flex items-center justify-between">
+                <span class="text-[9px] font-bold uppercase tracking-wider bg-red-600 px-1.5 py-0.5 rounded">BBC 6 MIN</span>
+                <span class="text-[11px] font-mono font-bold bg-black/75 px-1.5 py-0.5 rounded">${ep.duration}</span>
+              </div>
+            </div>
+
+            <!-- Episode Title & Metadata -->
+            <div class="flex-1 space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <h3 class="font-display font-bold text-base sm:text-lg text-slate-900 leading-snug">${ep.cantoneseTitle}</h3>
+                ${isSelected ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#1a4ba3] text-white">正在練習</span>' : ''}
+              </div>
+              <p class="text-xs sm:text-sm text-slate-600 font-medium">${ep.sourceLine}</p>
+              <p class="text-xs text-slate-400 font-medium">${ep.date}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectBbcEpisode(idx) {
+      stopAudioText();
+      selectedBbcIdx = idx;
+      renderBbcEpisodeList();
+      renderBbcEpisodeDetail();
+      document.getElementById('bbc-active-workspace').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function toggleBbcTranscript() {
+      const box = document.getElementById('bbc-transcript-box');
+      if (box) box.classList.toggle('hidden');
+    }
+
+    function renderBbcEpisodeDetail() {
+      const ep = BBC_6MIN_EPISODES[selectedBbcIdx];
+      document.getElementById('bbc-active-date').textContent = ep.date;
+      document.getElementById('bbc-active-title').textContent = ep.cantoneseTitle;
+      document.getElementById('bbc-active-subtitle').textContent = ep.sourceLine;
+
+      const transcriptBox = document.getElementById('bbc-transcript-box');
+      transcriptBox.innerHTML = ep.transcript.map((p, i) => `<p><strong>[${i + 1}]</strong> ${p}</p>`).join('');
+
+      const quizArea = document.getElementById('bbc-quiz-area');
+      quizArea.innerHTML = `
+        <!-- Left: Listening MC & Cloze -->
+        <div class="lg:col-span-7 space-y-4">
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+            <p class="text-sm font-bold text-slate-900">${ep.mcQuestion}</p>
+            <div class="space-y-2 text-sm">
+              ${ep.mcOptions.map((opt, idx) => `
+                <label class="flex items-start gap-2.5 p-2.5 rounded-xl bg-white border border-slate-200 hover:border-blue-300 cursor-pointer">
+                  <input type="radio" name="bbc_mc" value="${idx}" class="mt-1 text-blue-600" />
+                  <span>${opt}</span>
+                </label>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5">
+            <p class="text-sm font-bold text-slate-900">Detail Cloze (聽細節填生字):</p>
+            <p class="text-sm text-slate-800 leading-relaxed">
+              ${ep.clozeSentence.replace('(2) ________', '<input type="text" id="bbc-cloze-input" placeholder="Type word..." class="w-32 px-2.5 py-0.5 mx-1 border-b-2 border-blue-500 bg-blue-50/60 text-center font-bold text-blue-900 focus:outline-none" />')}
+            </p>
+          </div>
+
+          <div class="flex items-center justify-between gap-3">
+            <button onclick="gradeBbcEpisode()" class="px-5 py-2.5 rounded-xl bg-[#1a4ba3] hover:bg-[#12387d] text-white font-bold text-sm transition shadow-sm cursor-pointer">
+              核對答案 Check Answers (+15 XP)
+            </button>
+          </div>
+          <div id="bbc-feedback" class="hidden p-4 rounded-2xl text-xs sm:text-sm"></div>
+        </div>
+
+        <!-- Right: Episode Key Vocabulary Cards -->
+        <div class="lg:col-span-5 space-y-3">
+          <h3 class="font-display font-bold text-sm uppercase tracking-wider text-slate-500">本集必學詞彙 Key Vocabulary</h3>
+          ${ep.vocab.map(v => `
+            <div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-200/80 space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-display font-bold text-base text-slate-900">${v.word}</span>
+                <span class="text-[11px] font-semibold px-2 py-0.5 rounded bg-white text-amber-800 border border-amber-200">${v.pos}</span>
+              </div>
+              <p class="text-xs text-slate-700 leading-relaxed">${v.meaning}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function gradeBbcEpisode() {
+      const ep = BBC_6MIN_EPISODES[selectedBbcIdx];
+      const mcChoice = document.querySelector('input[name="bbc_mc"]:checked')?.value;
+      const clozeVal = (document.getElementById('bbc-cloze-input')?.value || '').trim().toLowerCase();
+
+      let score = 0;
+      if (mcChoice !== undefined && parseInt(mcChoice, 10) === ep.mcAnswer) score++;
+      if (clozeVal === ep.clozeAnswer.toLowerCase()) score++;
+
+      const fb = document.getElementById('bbc-feedback');
+      fb.classList.remove('hidden');
+      fb.className = score === 2
+        ? 'p-4 rounded-2xl text-xs sm:text-sm bg-emerald-50 border border-emerald-200 text-emerald-950'
+        : 'p-4 rounded-2xl text-xs sm:text-sm bg-amber-50 border border-amber-200 text-amber-950';
+      fb.innerHTML = `
+        <p class="font-bold mb-1">得分 Score: ${score}/2</p>
+        <p>• <strong>Q1 正確答案:</strong> ${ep.mcOptions[ep.mcAnswer]}</p>
+        <p>• <strong>Q2 填充答案:</strong> <span class="underline font-bold">${ep.clozeAnswer}</span></p>
+      `;
+      addXP(score * 8 + 5, `BBC 6 Minute English (${score}/2)`);
+    }
+
+    // -----------------------------------------------------------
+    // 4. LEVEL-ADAPTED DAILY SPRINT BANK (S1, S2, S3, S4-S6)
     // -----------------------------------------------------------
     const LEVEL_SPRINT_BANKS = {
       S1: [
         {
           type: 'S1 Foundation · Simple Past & Present Perfect',
-          prompt: 'Last Saturday, our school choir ________ at the Tuen Mun Town Hall concert.',
+          prompt: 'Last Saturday, our school choir ________ at the Town Hall concert.',
           options: ['performed', 'has performed', 'perform', 'was perform'],
           answer: 0,
           explanation: 'A finished past time marker ("Last Saturday") requires the Simple Past tense ("performed").'
@@ -1178,11 +1492,11 @@
           explanation: '"Quieter" is already a comparative adjective; adding "more" creates a double comparative error.'
         },
         {
-          type: 'S2 Vocabulary · Biography (Pilography)',
+          type: 'S2 Vocabulary · Biography',
           prompt: 'Despite facing numerous setbacks in her early laboratory trials, the scientist ________ and discovered a life-saving vaccine.',
           options: ['persevered', 'hesitated', 'vanished', 'complained'],
           answer: 0,
-          explanation: '"Persevered" means continued in a course of action even in the face of difficulty—a key biographical verb.'
+          explanation: '"Persevered" means continued in a course of action even in the face of difficulty.'
         },
         {
           type: 'S2 Reported Speech · Formal Letters',
@@ -1206,7 +1520,7 @@
       ],
       S3: [
         {
-          type: 'S3 Pre-DSE · Passive Voice & Participles',
+          type: 'S3 Grammar · Passive Voice & Participles',
           prompt: '________ in 1987, our secondary school has nurtured generations of well-rounded students.',
           options: ['Founded', 'Founding', 'Having founded', 'To found'],
           answer: 0,
@@ -1241,23 +1555,23 @@
           explanation: 'Describing garments as "disposable commodities" signals disapproval and criticism of wasteful consumerism.'
         }
       ],
-      DSE: [
+      'S4-S6': [
         {
-          type: 'DSE Paper 2 · Academic Collocation',
+          type: 'Paper 2 · Academic Collocation',
           prompt: 'The government must take ________ measures to curb youth vaping before the issue escalates further.',
           options: ['stringent', 'strongful', 'heavy-handedness', 'strictly'],
           answer: 0,
           explanation: '"Stringent measures" is a high-frequency Band 5** collocation meaning strict, precise, and effective regulations.'
         },
         {
-          type: 'DSE Paper 1 · Proofreading (Preposition)',
+          type: 'Paper 1 · Proofreading (Preposition)',
           prompt: 'Identify the incorrect word: "Despite of the torrential rain, thousands of runners completed the Hong Kong Marathon."',
           options: ['Despite', 'of', 'torrential', 'completed'],
           answer: 1,
           explanation: '"Despite" is never followed by "of" (unlike "In spite of"). Remove "of" for grammatical accuracy.'
         },
         {
-          type: 'DSE Paper 2 · Negative Inversion',
+          type: 'Paper 2 · Negative Inversion',
           prompt: 'Choose the most idiomatic Band 5** inversion for: "Students rarely appreciate the value of sleep until exam week arrives."',
           options: [
             'Rarely students appreciate the value of sleep until exam week arrives.',
@@ -1269,7 +1583,7 @@
           explanation: 'When a negative/limiting adverb ("Rarely") starts a sentence, invert auxiliary + subject: "Rarely do students appreciate".'
         },
         {
-          type: 'DSE Paper 3 · Formal Register & Tone',
+          type: 'Paper 3 · Formal Register & Tone',
           prompt: 'You are writing a formal letter of complaint to a property management company. Which closing line is most appropriate?',
           options: [
             'Fix this ASAP or else we will call the police!',
@@ -1281,16 +1595,16 @@
           explanation: 'Paper 3 formal correspondence requires a polite, firm, and objective call to action without colloquialisms.'
         },
         {
-          type: 'DSE Paper 1 · Part B2 Vocabulary',
+          type: 'Paper 1 · Advanced Vocabulary',
           prompt: 'In an editorial criticising short-sighted urban planning, the writer describes new concrete plazas as "________ of greenery."',
           options: ['devoid', 'abundant', 'conducive', 'susceptible'],
           answer: 0,
-          explanation: '"Devoid of [something]" means entirely lacking or free from it—a classic Paper 1 Part B2 vocabulary item.'
+          explanation: '"Devoid of [something]" means entirely lacking or free from it—a classic senior secondary vocabulary item.'
         }
       ]
     };
 
-    let activeSprintQuestions = [...LEVEL_SPRINT_BANKS.DSE];
+    let activeSprintQuestions = [...LEVEL_SPRINT_BANKS['S4-S6']];
     let currentSprintIdx = 0;
     let sprintUserAnswers = new Array(5).fill(null);
     let sprintSubmitted = false;
@@ -1323,7 +1637,6 @@
       const q = activeSprintQuestions[currentSprintIdx];
       document.getElementById('sprint-q-type').textContent = `Question ${currentSprintIdx + 1} of ${activeSprintQuestions.length} · ${q.type}`;
 
-      // Render progress dots
       const dotsEl = document.getElementById('sprint-dots');
       dotsEl.innerHTML = activeSprintQuestions.map((_, i) => {
         let bg = 'bg-slate-200';
@@ -1332,7 +1645,6 @@
         return `<button onclick="jumpSprintQ(${i})" class="w-2.5 h-2.5 rounded-full transition ${bg}" title="Question ${i + 1}"></button>`;
       }).join('');
 
-      // Render question & options
       const container = document.getElementById('sprint-question-container');
       const selected = sprintUserAnswers[currentSprintIdx];
 
@@ -1377,7 +1689,6 @@
         ${explanationHtml}
       `;
 
-      // Update buttons
       document.getElementById('sprint-prev-btn').disabled = currentSprintIdx === 0;
       const isLast = currentSprintIdx === activeSprintQuestions.length - 1;
       document.getElementById('sprint-next-btn').classList.toggle('hidden', isLast);
@@ -1471,7 +1782,7 @@
         paragraphs: [
           'Hong Kong imports more than ninety per cent of its fresh vegetables, leaving the city vulnerable to extreme weather disruptions and rising transport costs. Inside a converted industrial building in Kwun Tong, however, rows of emerald lettuce and kale thrive under soft magenta LED lights—without a single handful of soil. Known as vertical hydroponic farming, this technology stacks crops in climate-controlled towers, yielding up to ten times more produce per square metre than conventional fields.',
           'Unlike traditional agriculture, which relies heavily on seasonal rainfall and chemical pesticides, indoor farms circulate nutrient-rich water in a closed-loop system. Sensors monitor humidity, carbon dioxide, and mineral levels around the clock, adjusting <span class="font-semibold underline decoration-amber-400 decoration-2">them</span> automatically via artificial intelligence. Consequently, water consumption is slashed by nearly ninety per cent while harvest cycles remain predictable throughout the year.',
-          'Local secondary schools, including STEM clubs in Tuen Mun and Sha Tin, have begun installing compact hydroponic cabinets to teach students sustainable biology. Yet critics contend that high electricity bills for artificial lighting and air conditioning still inflate retail prices, preventing vertical-farmed greens from competing with imported produce in wet markets.'
+          'Local secondary schools have begun installing compact hydroponic cabinets to teach students sustainable biology. Yet critics contend that high electricity bills for artificial lighting and air conditioning still inflate retail prices, preventing vertical-farmed greens from competing with imported produce in wet markets.'
         ],
         q1: {
           prompt: '1. According to paragraph 1, why is Hong Kong vulnerable to food supply disruptions?',
@@ -1491,7 +1802,7 @@
         },
         tfng: [
           { stmt: '3. Vertical hydroponic farms require rich imported soil to grow crops.', ans: 'F', exp: 'Paragraph 1 notes crops grow "without a single handful of soil."' },
-          { stmt: '4. Every secondary school in Tuen Mun already owns a vertical farm.', ans: 'NG', exp: 'Paragraph 3 only says local schools "have begun installing" them; it does not state every school has one.' },
+          { stmt: '4. Every secondary school in Hong Kong already owns a vertical farm.', ans: 'NG', exp: 'Paragraph 3 only says local schools "have begun installing" them; it does not state every school has one.' },
           { stmt: '5. Electricity expenses currently make indoor-grown vegetables more costly than wet-market imports.', ans: 'T', exp: 'Paragraph 3 confirms high electricity bills "inflate retail prices."' }
         ],
         cloze: {
@@ -1512,8 +1823,8 @@
         title: 'From School Track to Olympic Glory: The Grit Behind Hong Kong Fencing',
         subtitle: 'How Youth Discipline and Tactical Poise Elevated Local Athletes onto the World Stage',
         paragraphs: [
-          'When Hong Kong fencers clinched historic Olympic gold medals, jubilant crowds erupted across shopping malls from Tuen Mun to Causeway Bay. Yet behind those electrifying bouts lay years of gruelling footwork drills in modest sports centres. Unlike team sports where teammates can cover for a momentary lapse, fencing demands split-second tactical decisions under intense psychological pressure.',
-          'Coaches emphasize that physical agility alone rarely separates champions from finalists. During a tightly contested bout, an athlete must read an opponent’s subtle shoulder feints while concealing <span class="font-semibold underline decoration-amber-400 decoration-2">their</span> own intentions. Many student-athletes in Hong Kong balance dawn strength conditioning with rigorous DSE revision, demonstrating remarkable time management and mental resilience.',
+          'When Hong Kong fencers clinched historic Olympic gold medals, jubilant crowds erupted across shopping malls across the city. Yet behind those electrifying bouts lay years of gruelling footwork drills in modest sports centres. Unlike team sports where teammates can cover for a momentary lapse, fencing demands split-second tactical decisions under intense psychological pressure.',
+          'Coaches emphasize that physical agility alone rarely separates champions from finalists. During a tightly contested bout, an athlete must read an opponent’s subtle shoulder feints while concealing <span class="font-semibold underline decoration-amber-400 decoration-2">their</span> own intentions. Many student-athletes in Hong Kong balance dawn strength conditioning with rigorous exam revision, demonstrating remarkable time management and mental resilience.',
           'Encouraged by international triumphs, primary and secondary schools have witnessed a surge in fencing club sign-ups. Nevertheless, sports sociologists caution that long-term athletic success depends on accessible community venues and post-retirement career pathways rather than fleeting medal fever.'
         ],
         q1: {
@@ -1538,7 +1849,7 @@
           { stmt: '5. Interest in school fencing clubs has risen following Hong Kong’s international victories.', ans: 'T', exp: 'Paragraph 3 mentions "a surge in fencing club sign-ups."' }
         ],
         cloze: {
-          template: 'Olympic fencing victories have inspired many Hong Kong students to join school (6) ________ clubs. Beyond physical speed, fencers need strong mental (7) ________ to hide their tactics while juggling training with DSE (8) ________. However, experts warn that lasting sports development requires better public (9) ________ and career support once athletes (10) ________.',
+          template: 'Olympic fencing victories have inspired many Hong Kong students to join school (6) ________ clubs. Beyond physical speed, fencers need strong mental (7) ________ to hide their tactics while juggling training with exam (8) ________. However, experts warn that lasting sports development requires better public (9) ________ and career support once athletes (10) ________.',
           answers: [
             { valid: ['fencing'] },
             { valid: ['resilience', 'poise', 'focus'] },
@@ -1550,8 +1861,8 @@
         }
       },
       pilography: {
-        topicName: 'Biography (Pilography)',
-        genre: 'Text 1 · Biographical Profile (Pilography)',
+        topicName: 'Biography',
+        genre: 'Text 1 · Biographical Profile',
         title: 'The Quiet Pioneer of Fibre Optics: Professor Charles Kao’s Enduring Legacy',
         subtitle: 'How Curiosity, Patience, and Humility Connected the Modern World',
         paragraphs: [
@@ -1620,7 +1931,7 @@
         },
         tfng: [
           { stmt: '3. Young volunteers want local heritage to remain locked inside static museums.', ans: 'F', exp: 'Paragraph 2 explicitly states "Rather than treating heritage as static museum relics..."' },
-          { stmt: '4. Every cha chaan teng in Tuen Mun now displays a hand-bent neon sign.', ans: 'NG', exp: 'Not mentioned in the text.' },
+          { stmt: '4. Every cha chaan teng in Kowloon now displays a hand-bent neon sign.', ans: 'NG', exp: 'Not mentioned in the text.' },
           { stmt: '5. Cultural historians associate Hong Kong’s identity with East-meets-West adaptability.', ans: 'T', exp: 'Paragraph 3 states Hong Kong’s charm lies in "its pragmatic East-meets-West adaptability."' }
         ],
         cloze: {
@@ -1707,7 +2018,7 @@
         tfng: [
           { stmt: '3. The entire 1915 railway station building still stands next to Victoria Harbour today.', ans: 'F', exp: 'Paragraph 1 notes the Clock Tower "is all that remains" of the former terminus.' },
           { stmt: '4. Heritage advocates opposed demolishing the Clock Tower in the 1970s.', ans: 'T', exp: 'Paragraph 2 confirms advocates "campaigned tirelessly to spare the tower."' },
-          { stmt: '5. The Clock Tower bell was cast in Tuen Mun in 1990.', ans: 'NG', exp: 'Where the bell was cast is never stated in the text.' }
+          { stmt: '5. The Clock Tower bell was cast in Hong Kong in 1990.', ans: 'NG', exp: 'Where the bell was cast is never stated in the text.' }
         ],
         cloze: {
           template: 'Built in 1915 as part of a railway (6) ________, the Tsim Sha Tsui Clock Tower greeted countless twentieth-century (7) ________ arriving in Hong Kong. Although the surrounding station was demolished in the 1970s, heritage (8) ________ fought to save the tower to preserve collective (9) ________. Today, it is a statutory (10) ________ visited by students.',
@@ -1721,8 +2032,8 @@
           keyText: '(6) terminus/station · (7) migrants/travellers · (8) advocates · (9) memory · (10) monument'
         }
       },
-      other_dse: {
-        topicName: 'Other DSE Themes (Environment & Workplace)',
+      other_topics: {
+        topicName: 'Environment & Workplace',
         genre: 'Text 1 · Environmental & Workplace Feature',
         title: 'Green Offices and Repair Cafés: How Hong Kong Youth Combat E-Waste',
         subtitle: 'Turning Broken Gadgets into Circular-Economy Skills',
@@ -1812,6 +2123,7 @@
     let currentPaper1Data = READING_PASSAGES_BANK.social;
 
     function renderPaper1Content(data) {
+      stopAudioText();
       currentPaper1Data = data;
       const lvlObj = FORM_LEVELS.find(l => l.id === appState.formLevel) || FORM_LEVELS[3];
       document.getElementById('p1-level-badge').textContent = `PAPER 1 · ${appState.formLevel} EXAM`;
@@ -1834,7 +2146,6 @@
         `).join('')}
       `;
 
-      // Render Summary Cloze inputs cleanly
       let clozeHtml = data.cloze.template;
       [6, 7, 8, 9, 10].forEach(num => {
         clozeHtml = clozeHtml.replace(
@@ -1845,7 +2156,6 @@
 
       const qPane = document.getElementById('p1-questions-container');
       qPane.innerHTML = `
-        <!-- Q1: Multiple Choice -->
         <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-3">
           <p class="text-sm font-bold text-slate-900">${data.q1.prompt} <span class="text-xs font-normal text-slate-500">(1 mark)</span></p>
           <div class="space-y-2 text-sm">
@@ -1862,14 +2172,12 @@
           <div id="p1-q1-fb" class="hidden text-xs p-3 rounded-xl"></div>
         </div>
 
-        <!-- Q2: Referencing -->
         <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-3">
           <p class="text-sm font-bold text-slate-900">${data.q2.prompt} <span class="text-xs font-normal text-slate-500">(1 mark)</span></p>
           <input type="text" id="p1_q2" placeholder="Type exact noun phrase from paragraph 2..." class="w-full px-3.5 py-2.5 rounded-xl bg-white border border-slate-300 text-sm focus:outline-none focus:border-indigo-500" />
           <div id="p1-q2-fb" class="hidden text-xs p-3 rounded-xl"></div>
         </div>
 
-        <!-- Q3-5: T / F / NG -->
         <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-3">
           <p class="text-sm font-bold text-slate-900">3–5. Decide whether each statement is True (T), False (F), or Not Given (NG). <span class="text-xs font-normal text-slate-500">(3 marks)</span></p>
           <div class="space-y-3 text-sm">
@@ -1888,7 +2196,6 @@
           <div id="p1-tfng-fb" class="hidden text-xs p-3 rounded-xl"></div>
         </div>
 
-        <!-- Q6-10: Summary Cloze -->
         <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 space-y-3">
           <p class="text-sm font-bold text-slate-900">6–10. Complete the summary using ONE word per blank. <span class="text-xs font-normal text-slate-500">(5 marks)</span></p>
           <div class="p-4 rounded-xl bg-white border border-slate-200 text-sm leading-loose text-slate-800">
@@ -1903,7 +2210,6 @@
       let score = 0;
       const d = currentPaper1Data;
 
-      // Q1: MC
       const q1Val = document.querySelector('input[name="p1_q1"]:checked')?.value;
       const q1Fb = document.getElementById('p1-q1-fb');
       q1Fb.classList.remove('hidden');
@@ -1916,7 +2222,6 @@
         q1Fb.innerHTML = `❌ <strong>Answer: ${d.q1.answer}.</strong> ${d.q1.exp}`;
       }
 
-      // Q2: Referencing
       const q2Val = document.getElementById('p1_q2').value.trim().toLowerCase();
       const q2Fb = document.getElementById('p1-q2-fb');
       q2Fb.classList.remove('hidden');
@@ -1930,7 +2235,6 @@
         q2Fb.innerHTML = `❌ <strong>Marking Scheme:</strong> ${d.q2.model}.`;
       }
 
-      // Q3-5: T / F / NG
       let tfScore = 0;
       d.tfng.forEach((item, i) => {
         const userChoice = document.getElementById(`p1_q${i + 3}`).value;
@@ -1946,7 +2250,6 @@
         ${d.tfng.map((item, i) => `<p>• <strong>Q${i + 3} (${item.ans}):</strong> ${item.exp}</p>`).join('')}
       `;
 
-      // Q6-10: Summary Cloze
       let clozeScore = 0;
       d.cloze.answers.forEach((ansObj, idx) => {
         const el = document.getElementById(`p1_q${idx + 6}`);
@@ -1985,7 +2288,7 @@
 Return ONLY valid JSON (no markdown fences) matching this exact structure:
 {
   "topicName": "${topicLabel}",
-  "genre": "Text 1 · HKDSE & Secondary Reading",
+  "genre": "Text 1 · Secondary Reading",
   "title": "Engaging Title",
   "subtitle": "Short Subtitle",
   "paragraphs": ["Paragraph 1 text...", "Paragraph 2 text with <span class=\\"font-semibold underline decoration-amber-400 decoration-2\\">pronoun</span>...", "Paragraph 3 text..."],
@@ -2033,7 +2336,7 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
       },
       sports: {
         partB_topic: 'Following Hong Kong’s recent international sporting achievements, write an article for your school magazine explaining how participating in sports builds resilience among secondary students and suggesting how schools can promote active lifestyles.',
-        hook: 'Whether on the athletics track in Tuen Mun or inside a bustling school gymnasium, sports teach lessons that no textbook can replicate. Beyond physical fitness, regular athletic training equips secondary students with the mental grit needed to bounce back from academic setbacks.'
+        hook: 'Whether on the athletics track or inside a bustling school gymnasium, sports teach lessons that no textbook can replicate. Beyond physical fitness, regular athletic training equips secondary students with the mental grit needed to bounce back from academic setbacks.'
       },
       pilography: {
         partB_topic: 'Write a biographical feature article for your school English journal profiling an inspiring Hong Kong scientist, athlete, or community leader whose perseverance overcame major obstacles.',
@@ -2051,7 +2354,7 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
         partB_topic: 'Some argue that renovating historic buildings in Hong Kong for commercial use harms their authenticity, while others believe adaptive reuse keeps heritage alive. Write an argumentative essay discussing both views and giving your opinion.',
         hook: 'Across Hong Kong, historic red-brick landmarks and former police compounds are finding new life as art hubs and cafés. Yet this transformation sparks an ongoing debate: does commercial revitalization preserve our history, or does it dilute its original spirit?'
       },
-      other_dse: {
+      other_topics: {
         partB_topic: 'Fast fashion and electronic waste are growing environmental concerns among teenagers. Write a proposal to your Principal recommending a campus-wide "Green & Circular Living Campaign" at your school.',
         hook: '1. Introduction\nThis proposal outlines a semester-long Green & Circular Living Campaign designed to reduce textile and electronic waste on campus while empowering students to adopt sustainable daily habits.'
       }
@@ -2079,7 +2382,7 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
     };
 
     const VOCAB_UPGRADES = [
-      { basic: 'very important', upgrade: 'paramount / indispensable', ex: 'Mental resilience is paramount during the DSE study leave.' },
+      { basic: 'very important', upgrade: 'paramount / indispensable', ex: 'Mental resilience is paramount during the exam study period.' },
       { basic: 'solve the problem', upgrade: 'alleviate / rectify the issue', ex: 'Subsidies alone cannot rectify structural housing shortages.' },
       { basic: 'more and more', upgrade: 'an escalating number of / increasingly', ex: 'An escalating number of graduates are opting for portfolio careers.' },
       { basic: 'bad effect', upgrade: 'detrimental impact / adverse repercussion', ex: 'Sleep deprivation exerts a detrimental impact on cognitive recall.' },
@@ -2127,7 +2430,7 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
 
       const data = WRITING_PROMPTS[key];
       const targetWords = key === 'partA' ? lvlObj.wordGoalA : lvlObj.wordGoalB;
-      document.getElementById('p2-header-sub').textContent = `HKDSE & Secondary (${appState.formLevel}) Paper 2 · Writing Studio`;
+      document.getElementById('p2-header-sub').textContent = `Eng F1@ (${appState.formLevel}) Paper 2 · Writing Studio`;
       document.getElementById('writing-prompt-tag').textContent = data.tag;
       document.getElementById('writing-target-words').textContent = `Target: ~${targetWords} words (${appState.formLevel})`;
       document.getElementById('writing-prompt-text').textContent = data.text;
@@ -2181,7 +2484,6 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
       }
     }
 
-    // Gemini API Helper with Exponential Backoff
     async function callGeminiText(userQuery, systemPrompt) {
       const apiKey = "";
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
@@ -2220,19 +2522,19 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
       const btn = document.getElementById('ai-grade-btn');
       const fbBox = document.getElementById('ai-essay-feedback');
       btn.disabled = true;
-      btn.innerHTML = '<span>⏳ Grading against HKEAA 7-Point Scale...</span>';
+      btn.innerHTML = '<span>⏳ Grading against 7-Point Scale...</span>';
       fbBox.classList.remove('hidden');
       fbBox.innerHTML = '<p class="text-sm text-indigo-200 animate-pulse">Analyzing Content, Language, and Organization...</p>';
 
       const promptInfo = WRITING_PROMPTS[currentWritingKey];
-      const sysPrompt = `You are a senior English teacher in Hong Kong and HKDSE Paper 2 examiner. Evaluate the student's draft calibrated for Form Level ${appState.formLevel} using the HKEAA 7-point scale for Content (C/7), Language (L/7), and Organization (O/7), and estimate an overall HKDSE Level (Level 2 to 5**). Provide concise, encouraging, actionable feedback with 2 concrete sentence upgrades appropriate for ${appState.formLevel}.`;
+      const sysPrompt = `You are a senior English teacher in Hong Kong evaluating a secondary school Paper 2 writing draft calibrated for Form Level ${appState.formLevel} using a 7-point scale for Content (C/7), Language (L/7), and Organization (O/7), and estimating an overall band level (Level 2 to 5**). Provide concise, encouraging, actionable feedback with 2 concrete sentence upgrades appropriate for ${appState.formLevel}.`;
       const query = `Form Level: ${appState.formLevel}\nTask Prompt (${promptInfo.tag}): ${promptInfo.text}\n\nStudent Draft:\n${essay}`;
 
       try {
         const reply = await callGeminiText(query, sysPrompt);
         fbBox.innerHTML = `
           <div class="flex items-center justify-between border-b border-slate-700 pb-2">
-            <span class="font-display font-bold text-amber-400 text-sm">🏅 HKEAA AI Examiner Report</span>
+            <span class="font-display font-bold text-amber-400 text-sm">🏅 AI Examiner Report</span>
             <span class="text-xs text-slate-400">Target: ${appState.targetGrade}</span>
           </div>
           <div class="text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-line">${escapeHtml(reply)}</div>
@@ -2240,7 +2542,6 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
         appState.mastery.p2 = Math.min(100, appState.mastery.p2 + 4);
         addXP(30, 'Paper 2 AI Essay Evaluation');
       } catch (e) {
-        // Fallback smart rubric analysis if offline/API unavailable
         const words = essay.split(/\s+/).length;
         const hasTransitions = /(furthermore|moreover|however|conversely|consequently|nevertheless)/i.test(essay);
         fbBox.innerHTML = `
@@ -2257,7 +2558,7 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
         addXP(20, 'Paper 2 Draft Completed');
       } finally {
         btn.disabled = false;
-        btn.innerHTML = '<span>🤖 Grade with HKEAA AI Examiner</span>';
+        btn.innerHTML = '<span>🤖 Grade with AI Examiner</span>';
       }
     }
 
@@ -2293,7 +2594,7 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
         ]
       },
       senior: {
-        label: 'S3 & HKDSE Part B2 Integrated Task',
+        label: 'S3 & S4–S6 Integrated Task',
         df1: `<div class="flex items-center justify-between border-b border-slate-200 pb-2">
                 <span class="font-bold text-indigo-800">📄 DF 1: Email from Event Coordinator</span>
                 <span class="text-xs text-slate-400">14 Nov</span>
@@ -2310,7 +2611,7 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
               <p class="text-slate-700 leading-relaxed italic">
                 "Oh, one crucial update from this morning's safety briefing: plastic bottled water will <span class="bg-amber-100 px-1 rounded font-medium not-italic">not be provided</span> on-site to align with our zero-waste pledge, so every volunteer must <span class="bg-amber-100 px-1 rounded font-medium not-italic">bring their own reusable water bottle</span>. On the bright side, lunch coupons worth <span class="bg-amber-100 px-1 rounded font-medium not-italic">HK$80</span> will be issued at registration!"
               </p>`,
-        instruction: '<strong>Task Instruction (S3/DSE):</strong> Write a formal, polite notice to student volunteers incorporating all <strong>5 key information points</strong> from DF 1 and DF 2 in your own words.',
+        instruction: '<strong>Task Instruction (S3/S4–S6):</strong> Write a formal, polite notice to student volunteers incorporating all <strong>5 key information points</strong> from DF 1 and DF 2 in your own words.',
         checkpoints: [
           { label: 'Reason for change (heavy rain / bad weather)', keys: ['rain', 'weather', 'forecast'] },
           { label: 'New venue (Hall 3B, HKCEC / Convention Centre)', keys: ['hall 3b', 'hkcec', 'convention'] },
@@ -2389,7 +2690,7 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
         group: 'Your History & English clubs are proposing a <strong>Heritage Field Trip</strong> to historic monuments in Hong Kong. Discuss educational benefits over textbook learning, site choices, and follow-up presentations.',
         ir: '"Why is it important for young people to understand the history of their own city?"'
       },
-      other_dse: {
+      other_topics: {
         group: 'Your school is launching a <strong>Zero-Waste & Sustainable Campus</strong> initiative. Discuss major sources of school waste, practical recycling habits, and how to reward eco-friendly classes.',
         ir: '"Do you think individual students can make a real difference in tackling climate change?"'
       }
@@ -2456,7 +2757,7 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
       sendBtn.disabled = true;
       sendBtn.textContent = 'Candidate C is responding...';
 
-      const sysPrompt = `You are Candidate C (Marcus) in an HKDSE Paper 4 English Speaking Group Interaction exam. Respond naturally in 2-3 concise spoken sentences: acknowledge Candidate B's point using a natural DSE discourse marker, add one fresh angle (e.g., rules against plagiarism or teacher guidance), and invite the group to respond. At the very end in brackets, add a 1-sentence coaching tip on Candidate B's phrasing.`;
+      const sysPrompt = `You are Candidate C (Marcus) in a Hong Kong secondary school Paper 4 English Speaking Group Interaction exam. Respond naturally in 2-3 concise spoken sentences: acknowledge Candidate B's point using a natural discourse marker, add one fresh angle (e.g., rules against plagiarism or teacher guidance), and invite the group to respond. At the very end in brackets, add a 1-sentence coaching tip on Candidate B's phrasing.`;
 
       try {
         const reply = await callGeminiText(`Candidate B just said: "${userSpeech}"`, sysPrompt);
@@ -2646,6 +2947,7 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
     }
 
     function switchTab(tabId) {
+      stopAudioText();
       document.querySelectorAll('.tab-panel').forEach(panel => {
         panel.classList.add('hidden');
       });
@@ -2716,27 +3018,20 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
     }
 
     function applyPersonalizedExamContent() {
-      // 1. Update Daily Sprint bank for chosen Form Level
-      const lvlBank = LEVEL_SPRINT_BANKS[appState.formLevel] || LEVEL_SPRINT_BANKS.DSE;
+      const lvlBank = LEVEL_SPRINT_BANKS[appState.formLevel] || LEVEL_SPRINT_BANKS['S4-S6'];
       activeSprintQuestions = [...lvlBank];
       currentSprintIdx = 0;
       sprintUserAnswers = new Array(activeSprintQuestions.length).fill(null);
       sprintSubmitted = false;
       renderSprintQuestion();
 
-      // 2. Update Paper 1 Reading Passage for chosen Topic & Form Level
       const primaryTopic = getPrimaryTopicId();
       const passageData = READING_PASSAGES_BANK[primaryTopic] || READING_PASSAGES_BANK.social;
       renderPaper1Content(passageData);
 
-      // 3. Update Paper 2 Writing prompts & target word counts
       selectWritingPrompt(currentWritingKey);
-
-      // 4. Update Paper 3 Integrated Skills & Paper 4 Speaking
       renderPaper3Content();
       renderPaper4Content();
-
-      // 5. Update Proofreading drills for Form Level
       renderProofreading();
       syncHeaderUI();
     }
@@ -2745,12 +3040,12 @@ Return ONLY valid JSON (no markdown fences) matching this exact structure:
     // 10. INITIALIZE APP
     // -----------------------------------------------------------
     window.addEventListener('DOMContentLoaded', () => {
-      renderSetupScreen();
+      renderBbcEpisodeList();
+      renderBbcEpisodeDetail();
       renderVocabUpgrades();
       renderFlashcard();
       applyPersonalizedExamContent();
 
-      // Set dynamic daily badge number based on current day of year
       const now = new Date();
       const start = new Date(now.getFullYear(), 0, 0);
       const dayOfYear = Math.floor((now - start) / (1000 * 60 * 60 * 24));
