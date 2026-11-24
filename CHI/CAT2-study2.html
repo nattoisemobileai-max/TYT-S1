@@ -62,6 +62,13 @@
         linear-gradient(to right, transparent 49.5%, #e7decb 49.5%, #e7decb 50.5%, transparent 50.5%),
         linear-gradient(to bottom, transparent 49.5%, #e7decb 49.5%, #e7decb 50.5%, transparent 50.5%);
     }
+    .speaking-circle {
+      box-shadow: 0 0 0 4px #2563eb, 0 10px 25px -5px rgba(37, 99, 235, 0.28);
+      border-color: #2563eb !important;
+      border-radius: 1rem;
+      transform: scale(1.01);
+      transition: all 0.28s ease;
+    }
   </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -633,7 +640,22 @@
       );
     }
 
+    function clearSpeakingSection() {
+      document.querySelectorAll('.speaking-circle').forEach(el => el.classList.remove('speaking-circle'));
+    }
+
+    function highlightSpeakingSection(targetId) {
+      clearSpeakingSection();
+      if (!targetId) return;
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.classList.add('speaking-circle');
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
     function resetSpeechControls() {
+      clearSpeakingSection();
       isSpeechPaused = false;
       speechQueue = [];
       speechQueueIdx = 0;
@@ -660,7 +682,10 @@
         return;
       }
 
-      const text = speechQueue[speechQueueIdx];
+      const chunk = speechQueue[speechQueueIdx];
+      const text = typeof chunk === 'string' ? chunk : chunk.text;
+      const targetId = typeof chunk === 'string' ? null : chunk.targetId;
+      highlightSpeakingSection(targetId);
       const u = new SpeechSynthesisUtterance(text);
       const bestVoice = pickBestChineseVoice();
       if (bestVoice) {
@@ -697,6 +722,15 @@
         return;
       }
 
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+        document.getElementById('play-anim-btn').textContent = '▶ 自動播放動畫';
+      }
+      if (currentStage < 5) {
+        renderIdiom(5);
+      }
+
       const item = filteredList[currentIndex];
       const wasActive = window.speechSynthesis.speaking || window.speechSynthesis.pending || window.speechSynthesis.paused;
       speechSessionId++;
@@ -705,10 +739,20 @@
 
       isSpeechPaused = false;
       speechQueue = [
-        item.word,
-        `解釋：${item.meaning}`,
-        `例句：${item.example}`
+        { text: item.word, targetId: 'chars-stage' },
+        { text: `辨義：${item.morphemes}`, targetId: 'colloc-morphemes' }
       ];
+      if (item.syn && item.syn.length) {
+        speechQueue.push({ text: `近義詞：${item.syn.join('、')}`, targetId: 'colloc-syn' });
+      }
+      if (item.ant && item.ant.length) {
+        speechQueue.push({ text: `反義詞：${item.ant.join('、')}`, targetId: 'colloc-ant' });
+      }
+      speechQueue.push(
+        { text: `解釋：${item.meaning}`, targetId: 'meaning-box' },
+        { text: `用法：${item.sentiment}，${item.target}`, targetId: 'usage-box' },
+        { text: `例句：${item.example}`, targetId: 'example-image-content' }
+      );
       speechQueueIdx = 0;
 
       const pauseBtn = document.getElementById('pause-speak-btn');
@@ -818,15 +862,15 @@
           : '<span class="text-stone-400 text-base">（課本未列）</span>';
 
         document.getElementById('collocations-content').innerHTML = `
-          <div class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-1.5">
+          <div id="colloc-morphemes" class="p-3.5 rounded-xl bg-amber-50/70 border border-amber-200 space-y-1.5 transition-all">
             <div class="text-sm font-bold text-amber-900">✨ 字詞辨義（高亮重點）</div>
             <div class="text-stone-800 leading-relaxed"><span class="marker-highlight font-semibold">${item.morphemes}</span></div>
           </div>
-          <div class="p-3.5 rounded-xl bg-emerald-50/60 border border-emerald-200 space-y-1.5">
+          <div id="colloc-syn" class="p-3.5 rounded-xl bg-emerald-50/60 border border-emerald-200 space-y-1.5 transition-all">
             <div class="text-sm font-bold text-emerald-900">🔗 近義詞配對</div>
             <div class="flex flex-wrap gap-1.5">${synHtml}</div>
           </div>
-          <div class="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-200 space-y-1.5">
+          <div id="colloc-ant" class="p-3.5 rounded-xl bg-indigo-50/60 border border-indigo-200 space-y-1.5 transition-all">
             <div class="text-sm font-bold text-indigo-900">🔄 反義詞配對</div>
             <div class="flex flex-wrap gap-1.5">${antHtml}</div>
           </div>
@@ -846,11 +890,11 @@
           : 'bg-sky-100 text-sky-900 border-sky-300';
 
         document.getElementById('meaning-usage-content').innerHTML = `
-          <div class="sm:col-span-8 p-4 rounded-xl bg-[#faf6ee] border border-[#e5dccb]">
+          <div id="meaning-box" class="sm:col-span-8 p-4 rounded-xl bg-[#faf6ee] border border-[#e5dccb] transition-all">
             <div class="text-sm font-bold text-stone-600 mb-1.5">【析義／解釋】</div>
             <p class="text-lg sm:text-xl font-semibold text-stone-900 leading-relaxed">${item.meaning}</p>
           </div>
-          <div class="sm:col-span-4 p-4 rounded-xl bg-[#faf6ee] border border-[#e5dccb] flex flex-col justify-center gap-2.5">
+          <div id="usage-box" class="sm:col-span-4 p-4 rounded-xl bg-[#faf6ee] border border-[#e5dccb] flex flex-col justify-center gap-2.5 transition-all">
             <div class="text-sm font-bold text-stone-600">【用法】</div>
             <div class="flex flex-wrap gap-2">
               <span class="px-3.5 py-1.5 rounded-full border text-sm sm:text-base font-bold ${sentBadge}">${item.sentiment}</span>
