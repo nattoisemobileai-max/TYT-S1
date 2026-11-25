@@ -1,0 +1,2224 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Experiment 2.13 | Effect of Chlorine on Microorganisms in Water (3D Lab)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #0b1120;
+      --bg-canvas-grad: radial-gradient(circle at 50% 40%, #14223e 0%, #0b1120 75%, #060a14 100%);
+      --bg-panel: rgba(15, 23, 42, 0.91);
+      --bg-card: rgba(15, 23, 42, 0.84);
+      --bg-item: rgba(30, 41, 59, 0.80);
+      --bg-input: rgba(15, 23, 42, 0.95);
+      --grid-line: rgba(56, 189, 248, 0.04);
+      --border-subtle: rgba(56, 189, 248, 0.28);
+      --border-strong: rgba(56, 189, 248, 0.58);
+      --accent-cyan: #38bdf8;
+      --accent-teal: #2dd4bf;
+      --accent-amber: #f59e0b;
+      --accent-rose: #fb7185;
+      --accent-lime: #a3e635;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --shadow-panel: 0 10px 30px rgba(0, 0, 0, 0.48);
+      --font-sans: 'Inter', 'Noto Sans TC', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body.light-mode {
+      --bg-deep: #eef4fa;
+      --bg-canvas-grad: radial-gradient(circle at 50% 35%, #ffffff 0%, #e2ecf6 72%, #cbd8e8 100%);
+      --bg-panel: rgba(255, 255, 255, 0.93);
+      --bg-card: rgba(248, 250, 252, 0.95);
+      --bg-item: rgba(241, 245, 249, 0.96);
+      --bg-input: #ffffff;
+      --grid-line: rgba(14, 116, 144, 0.055);
+      --border-subtle: rgba(14, 116, 144, 0.26);
+      --border-strong: rgba(2, 132, 199, 0.58);
+      --accent-cyan: #0284c7;
+      --accent-teal: #0d9488;
+      --accent-amber: #d97706;
+      --accent-rose: #e11d48;
+      --accent-lime: #65a30d;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --shadow-panel: 0 10px 28px rgba(15, 23, 42, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    input, textarea, select {
+      user-select: text;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: var(--bg-canvas-grad);
+      transition: background 0.3s ease;
+    }
+
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    /* Compact Single-Row Top Header */
+    .hud-header {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 6px 10px;
+      background: var(--bg-panel);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: var(--shadow-panel);
+      flex-wrap: wrap;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .exp-badge {
+      background: linear-gradient(135deg, #ea580c, #f59e0b);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 7px;
+      border-radius: 6px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+      white-space: nowrap;
+    }
+
+    .demo-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 5px;
+      background: rgba(245, 158, 11, 0.16);
+      color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      white-space: nowrap;
+    }
+
+    .brand-title {
+      font-size: 0.81rem;
+      font-weight: 700;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .btn-pill {
+      font-family: var(--font-sans);
+      font-size: 0.71rem;
+      font-weight: 600;
+      padding: 5px 8px;
+      border-radius: 7px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-item);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.16s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-pill:hover {
+      border-color: var(--accent-cyan);
+      color: var(--text-primary);
+    }
+
+    .btn-pill.active {
+      border-color: var(--accent-cyan);
+      color: #ffffff;
+      background: var(--accent-cyan);
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.28);
+    }
+
+    .btn-pill.audio-on {
+      border-color: var(--accent-teal);
+      color: #ffffff;
+      background: var(--accent-teal);
+    }
+
+    .btn-pill.caution-btn {
+      border-color: rgba(251, 113, 133, 0.45);
+      color: var(--accent-rose);
+    }
+
+    .btn-pill.caution-btn.active {
+      background: var(--accent-rose);
+      border-color: var(--accent-rose);
+      color: #ffffff;
+    }
+
+    .btn-pill.collapse-btn {
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+    }
+
+    .btn-pill.collapse-btn:hover {
+      background: var(--accent-amber);
+      color: #ffffff;
+    }
+
+    /* Collapsible Top Drawers */
+    .drawer-panel {
+      position: fixed;
+      top: 58px;
+      z-index: 18;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: var(--shadow-panel);
+      display: none;
+      flex-direction: column;
+      max-height: calc(100vh - 196px);
+      overflow: hidden;
+    }
+
+    .drawer-panel.open {
+      display: flex;
+    }
+
+    body.panels-collapsed .drawer-panel {
+      display: none !important;
+    }
+
+    .drawer-left {
+      left: 10px;
+      width: 355px;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-right {
+      right: 10px;
+      width: 385px;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-center {
+      left: 50%;
+      transform: translateX(-50%);
+      width: 370px;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-views {
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(56, 189, 248, 0.08);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .btn-close-drawer {
+      width: 24px;
+      height: 22px;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-item);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-close-drawer:hover {
+      border-color: var(--accent-rose);
+      color: var(--accent-rose);
+    }
+
+    .drawer-body {
+      padding: 11px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .section-header {
+      font-size: 0.71rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent-cyan);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 4px;
+    }
+
+    /* Aim, Caution & Hypothesis Styling */
+    .aim-box {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(45, 212, 191, 0.10));
+      border: 1px solid var(--border-strong);
+      border-radius: 9px;
+      padding: 9px 10px;
+    }
+
+    .aim-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 4px;
+    }
+
+    .aim-en {
+      font-size: 0.74rem;
+      line-height: 1.42;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .aim-zh {
+      font-size: 0.74rem;
+      line-height: 1.45;
+      color: var(--text-secondary);
+      padding-top: 4px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+
+    .caution-box {
+      background: rgba(251, 113, 133, 0.12);
+      border: 1px solid rgba(251, 113, 133, 0.5);
+      border-left: 4px solid var(--accent-rose);
+      border-radius: 9px;
+      padding: 9px 10px;
+    }
+
+    .caution-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-rose);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .caution-list {
+      padding-left: 16px;
+      font-size: 0.72rem;
+      line-height: 1.44;
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .hypothesis-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 9px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .hyp-card {
+      background: var(--bg-item);
+      border-radius: 7px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 0.72rem;
+    }
+
+    .hyp-toggle-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .hyp-btn {
+      font-size: 0.67rem;
+      font-weight: 600;
+      padding: 4px 6px;
+      border-radius: 5px;
+      border: 1px solid var(--border-subtle);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .hyp-btn.active-teal {
+      background: var(--accent-teal);
+      border-color: var(--accent-teal);
+      color: #fff;
+    }
+
+    .hyp-btn.active-rose {
+      background: var(--accent-rose);
+      border-color: var(--accent-rose);
+      color: #fff;
+    }
+
+    .hyp-textarea {
+      width: 100%;
+      min-height: 46px;
+      resize: vertical;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      padding: 6px 8px;
+      line-height: 1.38;
+    }
+
+    .hyp-textarea:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+    }
+
+    /* Textbook Material & Apparatus Grid */
+    .apparatus-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 7px;
+      font-size: 0.70rem;
+    }
+
+    .app-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      border-radius: 5px;
+      background: var(--bg-item);
+    }
+
+    .app-qty {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--accent-amber);
+      font-size: 0.68rem;
+      white-space: nowrap;
+    }
+
+    /* Observation & Interactive Table Styling */
+    .obs-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 8px 10px;
+    }
+
+    .obs-title {
+      font-size: 0.80rem;
+      font-weight: 700;
+      color: var(--accent-teal);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .obs-text-en {
+      font-size: 0.73rem;
+      line-height: 1.4;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .obs-text-zh {
+      font-size: 0.73rem;
+      line-height: 1.42;
+      color: var(--text-secondary);
+      padding-top: 4px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.7rem;
+    }
+
+    .results-table th {
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--text-primary);
+      font-weight: 700;
+      padding: 6px 6px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+      line-height: 1.25;
+    }
+
+    .results-table td {
+      padding: 7px 6px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+
+    .tbl-select {
+      width: 100%;
+      padding: 4px 5px;
+      border-radius: 5px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.69rem;
+      cursor: pointer;
+    }
+
+    .tbl-select.correct {
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 0 1px var(--accent-teal);
+    }
+
+    .tbl-select.wrong {
+      border-color: var(--accent-rose);
+      box-shadow: 0 0 0 1px var(--accent-rose);
+    }
+
+    .takeaway-box {
+      background: rgba(45, 212, 191, 0.10);
+      border: 1px solid rgba(45, 212, 191, 0.35);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.71rem;
+      line-height: 1.44;
+      color: var(--text-primary);
+    }
+
+    .table-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .feedback-msg {
+      font-size: 0.71rem;
+      font-weight: 600;
+      color: var(--accent-teal);
+    }
+
+    /* =====================================================================
+       ALWAYS-VISIBLE ULTRA-COMPACT BOTTOM EXPERIMENT OPERATION BAR
+       ===================================================================== */
+    .op-dock {
+      position: fixed;
+      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      width: min(840px, calc(100vw - 16px));
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      padding: 7px 9px;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .op-status-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 4px 8px;
+      border-radius: 7px;
+      background: rgba(56, 189, 248, 0.12);
+      border-left: 3px solid var(--accent-cyan);
+      font-size: 0.72rem;
+      line-height: 1.3;
+      color: var(--text-primary);
+    }
+
+    .op-status-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .op-badge-state {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(45, 212, 191, 0.2);
+      color: var(--accent-teal);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .op-steps-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+    }
+
+    .op-btn {
+      padding: 7px 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.71rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .op-btn:hover:not(:disabled) {
+      background: var(--accent-cyan);
+      color: #ffffff;
+    }
+
+    .op-btn:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+
+    .op-btn.step-done {
+      border-color: var(--accent-teal);
+      background: rgba(45, 212, 191, 0.2);
+      color: var(--accent-teal);
+    }
+
+    .op-btn.chlorine {
+      border-color: var(--accent-amber);
+      background: rgba(245, 158, 11, 0.18);
+    }
+
+    .op-btn.chlorine:hover:not(:disabled) {
+      background: var(--accent-amber);
+      color: #ffffff;
+    }
+
+    .op-utility-row {
+      display: grid;
+      grid-template-columns: 1.3fr 1.1fr 0.8fr;
+      gap: 5px;
+    }
+
+    .op-btn.demo {
+      border-color: var(--accent-teal);
+      background: rgba(45, 212, 191, 0.18);
+      color: var(--accent-teal);
+    }
+
+    .op-btn.demo:hover:not(:disabled) {
+      background: var(--accent-teal);
+      color: #ffffff;
+    }
+
+    .op-btn.pip-btn {
+      border-color: var(--border-subtle);
+      background: var(--bg-item);
+      color: var(--text-secondary);
+    }
+
+    .op-btn.pip-btn:hover {
+      border-color: var(--accent-cyan);
+      color: var(--text-primary);
+    }
+
+    .op-btn.reset {
+      border-color: var(--accent-rose);
+      background: rgba(251, 113, 133, 0.15);
+      color: var(--accent-rose);
+    }
+
+    .op-btn.reset:hover:not(:disabled) {
+      background: var(--accent-rose);
+      color: #ffffff;
+    }
+
+    /* Safety Glove Toast */
+    .glove-toast {
+      position: fixed;
+      top: 58px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 35;
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: var(--bg-panel);
+      border: 1px solid var(--accent-amber);
+      color: var(--accent-amber);
+      font-size: 0.73rem;
+      font-weight: 700;
+      display: none;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-panel);
+      white-space: nowrap;
+    }
+
+    .drawer-body::-webkit-scrollbar { width: 4px; }
+    .drawer-body::-webkit-scrollbar-thumb {
+      background: rgba(56, 189, 248, 0.35);
+      border-radius: 4px;
+    }
+
+    @media (max-width: 720px) {
+      .hud-header {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        padding: 5px 8px;
+      }
+      .brand-title {
+        display: none;
+      }
+      .btn-pill {
+        font-size: 0.67rem;
+        padding: 4px 6px;
+      }
+      .drawer-panel {
+        top: 48px;
+        max-height: calc(100vh - 205px);
+      }
+      .op-dock {
+        bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+        width: calc(100vw - 12px);
+        padding: 6px 7px;
+        gap: 5px;
+      }
+      .op-steps-row {
+        grid-template-columns: 1fr 1fr;
+      }
+      .op-btn {
+        font-size: 0.69rem;
+        padding: 6px 4px;
+      }
+    }
+  </style>
+
+  <!-- Three.js CDN Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="canvas-container"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Compact Single-Row Top Header -->
+  <header class="hud-header">
+    <div class="brand-block">
+      <span class="exp-badge">Exp 2.13</span>
+      <span class="demo-tag">Demonstration 示範</span>
+      <span class="brand-title">Effect of chlorine on microorganisms in water 氯對水中微生物的影響</span>
+    </div>
+
+    <div class="header-nav-tabs">
+      <button type="button" class="btn-pill" data-drawer-btn="drawer-aim">🎯 目的/假設 Aim &amp; Hyp</button>
+      <button type="button" class="btn-pill" data-drawer-btn="drawer-table">📋 觀察記錄表 Table</button>
+      <button type="button" class="btn-pill caution-btn" data-drawer-btn="drawer-caution">⚠️ 安全 Caution</button>
+      <button type="button" class="btn-pill" data-drawer-btn="drawer-views">🎥 視角 Views</button>
+      <button type="button" id="theme-toggle" class="btn-pill" title="Light / Dark Mode">☀️ Light</button>
+      <button type="button" id="audio-toggle" class="btn-pill" title="Sound Effects">🔇</button>
+      <button type="button" id="collapse-panels-btn" class="btn-pill collapse-btn">👁️ 收起面板</button>
+    </div>
+  </header>
+
+  <div id="glove-toast" class="glove-toast">
+    🧤 Putting on protective gloves before handling corrosive chlorine bleach... 戴上防護手套處理腐蝕性氯漂白水...
+  </div>
+
+  <!-- Drawer 1: Aim, Hypothesis & Textbook Materials -->
+  <aside class="drawer-panel drawer-left" id="drawer-aim">
+    <div class="drawer-header">
+      <span>🎯 Aim, Hypothesis &amp; Apparatus 目的、假設與器材</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-aim">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="aim-box">
+        <div class="aim-label">🎯 Aim / Purpose 實驗目的</div>
+        <div class="aim-en">
+          To observe the effect of <strong>chlorine</strong> (diluted chlorine bleach) on living <strong>microorganisms in filtered pond water</strong> using a microscope connected to a video imaging device and projector/TV (<strong>Chlorination</strong>).
+        </div>
+        <div class="aim-zh">
+          透過連接視像裝置與投影機／電視的顯微鏡，觀察<strong>氯</strong>（稀釋氯漂白水）對<strong>過濾池塘水中微生物</strong>的影響（<strong>加氯消毒法 Chlorination</strong>）。
+        </div>
+      </div>
+
+      <div class="hypothesis-box">
+        <div class="section-header">
+          <span>💡 Pre-Experiment Hypothesis 實驗假設</span>
+          <span id="hyp-status-badge" style="color: var(--accent-amber);">Editable 可填寫</span>
+        </div>
+
+        <div class="hyp-card">
+          <div style="font-weight: 600;">Step 3 — Filtered pond water (before adding chlorine 加氯前):</div>
+          <div class="hyp-toggle-group">
+            <button type="button" class="hyp-btn" data-hyp-step="step3" data-val="alive">Microorganisms swim actively 微生物活躍游動</button>
+            <button type="button" class="hyp-btn" data-hyp-step="step3" data-val="none">No living organisms 沒有活微生物</button>
+          </div>
+        </div>
+
+        <div class="hyp-card">
+          <div style="font-weight: 600;">Step 4 — After adding diluted chlorine bleach (加入稀釋氯漂白水後):</div>
+          <div class="hyp-toggle-group">
+            <button type="button" class="hyp-btn" data-hyp-step="step4" data-val="killed">Stop moving &amp; die 停止游動並死亡</button>
+            <button type="button" class="hyp-btn" data-hyp-step="step4" data-val="unaffected">Keep swimming normally 繼續正常游動</button>
+          </div>
+        </div>
+
+        <textarea id="hyp-statement" class="hyp-textarea" placeholder="Write your hypothesis here or click Generate... 在此輸入假設句，或點擊自動生成..."></textarea>
+        <div style="display: flex; gap: 6px;">
+          <button type="button" id="btn-autofill-hyp" class="btn-pill" style="flex: 1; justify-content: center;">✨ Generate 生成假設</button>
+          <button type="button" id="btn-lock-hyp" class="btn-pill active" style="flex: 1.1; justify-content: center;">🔒 Save 儲存假設</button>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span>🧰 Material &amp; Apparatus 材料及儀器</span>
+        <span style="font-family: var(--font-mono); font-size: 0.67rem;">Unit 2 p.125</span>
+      </div>
+      <div class="apparatus-grid">
+        <div class="app-item"><span>video imaging device 視像裝置</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>projector or TV 投影機或電視</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>microscope 顯微鏡</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>dropper 滴管</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>slide 載玻片</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>cover slip 蓋玻片</span><span class="app-qty">× 1</span></div>
+        <div class="app-item" style="grid-column: span 2;"><span>filtered pond water (Exp 2.10) 過濾池塘水</span><span class="app-qty">Dropper bottle</span></div>
+        <div class="app-item" style="grid-column: span 2;"><span>diluted chlorine bleach 稀釋氯漂白水</span><span class="app-qty">Corrosive 具腐蝕性</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Drawer 2: Observation & Conclusion Table -->
+  <aside class="drawer-panel drawer-right" id="drawer-table">
+    <div class="drawer-header">
+      <span>📋 Observation &amp; Conclusion 觀察記錄與結論</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-table">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="obs-box">
+        <div class="obs-title">
+          <span id="obs-title-text">Step 1: Setup Apparatus 連接實驗儀器</span>
+          <span id="obs-badge" style="font-size: 0.67rem; padding: 2px 7px; border-radius: 4px; background: rgba(148,163,184,0.2); color: var(--text-secondary);">Step 1</span>
+        </div>
+        <div id="obs-en" class="obs-text-en">
+          Connect the <strong>video imaging device</strong> to the <strong>microscope</strong> and <strong>projector / TV</strong>.
+        </div>
+        <div id="obs-zh" class="obs-text-zh">
+          把<strong>視像裝置</strong>連接至<strong>顯微鏡</strong>和<strong>投影機／電視</strong>。
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span>✍️ Textbook Steps 3 &amp; 4 Observation Table</span>
+        <span id="score-text" style="color: var(--accent-teal);">0 / 4</span>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th style="width: 28%;">Stage<br>實驗步驟</th>
+              <th style="width: 38%;">Screen Observation<br>投影機畫面觀察</th>
+              <th style="width: 34%;">Explanation / Conclusion<br>原理解釋與結論</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div style="font-weight: 700;">Step 3</div>
+                <div style="font-size: 0.66rem; color: var(--text-secondary);">Filtered pond water<br>過濾池塘水（加氯前）</div>
+              </td>
+              <td>
+                <select class="tbl-select" id="sel-obs-3">
+                  <option value="">-- Select 選擇觀察 --</option>
+                  <option value="swimming">Many microorganisms move/swim actively 許多微生物在水中活躍游動</option>
+                  <option value="motionless">All organisms are completely motionless 所有生物完全不動</option>
+                  <option value="empty">Nothing visible in pond water 池塘水中完全沒有任何東西</option>
+                </select>
+              </td>
+              <td>
+                <select class="tbl-select" id="sel-exp-3">
+                  <option value="">-- Select 選擇解釋 --</option>
+                  <option value="contains_micro">Filtered pond water still contains living microorganisms 過濾池塘水仍含有活微生物</option>
+                  <option value="pure_water">Filtered water is completely sterile 過濾水已完全無菌</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div style="font-weight: 700;">Step 4</div>
+                <div style="font-size: 0.66rem; color: var(--text-secondary);">+ Chlorine bleach<br>加入稀釋氯漂白水後</div>
+              </td>
+              <td>
+                <select class="tbl-select" id="sel-obs-4">
+                  <option value="">-- Select 選擇觀察 --</option>
+                  <option value="stop_die">Microorganisms stop moving and die 微生物停止游動並死亡</option>
+                  <option value="swim_faster">Microorganisms swim even faster 微生物游得更快</option>
+                  <option value="no_change">No change in microorganism movement 微生物活動沒有變化</option>
+                </select>
+              </td>
+              <td>
+                <select class="tbl-select" id="sel-exp-4">
+                  <option value="">-- Select 選擇結論 --</option>
+                  <option value="chlorine_kills">Chlorine kills most microorganisms (Chlorination) 氯能殺死大部分微生物（加氯消毒法）</option>
+                  <option value="chlorine_food">Chlorine acts as nutrients for microorganisms 氯是微生物的養分</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="takeaway-box">
+        <div style="font-weight: 700; color: var(--accent-teal); margin-bottom: 3px;">📚 Key Concepts 課本重點 (p.125)</div>
+        <div>• <strong>Chlorination (加氯消毒法):</strong> Adding chlorine to water to kill most microorganisms; widely used in water treatment plants (濾水廠) and swimming pools (游泳池).</div>
+        <div style="margin-top: 3px; color: var(--text-secondary);">• <strong>Caution:</strong> Chlorine is toxic and has an irritating smell (有毒及具刺激性氣味). Excessive chlorine irritates skin and eyes (刺激皮膚和眼睛).</div>
+      </div>
+
+      <div class="table-actions">
+        <span id="table-feedback" class="feedback-msg">Complete Steps 3 &amp; 4 above ↑</span>
+        <div style="display: flex; gap: 6px;">
+          <button type="button" id="btn-auto-fill-table" class="btn-pill" style="font-size: 0.69rem;">Auto-Fill 填入答案</button>
+          <button type="button" id="btn-check-table" class="btn-pill active" style="font-size: 0.69rem;">✔ Check 核對答案</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Drawer 3: Safety Caution Card (p.125) -->
+  <aside class="drawer-panel drawer-center" id="drawer-caution">
+    <div class="drawer-header" style="color: var(--accent-rose); background: rgba(251, 113, 133, 0.12);">
+      <span>⚠️ Safety Caution 安全注意事項 (p.125)</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-caution">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="caution-box">
+        <div class="caution-title">⚠️ Caution 注意事項</div>
+        <ul class="caution-list">
+          <li><strong>Chlorine bleach is corrosive.</strong> Wear <strong>protective gloves</strong> when handling it.<br><span style="color: var(--text-secondary);">氯漂白水具腐蝕性。處理時須戴上防護手套。</span></li>
+          <li><strong>Wash your hands thoroughly</strong> after the experiment.<br><span style="color: var(--text-secondary);">實驗後須徹底清洗雙手。</span></li>
+          <li><strong>Toxic &amp; irritating smell:</strong> Too much chlorine in swimming pools may irritate our skin and eyes.<br><span style="color: var(--text-secondary);">氯有毒並帶有刺激性氣味；泳池水中加入過量氯會刺激皮膚和眼睛。</span></li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Drawer 4: 3D Camera Views -->
+  <aside class="drawer-panel drawer-views" id="drawer-views">
+    <div class="drawer-header">
+      <span>🎥 3D Camera Views 視角切換</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-views">✕</button>
+    </div>
+    <div class="drawer-body" style="flex-direction: row; flex-wrap: wrap; gap: 6px;">
+      <button type="button" class="btn-pill active" data-cam="bench">實驗台全景 Full Bench</button>
+      <button type="button" class="btn-pill" data-cam="projector">投影機畫面 Projector TV</button>
+      <button type="button" class="btn-pill" data-cam="microscope">顯微鏡載玻片 Microscope</button>
+      <button type="button" class="btn-pill" data-cam="dropper">滴管操作 Dropper View</button>
+    </div>
+  </aside>
+
+  <!-- ALWAYS-VISIBLE ULTRA-COMPACT BOTTOM EXPERIMENT OPERATION BAR -->
+  <section class="op-dock" aria-label="Experiment 2.13 Operations">
+    <div class="op-status-strip">
+      <span id="op-status-text" class="op-status-text">
+        Step 1: Tap <strong>1️⃣ 連接視像裝置</strong> to connect video imaging device to microscope &amp; projector/TV
+      </span>
+      <span id="op-badge-state" class="op-badge-state">Step 1 Ready</span>
+    </div>
+
+    <div class="op-steps-row">
+      <button type="button" id="btn-step-1" class="op-btn">1️⃣ 連接視像裝置 Connect TV</button>
+      <button type="button" id="btn-step-2" class="op-btn" disabled>2️⃣ 滴加池塘水 Pond Water</button>
+      <button type="button" id="btn-step-3" class="op-btn" disabled>3️⃣ 觀察微生物 Observe (Step 3)</button>
+      <button type="button" id="btn-step-4" class="op-btn chlorine" disabled>4️⃣ 滴加漂白水 Add Chlorine</button>
+    </div>
+
+    <div class="op-utility-row">
+      <button type="button" id="btn-demo-all" class="op-btn demo">▶ 一鍵示範 Demo All (Steps 1–4)</button>
+      <button type="button" id="btn-focus-tv" class="op-btn pip-btn">📺 聚焦投影畫面 Focus TV</button>
+      <button type="button" id="btn-reset" class="op-btn reset">↺ 重設 Reset</button>
+    </div>
+  </section>
+
+  <!-- Three.js 3D Interactive Laboratory & Live Microscope Projection Engine -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    // =========================================================================
+    // 1. EXPERIMENT STATE & BILINGUAL HYPOTHESIS / TABLE LOGIC
+    // =========================================================================
+    const expState = {
+      step: 0, // 0: initial, 1: connected TV, 2: pond water + cover slip mounted, 3: observing live microbes, 4: chlorine added & microbes killed
+      animating: false,
+      chlorineDiffusion: 0.0, // 0 -> 1 wave across microscope field
+      microbeVitality: 1.0,    // 1.0 (lively) -> 0.0 (immobilized/killed)
+      glovesWorn: false
+    };
+
+    const userRecord = {
+      hypStep3: '',
+      hypStep4: '',
+      hypLocked: false
+    };
+
+    // Hypothesis Builder Buttons
+    document.querySelectorAll('[data-hyp-step]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (userRecord.hypLocked) return;
+        const stepKey = btn.dataset.hypStep;
+        const val = btn.dataset.val;
+        if (stepKey === 'step3') userRecord.hypStep3 = val;
+        if (stepKey === 'step4') userRecord.hypStep4 = val;
+
+        document.querySelectorAll(`[data-hyp-step="${stepKey}"]`).forEach(b => {
+          b.classList.remove('active-teal', 'active-rose');
+        });
+        if (val === 'alive' || val === 'killed') {
+          btn.classList.add('active-teal');
+        } else {
+          btn.classList.add('active-rose');
+        }
+      });
+    });
+
+    document.getElementById('btn-autofill-hyp').addEventListener('click', () => {
+      if (userRecord.hypLocked) return;
+      if (!userRecord.hypStep3) {
+        document.querySelector('[data-hyp-step="step3"][data-val="alive"]').click();
+      }
+      if (!userRecord.hypStep4) {
+        document.querySelector('[data-hyp-step="step4"][data-val="killed"]').click();
+      }
+      const s3En = userRecord.hypStep3 === 'alive' ? 'living microorganisms will be seen swimming actively' : 'no living microorganisms will be visible';
+      const s4En = userRecord.hypStep4 === 'killed' ? 'they will stop moving and be killed by chlorination' : 'they will continue swimming normally';
+      const s3Zh = userRecord.hypStep3 === 'alive' ? '能觀察到活微生物在水中活躍游動' : '不會看到任何活微生物';
+      const s4Zh = userRecord.hypStep4 === 'killed' ? '牠們會停止游動並被氯殺死' : '牠們會繼續正常游動';
+
+      document.getElementById('hyp-statement').value =
+        `I predict that in filtered pond water ${s3En}, and after adding diluted chlorine bleach, ${s4En}.\n我預測在過濾池塘水中${s3Zh}，而加入稀釋氯漂白水後，${s4Zh}。`;
+    });
+
+    document.getElementById('btn-lock-hyp').addEventListener('click', () => {
+      userRecord.hypLocked = !userRecord.hypLocked;
+      const badge = document.getElementById('hyp-status-badge');
+      const btn = document.getElementById('btn-lock-hyp');
+      const textarea = document.getElementById('hyp-statement');
+      badge.textContent = userRecord.hypLocked ? 'Saved 已儲存' : 'Editable 可填寫';
+      badge.style.color = userRecord.hypLocked ? 'var(--accent-teal)' : 'var(--accent-amber)';
+      btn.textContent = userRecord.hypLocked ? '✏️ Edit 修改假設' : '🔒 Save 儲存假設';
+      textarea.disabled = userRecord.hypLocked;
+    });
+
+    // Observation & Conclusion Table Verification
+    document.getElementById('btn-check-table').addEventListener('click', () => {
+      const checks = [
+        { id: 'sel-obs-3', expected: 'swimming' },
+        { id: 'sel-exp-3', expected: 'contains_micro' },
+        { id: 'sel-obs-4', expected: 'stop_die' },
+        { id: 'sel-exp-4', expected: 'chlorine_kills' }
+      ];
+
+      let score = 0;
+      checks.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (el.value === item.expected) {
+          el.classList.add('correct');
+          el.classList.remove('wrong');
+          score++;
+        } else {
+          el.classList.add('wrong');
+          el.classList.remove('correct');
+        }
+      });
+
+      document.getElementById('score-text').textContent = `${score} / 4`;
+      const fb = document.getElementById('table-feedback');
+      if (score === 4) {
+        fb.textContent = '🎉 4/4 Correct! Chlorine kills microorganisms (Chlorination 加氯消毒法)!';
+        fb.style.color = 'var(--accent-teal)';
+      } else {
+        fb.textContent = `Score: ${score}/4 — Check red boxes 再檢查紅框項目`;
+        fb.style.color = 'var(--accent-rose)';
+      }
+    });
+
+    document.getElementById('btn-auto-fill-table').addEventListener('click', () => {
+      document.getElementById('sel-obs-3').value = 'swimming';
+      document.getElementById('sel-exp-3').value = 'contains_micro';
+      document.getElementById('sel-obs-4').value = 'stop_die';
+      document.getElementById('sel-exp-4').value = 'chlorine_kills';
+      document.getElementById('btn-check-table').click();
+    });
+
+    // =========================================================================
+    // 2. WEB AUDIO SYNTHESIZER (Equipment Clicks, Dropper Dispense, TV Hum)
+    // =========================================================================
+    class LabSFX {
+      constructor() {
+        this.ctx = null;
+        this.enabled = false;
+      }
+
+      toggle() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        this.enabled = !this.enabled;
+        return this.enabled;
+      }
+
+      playPowerOn() {
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.18);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.24);
+      }
+
+      playDrop() {
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(980, now);
+        osc.frequency.exponentialRampToValueAtTime(1560, now + 0.08);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      }
+    }
+
+    const sfx = new LabSFX();
+
+    // =========================================================================
+    // 3. LIVE HIGH-RESOLUTION MICROSCOPE & PROJECTOR/TV CANVAS TEXTURE
+    // =========================================================================
+    const scopeCanvas = document.createElement('canvas');
+    scopeCanvas.width = 768;
+    scopeCanvas.height = 512;
+    const sCtx = scopeCanvas.getContext('2d');
+    const scopeTexture = new THREE.CanvasTexture(scopeCanvas);
+    scopeTexture.colorSpace = THREE.SRGBColorSpace;
+
+    // Create diverse pond water microorganisms (Paramecium, Amoeba, Euglena, Rotifer)
+    const MICROORGANISMS = [];
+    const SPECIES = [
+      { type: 'paramecium', color: '#0f766e', bodyColor: 'rgba(45, 212, 191, 0.55)', size: 22, speed: 52 },
+      { type: 'euglena', color: '#15803d', bodyColor: 'rgba(132, 204, 22, 0.65)', size: 17, speed: 68 },
+      { type: 'amoeba', color: '#4338ca', bodyColor: 'rgba(129, 140, 248, 0.52)', size: 24, speed: 24 },
+      { type: 'rotifer', color: '#b45309', bodyColor: 'rgba(251, 191, 36, 0.60)', size: 20, speed: 44 }
+    ];
+
+    function initMicroorganisms() {
+      MICROORGANISMS.length = 0;
+      for (let i = 0; i < 22; i++) {
+        const sp = SPECIES[i % SPECIES.length];
+        const ang = Math.random() * Math.PI * 2;
+        const rad = Math.random() * 145;
+        MICROORGANISMS.push({
+          ...sp,
+          x: 384 + Math.cos(ang) * rad,
+          y: 256 + Math.sin(ang) * rad,
+          heading: Math.random() * Math.PI * 2,
+          turnRate: (Math.random() - 0.5) * 2.2,
+          phase: Math.random() * Math.PI * 2,
+          alive: true
+        });
+      }
+    }
+    initMicroorganisms();
+
+    function updateAndDrawMicroscopeScreen(dt, elapsed) {
+      const W = scopeCanvas.width;
+      const H = scopeCanvas.height;
+      const cx = W * 0.5;
+      const cy = H * 0.5;
+      const fovR = 205;
+
+      // Screen bezel background
+      sCtx.fillStyle = '#070d19';
+      sCtx.fillRect(0, 0, W, H);
+
+      // Top HUD bar on Projector/TV Screen
+      sCtx.fillStyle = '#0f172a';
+      sCtx.fillRect(0, 0, W, 42);
+      sCtx.fillStyle = '#38bdf8';
+      sCtx.font = 'bold 16px "JetBrains Mono", monospace';
+      sCtx.textAlign = 'left';
+      sCtx.fillText('LIVE MICROSCOPE FEED // 400× MAGNIFICATION', 20, 27);
+
+      sCtx.textAlign = 'right';
+      if (expState.step === 0) {
+        sCtx.fillStyle = '#64748b';
+        sCtx.fillText('NO SIGNAL (STANDBY)', W - 20, 27);
+        // Standby screen graphic
+        sCtx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+        sCtx.lineWidth = 2;
+        sCtx.strokeRect(cx - 170, cy - 45, 340, 90);
+        sCtx.fillStyle = '#94a3b8';
+        sCtx.font = 'bold 20px Inter, sans-serif';
+        sCtx.textAlign = 'center';
+        sCtx.fillText('PROJECTOR / TV STANDBY', cx, cy - 6);
+        sCtx.font = '15px "Noto Sans TC", sans-serif';
+        sCtx.fillStyle = '#38bdf8';
+        sCtx.fillText('Step 1: Connect Video Imaging Device 連接視像裝置', cx, cy + 24);
+        scopeTexture.needsUpdate = true;
+        return;
+      }
+
+      // Active status badge on TV top-right
+      if (expState.step === 1) {
+        sCtx.fillStyle = '#f59e0b';
+        sCtx.fillText('EMPTY SLIDE (MOUNT SAMPLE)', W - 20, 27);
+      } else if (expState.step === 2 || expState.step === 3) {
+        sCtx.fillStyle = '#2dd4bf';
+        sCtx.fillText('FILTERED POND WATER (ACTIVE)', W - 20, 27);
+      } else if (expState.step === 4) {
+        sCtx.fillStyle = '#fb7185';
+        sCtx.fillText('CHLORINE BLEACH ADDED (DISINFECTED)', W - 20, 27);
+      }
+
+      // Circular Illuminated Microscope Field of View
+      sCtx.save();
+      sCtx.beginPath();
+      sCtx.arc(cx, cy + 14, fovR, 0, Math.PI * 2);
+      sCtx.clip();
+
+      // Illuminated condenser lamp background
+      const lampGrad = sCtx.createRadialGradient(cx, cy + 14, 20, cx, cy + 14, fovR);
+      if (expState.step >= 2) {
+        lampGrad.addColorStop(0, '#ecfeff');
+        lampGrad.addColorStop(0.75, '#cffafe');
+        lampGrad.addColorStop(1, '#a5f3fc');
+      } else {
+        lampGrad.addColorStop(0, '#ffffff');
+        lampGrad.addColorStop(1, '#e2e8f0');
+      }
+      sCtx.fillStyle = lampGrad;
+      sCtx.fillRect(cx - fovR, cy + 14 - fovR, fovR * 2, fovR * 2);
+
+      // Subtle microscope reticle grid
+      sCtx.strokeStyle = 'rgba(14, 116, 144, 0.14)';
+      sCtx.lineWidth = 1;
+      for (let gx = cx - fovR; gx <= cx + fovR; gx += 32) {
+        sCtx.beginPath();
+        sCtx.moveTo(gx, cy + 14 - fovR);
+        sCtx.lineTo(gx, cy + 14 + fovR);
+        sCtx.stroke();
+      }
+      for (let gy = cy + 14 - fovR; gy <= cy + 14 + fovR; gy += 32) {
+        sCtx.beginPath();
+        sCtx.moveTo(cx - fovR, gy);
+        sCtx.lineTo(cx + fovR, gy);
+        sCtx.stroke();
+      }
+
+      // Draw Microorganisms if Pond Water has been added (Step >= 2)
+      if (expState.step >= 2) {
+        const diffRadius = expState.chlorineDiffusion * (fovR * 2.2);
+
+        MICROORGANISMS.forEach((m) => {
+          // Check if chlorine diffusion wave has reached this microorganism
+          const distFromChlorine = Math.hypot(m.x - (cx - fovR * 0.45), m.y - (cy - fovR * 0.25));
+          const hitByChlorine = expState.step === 4 && distFromChlorine < diffRadius;
+
+          if (hitByChlorine) {
+            m.alive = false;
+          }
+
+          if (m.alive) {
+            m.heading += (Math.sin(elapsed * 2.1 + m.phase) * 1.4 + m.turnRate) * dt;
+            m.x += Math.cos(m.heading) * m.speed * dt;
+            m.y += Math.sin(m.heading) * m.speed * dt;
+
+            // Keep inside circular field of view
+            const dx = m.x - cx;
+            const dy = m.y - (cy + 14);
+            const dist = Math.hypot(dx, dy);
+            if (dist > fovR - 24) {
+              m.heading = Math.atan2(-dy, -dx) + (Math.random() - 0.5) * 0.6;
+              m.x = cx + (dx / dist) * (fovR - 25);
+              m.y = (cy + 14) + (dy / dist) * (fovR - 25);
+            }
+          }
+
+          // Render microorganism shape
+          sCtx.save();
+          sCtx.translate(m.x, m.y);
+          sCtx.rotate(m.heading);
+
+          const wiggle = m.alive ? Math.sin(elapsed * 14 + m.phase) * 0.18 : 0;
+          sCtx.rotate(wiggle);
+
+          sCtx.fillStyle = m.alive ? m.bodyColor : 'rgba(148, 163, 184, 0.45)';
+          sCtx.strokeStyle = m.alive ? m.color : '#64748b';
+          sCtx.lineWidth = 2;
+
+          if (m.type === 'paramecium') {
+            // Slipper-shaped ciliate
+            sCtx.beginPath();
+            sCtx.ellipse(0, 0, m.size, m.size * 0.42, 0, 0, Math.PI * 2);
+            sCtx.fill();
+            sCtx.stroke();
+            // Internal vacuoles
+            sCtx.fillStyle = m.alive ? '#0d9488' : '#94a3b8';
+            sCtx.beginPath();
+            sCtx.arc(-m.size * 0.35, 0, 3.5, 0, Math.PI * 2);
+            sCtx.arc(m.size * 0.3, 1, 2.8, 0, Math.PI * 2);
+            sCtx.fill();
+          } else if (m.type === 'euglena') {
+            // Spindle-shaped flagellate + whip tail
+            sCtx.beginPath();
+            sCtx.ellipse(0, 0, m.size * 0.9, m.size * 0.32, 0, 0, Math.PI * 2);
+            sCtx.fill();
+            sCtx.stroke();
+            // Flagellum tail
+            sCtx.beginPath();
+            sCtx.moveTo(-m.size * 0.9, 0);
+            const tailWave = m.alive ? Math.sin(elapsed * 22 + m.phase) * 6 : 0;
+            sCtx.quadraticCurveTo(-m.size * 1.35, tailWave, -m.size * 1.7, -tailWave * 0.6);
+            sCtx.stroke();
+          } else if (m.type === 'amoeba') {
+            // Irregular pseudopodia blob
+            sCtx.beginPath();
+            for (let a = 0; a < Math.PI * 2; a += Math.PI / 4) {
+              const pulseR = m.size * (0.65 + 0.25 * Math.sin(a * 3 + (m.alive ? elapsed * 3 : 0) + m.phase));
+              const px = Math.cos(a) * pulseR;
+              const py = Math.sin(a) * pulseR;
+              if (a === 0) sCtx.moveTo(px, py);
+              else sCtx.lineTo(px, py);
+            }
+            sCtx.closePath();
+            sCtx.fill();
+            sCtx.stroke();
+          } else {
+            // Rotifer
+            sCtx.beginPath();
+            sCtx.ellipse(0, 0, m.size * 0.85, m.size * 0.48, 0, 0, Math.PI * 2);
+            sCtx.fill();
+            sCtx.stroke();
+          }
+
+          // If killed by chlorine, draw a subtle red '×' marker
+          if (!m.alive) {
+            sCtx.strokeStyle = '#e11d48';
+            sCtx.lineWidth = 2.2;
+            sCtx.beginPath();
+            sCtx.moveTo(-5, -5);
+            sCtx.lineTo(5, 5);
+            sCtx.moveTo(5, -5);
+            sCtx.lineTo(-5, 5);
+            sCtx.stroke();
+          }
+
+          sCtx.restore();
+        });
+
+        // Pale yellow-green Chlorine Diffusion Wave (Step 4)
+        if (expState.step === 4 && expState.chlorineDiffusion > 0) {
+          const waveX = cx - fovR * 0.45;
+          const waveY = cy - fovR * 0.25;
+          const waveGrad = sCtx.createRadialGradient(waveX, waveY, 5, waveX, waveY, Math.max(10, diffRadius));
+          waveGrad.addColorStop(0, 'rgba(190, 242, 100, 0.34)');
+          waveGrad.addColorStop(0.75, 'rgba(163, 230, 53, 0.22)');
+          waveGrad.addColorStop(1, 'rgba(163, 230, 53, 0.0)');
+          sCtx.fillStyle = waveGrad;
+          sCtx.beginPath();
+          sCtx.arc(waveX, waveY, diffRadius, 0, Math.PI * 2);
+          sCtx.fill();
+        }
+      }
+
+      sCtx.restore();
+
+      // Outer circular optical aperture ring
+      sCtx.strokeStyle = '#38bdf8';
+      sCtx.lineWidth = 4;
+      sCtx.beginPath();
+      sCtx.arc(cx, cy + 14, fovR, 0, Math.PI * 2);
+      sCtx.stroke();
+
+      // Bottom caption on TV screen
+      sCtx.fillStyle = '#cbd5e1';
+      sCtx.font = 'bold 15px "Noto Sans TC", sans-serif';
+      sCtx.textAlign = 'center';
+      if (expState.step === 1) {
+        sCtx.fillText('Step 2: Add 1 drop of filtered pond water onto slide 滴加一滴過濾池塘水', cx, H - 12);
+      } else if (expState.step === 2 || expState.step === 3) {
+        sCtx.fillStyle = '#2dd4bf';
+        sCtx.fillText('Step 3 Observation: Microorganisms swimming actively 微生物在水中活躍游動', cx, H - 12);
+      } else if (expState.step === 4) {
+        sCtx.fillStyle = '#fb7185';
+        sCtx.fillText('Step 4 Observation: Chlorine kills microorganisms 氯殺死水中微生物 (加氯消毒法)', cx, H - 12);
+      }
+
+      scopeTexture.needsUpdate = true;
+    }
+
+    // =========================================================================
+    // 4. THREE.JS 3D SCENE, LIGHTING & APPARATUS MODELS (p.125)
+    // =========================================================================
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    const sceneFog = new THREE.FogExp2(0x0b1120, 0.022);
+    scene.fog = sceneFog;
+
+    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0.4, 4.3, 10.6);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.target.set(0.2, 2.1, 0);
+    controls.minDistance = 2.4;
+    controls.maxDistance = 18;
+    controls.maxPolarAngle = Math.PI * 0.49;
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.DirectionalLight(0xe0f2fe, 2.2);
+    keyLight.position.set(5, 11, 7);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(1024, 1024);
+    scene.add(keyLight);
+
+    const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.3);
+    rimLight.position.set(-7, 6, -5);
+    scene.add(rimLight);
+
+    // Lab Bench
+    const benchMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.65, metalness: 0.18 });
+    const bench = new THREE.Mesh(new THREE.BoxGeometry(15.5, 0.3, 6.4), benchMat);
+    bench.position.set(0.2, 0, 0);
+    bench.receiveShadow = true;
+    scene.add(bench);
+
+    const benchLineMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.38 });
+    const benchLine = new THREE.Mesh(new THREE.BoxGeometry(15.54, 0.03, 6.44), benchLineMat);
+    benchLine.position.set(0.2, 0.15, 0);
+    scene.add(benchLine);
+
+    // Helper: Label Plaque Texture
+    function createLabelTexture(line1, line2, accent = '#38bdf8') {
+      const cvs = document.createElement('canvas');
+      cvs.width = 256;
+      cvs.height = 112;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.90)';
+      ctx.beginPath();
+      ctx.roundRect(6, 6, 244, 100, 14);
+      ctx.fill();
+      ctx.strokeStyle = accent;
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = 'bold 24px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(line1, 128, 48);
+
+      ctx.fillStyle = accent;
+      ctx.font = 'bold 26px "Noto Sans TC", sans-serif';
+      ctx.fillText(line2, 128, 86);
+
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    // Shared Materials
+    const darkMetalMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.65, roughness: 0.32 });
+    const silverMetalMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.85, roughness: 0.22 });
+    const glassMat = new THREE.MeshPhysicalMaterial({
+      color: 0xe0f2fe,
+      transparent: true,
+      opacity: 0.42,
+      roughness: 0.08,
+      ior: 1.47,
+      depthWrite: false
+    });
+
+    // --- A. 3D COMPOUND MICROSCOPE & VIDEO IMAGING DEVICE (Left-Center) ---
+    const MIC_X = -2.35;
+    const STAGE_Y = 1.65;
+    const micGroup = new THREE.Group();
+    micGroup.position.set(MIC_X, 0.16, 0);
+
+    // Microscope Base
+    const micBase = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.24, 2.05), darkMetalMat);
+    micBase.position.y = 0.12;
+    micBase.castShadow = true;
+    micGroup.add(micBase);
+
+    // Illuminator Lamp at Base
+    const lampMat = new THREE.MeshStandardMaterial({
+      color: 0xfef08a,
+      emissive: 0xfacc15,
+      emissiveIntensity: 0.2
+    });
+    const lampLens = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.26, 0.12, 24), lampMat);
+    lampLens.position.set(0, 0.27, 0.25);
+    micGroup.add(lampLens);
+
+    // Curved Microscope Arm
+    const armVert = new THREE.Mesh(new THREE.BoxGeometry(0.32, 2.45, 0.42), darkMetalMat);
+    armVert.position.set(0, 1.35, -0.68);
+    micGroup.add(armVert);
+
+    const armTop = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.32, 1.05), darkMetalMat);
+    armTop.position.set(0, 2.55, -0.22);
+    micGroup.add(armTop);
+
+    // Coarse & Fine Focus Knobs
+    [-0.24, 0.24].forEach(kx => {
+      const knob = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.12, 20), silverMetalMat);
+      knob.rotation.z = Math.PI / 2;
+      knob.position.set(kx, 1.15, -0.68);
+      micGroup.add(knob);
+    });
+
+    // Mechanical Stage
+    const stageMesh = new THREE.Mesh(new THREE.BoxGeometry(1.35, 0.10, 1.35), darkMetalMat);
+    stageMesh.position.set(0, STAGE_Y - 0.16, 0.18);
+    micGroup.add(stageMesh);
+
+    // Stage Clips
+    [-0.36, 0.36].forEach(cx => {
+      const clip = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.02, 0.45), silverMetalMat);
+      clip.position.set(cx, STAGE_Y - 0.09, 0.28);
+      micGroup.add(clip);
+    });
+
+    // Nosepiece & 3 Objective Lenses
+    const nosepiece = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.34, 0.18, 24), silverMetalMat);
+    nosepiece.position.set(0, 2.32, 0.22);
+    micGroup.add(nosepiece);
+
+    const objMain = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.06, 0.42, 16), silverMetalMat);
+    objMain.position.set(0, 2.04, 0.22);
+    micGroup.add(objMain);
+
+    const objSide = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.055, 0.36, 16), silverMetalMat);
+    objSide.position.set(0.22, 2.08, 0.18);
+    objSide.rotation.z = -0.35;
+    micGroup.add(objSide);
+
+    // Eyepiece Tube + Video Imaging Device (視像裝置 × 1)
+    const eyepieceTube = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.18, 0.55, 20), darkMetalMat);
+    eyepieceTube.position.set(0, 2.95, 0.18);
+    micGroup.add(eyepieceTube);
+
+    const camHousing = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.28, 0.24, 0.45, 24),
+      new THREE.MeshStandardMaterial({ color: 0x0284c7, metalness: 0.55, roughness: 0.28 })
+    );
+    camHousing.position.set(0, 3.38, 0.18);
+    micGroup.add(camHousing);
+
+    const camLedMat = new THREE.MeshBasicMaterial({ color: 0x64748b });
+    const camLed = new THREE.Mesh(new THREE.SphereGeometry(0.045, 12, 12), camLedMat);
+    camLed.position.set(0, 3.45, 0.44);
+    micGroup.add(camLed);
+
+    const camLabel = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.15, 0.50),
+      new THREE.MeshBasicMaterial({ map: createLabelTexture('Video Imaging Device', '視像裝置 × 1', '#38bdf8'), transparent: true })
+    );
+    camLabel.position.set(-1.15, 3.35, 0.18);
+    micGroup.add(camLabel);
+
+    scene.add(micGroup);
+
+    // --- B. SLIDE × 1, COVER SLIP × 1, POND WATER DROP & CHLORINE DROP ---
+    const slideGroup = new THREE.Group();
+    const SLIDE_PREP_POS = new THREE.Vector3(-0.35, 0.21, 1.35);
+    const SLIDE_STAGE_POS = new THREE.Vector3(MIC_X, STAGE_Y + 0.03, 0.18);
+    slideGroup.position.copy(SLIDE_PREP_POS);
+
+    const slideMesh = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.035, 0.36), glassMat);
+    slideGroup.add(slideMesh);
+
+    const pondDropMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(0.11, 18, 12),
+      new THREE.MeshPhysicalMaterial({ color: 0x2dd4bf, transparent: true, opacity: 0.72, roughness: 0.05 })
+    );
+    pondDropMesh.scale.set(1.2, 0.35, 1.2);
+    pondDropMesh.position.set(0, 0.03, 0);
+    pondDropMesh.visible = false;
+    slideGroup.add(pondDropMesh);
+
+    const chlorineDropMesh = new THREE.Mesh(
+      new THREE.SphereGeometry(0.12, 18, 12),
+      new THREE.MeshPhysicalMaterial({ color: 0xa3e635, transparent: true, opacity: 0.65, roughness: 0.05 })
+    );
+    chlorineDropMesh.scale.set(1.3, 0.32, 1.3);
+    chlorineDropMesh.position.set(0, 0.035, 0);
+    chlorineDropMesh.visible = false;
+    slideGroup.add(chlorineDropMesh);
+
+    const coverSlipMesh = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.015, 0.28), glassMat);
+    coverSlipMesh.position.set(0.32, 0.03, 0);
+    slideGroup.add(coverSlipMesh);
+
+    scene.add(slideGroup);
+
+    // --- C. PROJECTOR / TV SCREEN × 1 (Right-Center) & DATA CABLE ---
+    const TV_POS = new THREE.Vector3(2.45, 2.35, -0.35);
+    const tvGroup = new THREE.Group();
+    tvGroup.position.copy(TV_POS);
+    tvGroup.rotation.y = -0.22;
+
+    // TV Frame Bezel
+    const tvBezel = new THREE.Mesh(new THREE.BoxGeometry(4.35, 2.95, 0.18), darkMetalMat);
+    tvBezel.castShadow = true;
+    tvGroup.add(tvBezel);
+
+    // Live Microscope Screen Plane
+    const tvScreen = new THREE.Mesh(
+      new THREE.PlaneGeometry(4.05, 2.70),
+      new THREE.MeshBasicMaterial({ map: scopeTexture })
+    );
+    tvScreen.position.z = 0.10;
+    tvGroup.add(tvScreen);
+
+    // TV Stand Neck & Base
+    const tvStandNeck = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.85, 16), silverMetalMat);
+    tvStandNeck.position.set(0, -1.82, -0.05);
+    tvGroup.add(tvStandNeck);
+
+    const tvStandBase = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.12, 0.85), darkMetalMat);
+    tvStandBase.position.set(0, -2.18, 0.05);
+    tvGroup.add(tvStandBase);
+
+    const tvLabel = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.35, 0.52),
+      new THREE.MeshBasicMaterial({ map: createLabelTexture('Projector / TV', '投影機或電視 × 1', '#2dd4bf'), transparent: true })
+    );
+    tvLabel.position.set(0, 1.82, 0.05);
+    tvGroup.add(tvLabel);
+
+    scene.add(tvGroup);
+
+    // Data Cable connecting Video Imaging Device to Projector / TV
+    const cableCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(MIC_X + 0.25, 3.50, 0.18),
+      new THREE.Vector3(-0.8, 3.15, -0.45),
+      new THREE.Vector3(0.45, 1.35, -0.65),
+      new THREE.Vector3(1.65, 1.45, -0.45)
+    ]);
+    const cableMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.5 });
+    const cableMesh = new THREE.Mesh(new THREE.TubeGeometry(cableCurve, 32, 0.032, 8, false), cableMat);
+    scene.add(cableMesh);
+
+    // --- D. REAGENT BOTTLES (Filtered Pond Water & Diluted Chlorine Bleach) + DROPPER ---
+    function buildReagentBottle(xPos, zPos, liquidColor, enText, zhText, accent) {
+      const grp = new THREE.Group();
+      grp.position.set(xPos, 0.16, zPos);
+
+      const bottleGlass = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.92, 24), glassMat);
+      bottleGlass.position.y = 0.46;
+      grp.add(bottleGlass);
+
+      const liq = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.32, 0.32, 0.58, 24),
+        new THREE.MeshPhysicalMaterial({ color: liquidColor, transparent: true, opacity: 0.72, depthWrite: false })
+      );
+      liq.position.y = 0.32;
+      grp.add(liq);
+
+      const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.22, 0.22, 18), darkMetalMat);
+      cap.position.y = 1.02;
+      grp.add(cap);
+
+      const lbl = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.18, 0.52),
+        new THREE.MeshBasicMaterial({ map: createLabelTexture(enText, zhText, accent), transparent: true })
+      );
+      lbl.position.set(0, 0.48, 0.40);
+      grp.add(lbl);
+
+      scene.add(grp);
+    }
+
+    buildReagentBottle(-4.65, 1.25, 0x2dd4bf, 'Pond Water (2.10)', '過濾池塘水', '#2dd4bf');
+    buildReagentBottle(4.85, 1.25, 0xa3e635, 'Chlorine Bleach', '稀釋氯漂白水', '#f59e0b');
+
+    // Animated Glass Dropper × 1
+    const dropperGroup = new THREE.Group();
+    const dropperTube = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.025, 0.95, 16), glassMat);
+    dropperTube.position.y = 0.48;
+    dropperGroup.add(dropperTube);
+
+    const dropperBulb = new THREE.Mesh(
+      new THREE.SphereGeometry(0.11, 16, 14),
+      new THREE.MeshStandardMaterial({ color: 0xf43f5e, roughness: 0.6 })
+    );
+    dropperBulb.scale.set(0.85, 1.35, 0.85);
+    dropperBulb.position.y = 1.02;
+    dropperGroup.add(dropperBulb);
+
+    const DROPPER_REST_POS = new THREE.Vector3(-3.65, 0.24, 1.65);
+    dropperGroup.position.copy(DROPPER_REST_POS);
+    dropperGroup.rotation.set(Math.PI * 0.48, 0.2, 0);
+    scene.add(dropperGroup);
+
+    // =========================================================================
+    // 5. DRAWER TOGGLES, COLLAPSE/EXPAND ALL & LIGHT/DARK THEME
+    // =========================================================================
+    let isLightMode = false;
+    const themeBtn = document.getElementById('theme-toggle');
+
+    function applyTheme(light) {
+      isLightMode = light;
+      document.body.classList.toggle('light-mode', light);
+
+      if (light) {
+        themeBtn.textContent = '🌙 Dark';
+        sceneFog.color.setHex(0xe2ecf6);
+        ambientLight.intensity = 1.15;
+        keyLight.intensity = 2.4;
+        benchMat.color.setHex(0xcbd5e1);
+        benchLineMat.color.setHex(0x0284c7);
+      } else {
+        themeBtn.textContent = '☀️ Light';
+        sceneFog.color.setHex(0x0b1120);
+        ambientLight.intensity = 0.85;
+        keyLight.intensity = 2.2;
+        benchMat.color.setHex(0x0f172a);
+        benchLineMat.color.setHex(0x38bdf8);
+      }
+    }
+
+    themeBtn.addEventListener('click', () => applyTheme(!isLightMode));
+
+    let panelsCollapsed = false;
+    const collapseBtn = document.getElementById('collapse-panels-btn');
+
+    function setPanelsCollapsed(collapsed) {
+      panelsCollapsed = collapsed;
+      document.body.classList.toggle('panels-collapsed', collapsed);
+      collapseBtn.textContent = collapsed ? '👁️ 展開面板' : '👁️ 收起面板';
+      if (collapsed) {
+        document.querySelectorAll('[data-drawer-btn]').forEach(b => b.classList.remove('active'));
+      } else {
+        document.querySelectorAll('.drawer-panel.open').forEach(d => {
+          const btn = document.querySelector(`[data-drawer-btn="${d.id}"]`);
+          if (btn) btn.classList.add('active');
+        });
+      }
+    }
+
+    collapseBtn.addEventListener('click', () => setPanelsCollapsed(!panelsCollapsed));
+
+    document.querySelectorAll('[data-drawer-btn]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (panelsCollapsed) setPanelsCollapsed(false);
+        const targetId = btn.dataset.drawerBtn;
+        const targetDrawer = document.getElementById(targetId);
+        const willOpen = !targetDrawer.classList.contains('open');
+
+        if (window.innerWidth <= 980) {
+          document.querySelectorAll('.drawer-panel').forEach(d => d.classList.remove('open'));
+          document.querySelectorAll('[data-drawer-btn]').forEach(b => b.classList.remove('active'));
+        }
+
+        if (willOpen) {
+          targetDrawer.classList.add('open');
+          btn.classList.add('active');
+        } else {
+          targetDrawer.classList.remove('open');
+          btn.classList.remove('active');
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-close-drawer]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.closeDrawer;
+        const drawer = document.getElementById(targetId);
+        if (drawer) drawer.classList.remove('open');
+        const navBtn = document.querySelector(`[data-drawer-btn="${targetId}"]`);
+        if (navBtn) navBtn.classList.remove('active');
+      });
+    });
+
+    // =========================================================================
+    // 6. SEQUENTIAL & DIRECT EXPERIMENT OPERATIONS (STEPS 1 TO 4)
+    // =========================================================================
+    let activeAnim = null;
+    let demoQueue = [];
+
+    const CAM_PRESETS = {
+      bench: { pos: new THREE.Vector3(0.4, 4.3, 10.6), target: new THREE.Vector3(0.2, 2.1, 0) },
+      projector: { pos: new THREE.Vector3(1.6, 2.55, 4.9), target: new THREE.Vector3(2.45, 2.35, -0.35) },
+      microscope: { pos: new THREE.Vector3(-1.6, 2.9, 4.6), target: new THREE.Vector3(MIC_X, 2.1, 0.15) },
+      dropper: { pos: new THREE.Vector3(-0.3, 2.3, 4.4), target: new THREE.Vector3(-0.35, 0.6, 1.35) }
+    };
+
+    let camGoalPos = null;
+    let camGoalTarget = null;
+
+    document.querySelectorAll('[data-cam]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-cam]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const p = CAM_PRESETS[btn.dataset.cam];
+        if (p) {
+          camGoalPos = p.pos.clone();
+          camGoalTarget = p.target.clone();
+        }
+      });
+    });
+
+    renderer.domElement.addEventListener('pointerdown', () => {
+      camGoalPos = null;
+    });
+
+    function updateOperationUI() {
+      const b1 = document.getElementById('btn-step-1');
+      const b2 = document.getElementById('btn-step-2');
+      const b3 = document.getElementById('btn-step-3');
+      const b4 = document.getElementById('btn-step-4');
+
+      const statusText = document.getElementById('op-status-text');
+      const badgeState = document.getElementById('op-badge-state');
+      const obsTitle = document.getElementById('obs-title-text');
+      const obsBadge = document.getElementById('obs-badge');
+      const obsEn = document.getElementById('obs-en');
+      const obsZh = document.getElementById('obs-zh');
+
+      const busy = activeAnim !== null;
+
+      b1.classList.toggle('step-done', expState.step >= 1);
+      b2.classList.toggle('step-done', expState.step >= 2);
+      b3.classList.toggle('step-done', expState.step >= 3);
+      b4.classList.toggle('step-done', expState.step >= 4);
+
+      b1.disabled = busy || expState.step >= 1;
+      b2.disabled = busy || expState.step < 1 || expState.step >= 2;
+      b3.disabled = busy || expState.step < 2 || expState.step >= 3;
+      b4.disabled = busy || expState.step < 2 || expState.step >= 4;
+
+      if (expState.step === 0) {
+        statusText.innerHTML = '<strong>Step 1:</strong> Tap <strong>1️⃣ 連接視像裝置</strong> to connect video imaging device to microscope &amp; projector/TV';
+        badgeState.textContent = 'Step 1 Ready';
+        badgeState.style.color = 'var(--accent-cyan)';
+        obsTitle.textContent = 'Step 1: Setup Apparatus 連接實驗儀器';
+        obsBadge.textContent = 'Step 1';
+        obsEn.innerHTML = 'Connect the <strong>video imaging device</strong> to the <strong>microscope</strong> and <strong>projector / TV</strong>.';
+        obsZh.innerHTML = '把<strong>視像裝置</strong>連接至<strong>顯微鏡</strong>和<strong>投影機／電視</strong>。';
+      } else if (expState.step === 1) {
+        statusText.innerHTML = '<strong>Step 2:</strong> Tap <strong>2️⃣ 滴加池塘水</strong> to place 1 drop of filtered pond water on slide &amp; mount under microscope';
+        badgeState.textContent = 'Step 2 Ready';
+        badgeState.style.color = 'var(--accent-cyan)';
+        obsTitle.textContent = 'Step 2: Mount Pond Water Sample 裝載過濾池塘水樣本';
+        obsBadge.textContent = 'Step 2';
+        obsEn.innerHTML = 'Place one drop of <strong>filtered pond water (Exp 2.10)</strong> on a slide, cover with a <strong>cover slip</strong>, and mount under the microscope.';
+        obsZh.innerHTML = '在載玻片上滴一滴<strong>過濾池塘水（實驗 2.10）</strong>，蓋上<strong>蓋玻片</strong>，並放在顯微鏡載物台上。';
+      } else if (expState.step === 2) {
+        statusText.innerHTML = '<strong>Step 3:</strong> Tap <strong>3️⃣ 觀察微生物</strong> to view the projector/TV screen (Filtered pond water before chlorine)';
+        badgeState.textContent = 'Step 3 Ready';
+        badgeState.style.color = 'var(--accent-teal)';
+        obsTitle.textContent = 'Step 3: Observe Pond Water 觀察過濾池塘水';
+        obsBadge.textContent = 'Step 3';
+        obsEn.innerHTML = 'Look at the screen of the projector/TV: <strong>Living microorganisms are swimming actively</strong> in the filtered pond water.';
+        obsZh.innerHTML = '觀察投影機／電視畫面：<strong>許多活微生物正在過濾池塘水中活躍地游動</strong>。';
+      } else if (expState.step === 3) {
+        statusText.innerHTML = '<strong>Step 4:</strong> Tap <strong>4️⃣ 滴加漂白水</strong> (with protective gloves) to observe the effect of chlorine!';
+        badgeState.textContent = 'Step 4 Ready';
+        badgeState.style.color = 'var(--accent-amber)';
+        obsTitle.textContent = 'Step 3 Observed: Microorganisms Active 微生物活躍游動';
+        obsBadge.textContent = 'Step 3 Done';
+        obsEn.innerHTML = 'Living microorganisms (Paramecium, Euglena, Amoeba) swim actively. Now proceed to <strong>Step 4</strong> to add diluted chlorine bleach.';
+        obsZh.innerHTML = '顯微鏡畫面顯示草履蟲、眼蟲、變形蟲等微生物活躍游動。現在進行<strong>步驟 4</strong>：加入稀釋氯漂白水。';
+      } else if (expState.step === 4) {
+        statusText.innerHTML = '<strong>Step 4 Complete:</strong> Chlorine kills microorganisms! Open <strong>📋 觀察記錄表 Table</strong> to record results.';
+        badgeState.textContent = 'Disinfected 已消毒';
+        badgeState.style.color = 'var(--accent-rose)';
+        obsTitle.textContent = 'Step 4 Result: Chlorination 加氯消毒法';
+        obsBadge.textContent = 'Step 4 Done';
+        obsEn.innerHTML = 'After adding a drop of <strong>diluted chlorine bleach</strong>, the microorganisms <strong>stop moving and die</strong>. Chlorine kills most microorganisms in water.';
+        obsZh.innerHTML = '加入一滴<strong>稀釋氯漂白水</strong>後，微生物<strong>停止游動並死亡</strong>。這證明氯能殺死水中大部分微生物（加氯消毒法）。';
+      }
+    }
+
+    // Step 1: Connect Video Imaging Device & Power On Projector/TV
+    function runStep1(cb) {
+      if (expState.step >= 1 || activeAnim) return;
+      sfx.playPowerOn();
+      camGoalPos = CAM_PRESETS.projector.pos.clone();
+      camGoalTarget = CAM_PRESETS.projector.target.clone();
+
+      activeAnim = {
+        type: 'connect',
+        timer: 0,
+        duration: 0.9,
+        onComplete: () => {
+          expState.step = 1;
+          camLedMat.color.setHex(0x2dd4bf);
+          cableMat.color.setHex(0x38bdf8);
+          lampMat.emissiveIntensity = 1.6;
+          updateOperationUI();
+          if (cb) cb();
+        }
+      };
+      updateOperationUI();
+    }
+
+    // Step 2: Add 1 Drop of Filtered Pond Water onto Slide, Place Cover Slip, Mount on Microscope Stage
+    function runStep2(cb) {
+      if (expState.step !== 1 || activeAnim) return;
+      camGoalPos = CAM_PRESETS.dropper.pos.clone();
+      camGoalTarget = CAM_PRESETS.dropper.target.clone();
+
+      activeAnim = {
+        type: 'pond_drop',
+        timer: 0,
+        duration: 2.0,
+        dropped: false,
+        onComplete: () => {
+          expState.step = 2;
+          slideGroup.position.copy(SLIDE_STAGE_POS);
+          coverSlipMesh.position.set(0, 0.042, 0);
+          dropperGroup.position.copy(DROPPER_REST_POS);
+          dropperGroup.rotation.set(Math.PI * 0.48, 0.2, 0);
+          updateOperationUI();
+          if (cb) cb();
+        }
+      };
+      updateOperationUI();
+    }
+
+    // Step 3: Focus Microscope & Zoom to Projector/TV Screen
+    function runStep3(cb) {
+      if (expState.step !== 2 || activeAnim) return;
+      sfx.playPowerOn();
+      camGoalPos = CAM_PRESETS.projector.pos.clone();
+      camGoalTarget = CAM_PRESETS.projector.target.clone();
+
+      activeAnim = {
+        type: 'observe',
+        timer: 0,
+        duration: 1.1,
+        onComplete: () => {
+          expState.step = 3;
+          updateOperationUI();
+          if (cb) cb();
+        }
+      };
+      updateOperationUI();
+    }
+
+    // Step 4: Wear Gloves, Add Drop of Diluted Chlorine Bleach, Observe Disinfection on TV
+    function runStep4(cb) {
+      if (expState.step < 2 || expState.step >= 4 || activeAnim) return;
+      const toast = document.getElementById('glove-toast');
+      toast.style.display = 'block';
+      expState.glovesWorn = true;
+
+      // Move camera to see both slide/dropper and projector TV clearly
+      camGoalPos = new THREE.Vector3(0.2, 3.3, 6.8);
+      camGoalTarget = new THREE.Vector3(0.3, 2.2, -0.1);
+
+      activeAnim = {
+        type: 'chlorine_drop',
+        timer: 0,
+        duration: 2.2,
+        dropped: false,
+        onComplete: () => {
+          toast.style.display = 'none';
+          expState.step = 4;
+          dropperGroup.position.copy(DROPPER_REST_POS);
+          dropperGroup.rotation.set(Math.PI * 0.48, 0.2, 0);
+          camGoalPos = CAM_PRESETS.projector.pos.clone();
+          camGoalTarget = CAM_PRESETS.projector.target.clone();
+          updateOperationUI();
+          if (cb) cb();
+        }
+      };
+      updateOperationUI();
+    }
+
+    document.getElementById('btn-step-1').addEventListener('click', () => runStep1());
+    document.getElementById('btn-step-2').addEventListener('click', () => runStep2());
+    document.getElementById('btn-step-3').addEventListener('click', () => runStep3());
+    document.getElementById('btn-step-4').addEventListener('click', () => runStep4());
+
+    document.getElementById('btn-focus-tv').addEventListener('click', () => {
+      camGoalPos = CAM_PRESETS.projector.pos.clone();
+      camGoalTarget = CAM_PRESETS.projector.target.clone();
+    });
+
+    document.getElementById('btn-demo-all').addEventListener('click', () => {
+      if (activeAnim) return;
+      demoQueue = [];
+      if (expState.step < 1) demoQueue.push(runStep1);
+      if (expState.step < 2) demoQueue.push(runStep2);
+      if (expState.step < 3) demoQueue.push(runStep3);
+      if (expState.step < 4) demoQueue.push(runStep4);
+
+      const runNext = () => {
+        if (demoQueue.length === 0) return;
+        const fn = demoQueue.shift();
+        fn(() => setTimeout(runNext, 450));
+      };
+      runNext();
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      activeAnim = null;
+      demoQueue = [];
+      expState.step = 0;
+      expState.chlorineDiffusion = 0;
+      expState.microbeVitality = 1.0;
+      expState.glovesWorn = false;
+      document.getElementById('glove-toast').style.display = 'none';
+
+      camLedMat.color.setHex(0x64748b);
+      cableMat.color.setHex(0x334155);
+      lampMat.emissiveIntensity = 0.2;
+
+      slideGroup.position.copy(SLIDE_PREP_POS);
+      coverSlipMesh.position.set(0.32, 0.03, 0);
+      pondDropMesh.visible = false;
+      chlorineDropMesh.visible = false;
+      dropperGroup.position.copy(DROPPER_REST_POS);
+      dropperGroup.rotation.set(Math.PI * 0.48, 0.2, 0);
+
+      initMicroorganisms();
+
+      ['sel-obs-3', 'sel-exp-3', 'sel-obs-4', 'sel-exp-4'].forEach(id => {
+        const el = document.getElementById(id);
+        el.value = '';
+        el.classList.remove('correct', 'wrong');
+      });
+      document.getElementById('score-text').textContent = '0 / 4';
+      document.getElementById('table-feedback').textContent = 'Complete Steps 3 & 4 above ↑';
+      document.getElementById('table-feedback').style.color = 'var(--accent-teal)';
+
+      camGoalPos = CAM_PRESETS.bench.pos.clone();
+      camGoalTarget = CAM_PRESETS.bench.target.clone();
+      updateOperationUI();
+    });
+
+    const audioBtn = document.getElementById('audio-toggle');
+    audioBtn.addEventListener('click', () => {
+      const on = sfx.toggle();
+      audioBtn.textContent = on ? '🔊' : '🔇';
+      audioBtn.classList.toggle('audio-on', on);
+    });
+
+    updateOperationUI();
+
+    // =========================================================================
+    // 7. MAIN 3D ANIMATION & LIVE MICROSCOPE PROJECTION LOOP
+    // =========================================================================
+    const clock = new THREE.Clock();
+
+    function animate() {
+      const dt = Math.min(clock.getDelta(), 0.05);
+      const elapsed = clock.elapsedTime;
+
+      if (activeAnim) {
+        activeAnim.timer += dt;
+        const t = Math.min(1.0, activeAnim.timer / activeAnim.duration);
+
+        if (activeAnim.type === 'pond_drop') {
+          if (t < 0.55) {
+            // Move dropper over slide on bench
+            const st = t / 0.55;
+            dropperGroup.position.lerpVectors(DROPPER_REST_POS, new THREE.Vector3(SLIDE_PREP_POS.x, 1.05, SLIDE_PREP_POS.z), st);
+            dropperGroup.rotation.set(0, 0, 0);
+            if (st > 0.7 && !activeAnim.dropped) {
+              activeAnim.dropped = true;
+              pondDropMesh.visible = true;
+              sfx.playDrop();
+            }
+          } else {
+            // Place cover slip & mount slide onto microscope stage
+            const mt = (t - 0.55) / 0.45;
+            coverSlipMesh.position.lerpVectors(new THREE.Vector3(0.32, 0.03, 0), new THREE.Vector3(0, 0.042, 0), Math.min(1, mt * 2));
+            slideGroup.position.lerpVectors(SLIDE_PREP_POS, SLIDE_STAGE_POS, mt);
+            slideGroup.position.y += Math.sin(mt * Math.PI) * 0.45;
+          }
+        } else if (activeAnim.type === 'chlorine_drop') {
+          // Move dropper over mounted slide on microscope stage & dispense chlorine drop
+          const targetDropPos = new THREE.Vector3(SLIDE_STAGE_POS.x + 0.12, SLIDE_STAGE_POS.y + 0.28, SLIDE_STAGE_POS.z + 0.12);
+          dropperGroup.position.lerpVectors(DROPPER_REST_POS, targetDropPos, Math.min(1, t * 1.8));
+          dropperGroup.rotation.set(0.25, 0, 0.35);
+
+          if (t >= 0.45 && !activeAnim.dropped) {
+            activeAnim.dropped = true;
+            chlorineDropMesh.visible = true;
+            sfx.playDrop();
+            expState.step = 4; // Trigger live chlorine wave on TV screen immediately as drop hits slide!
+          }
+        }
+
+        if (t >= 1.0) {
+          const done = activeAnim.onComplete;
+          activeAnim = null;
+          if (done) done();
+        }
+      }
+
+      // Advance chlorine diffusion wave smoothly once Step 4 is triggered
+      if (expState.step === 4 && expState.chlorineDiffusion < 1.0) {
+        expState.chlorineDiffusion = Math.min(1.0, expState.chlorineDiffusion + dt * 0.42);
+      }
+
+      // Update live 2D CanvasTexture rendered onto the 3D Projector / TV Screen
+      updateAndDrawMicroscopeScreen(dt, elapsed);
+
+      if (camGoalPos && camGoalTarget) {
+        camera.position.lerp(camGoalPos, 0.08);
+        controls.target.lerp(camGoalTarget, 0.08);
+        if (camera.position.distanceTo(camGoalPos) < 0.04) {
+          camGoalPos = null;
+          camGoalTarget = null;
+        }
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    renderer.setAnimationLoop(animate);
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
