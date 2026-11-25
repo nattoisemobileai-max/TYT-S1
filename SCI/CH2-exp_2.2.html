@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Experiment 2.2 | Simulating the formation of rain 模擬雨的形成 (3D Lab)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #0b1120;
+      --bg-canvas-grad: radial-gradient(circle at 50% 42%, #152544 0%, #0b1120 75%, #060a14 100%);
+      --bg-panel: rgba(15, 23, 42, 0.92);
+      --bg-card: rgba(15, 23, 42, 0.85);
+      --bg-item: rgba(30, 41, 59, 0.82);
+      --bg-input: rgba(15, 23, 42, 0.95);
+      --grid-line: rgba(56, 189, 248, 0.04);
+      --border-subtle: rgba(56, 189, 248, 0.28);
+      --border-strong: rgba(56, 189, 248, 0.58);
+      --accent-cyan: #38bdf8;
+      --accent-teal: #2dd4bf;
+      --accent-amber: #f59e0b;
+      --accent-rose: #fb7185;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --shadow-panel: 0 10px 30px rgba(0, 0, 0, 0.48);
+      --font-sans: 'Inter', 'Noto Sans TC', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body.light-mode {
+      --bg-deep: #eef4fa;
+      --bg-canvas-grad: radial-gradient(circle at 50% 35%, #ffffff 0%, #e2ecf6 72%, #cbd8e8 100%);
+      --bg-panel: rgba(255, 255, 255, 0.94);
+      --bg-card: rgba(248, 250, 252, 0.96);
+      --bg-item: rgba(241, 245, 249, 0.98);
+      --bg-input: #ffffff;
+      --grid-line: rgba(14, 116, 144, 0.055);
+      --border-subtle: rgba(14, 116, 144, 0.26);
+      --border-strong: rgba(2, 132, 199, 0.58);
+      --accent-cyan: #0284c7;
+      --accent-teal: #0d9488;
+      --accent-amber: #d97706;
+      --accent-rose: #e11d48;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --shadow-panel: 0 10px 28px rgba(15, 23, 42, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    input, textarea, select {
+      user-select: text;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: var(--bg-canvas-grad);
+      transition: background 0.3s ease;
+    }
+
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    /* Compact Single-Row Top Header */
+    .hud-header {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 6px 10px;
+      background: var(--bg-panel);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: var(--shadow-panel);
+      flex-wrap: wrap;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .exp-badge {
+      background: linear-gradient(135deg, #ea580c, #f59e0b);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 7px;
+      border-radius: 6px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+      white-space: nowrap;
+    }
+
+    .brand-title {
+      font-size: 0.81rem;
+      font-weight: 700;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .btn-pill {
+      font-family: var(--font-sans);
+      font-size: 0.71rem;
+      font-weight: 600;
+      padding: 5px 8px;
+      border-radius: 7px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-item);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.16s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-pill:hover {
+      border-color: var(--accent-cyan);
+      color: var(--text-primary);
+    }
+
+    .btn-pill.active {
+      border-color: var(--accent-cyan);
+      color: #ffffff;
+      background: var(--accent-cyan);
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.28);
+    }
+
+    .btn-pill.audio-on {
+      border-color: var(--accent-teal);
+      color: #ffffff;
+      background: var(--accent-teal);
+    }
+
+    .btn-pill.caution-btn {
+      border-color: rgba(251, 113, 133, 0.45);
+      color: var(--accent-rose);
+    }
+
+    .btn-pill.caution-btn.active {
+      background: var(--accent-rose);
+      border-color: var(--accent-rose);
+      color: #ffffff;
+    }
+
+    .btn-pill.collapse-btn {
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+    }
+
+    .btn-pill.collapse-btn:hover {
+      background: var(--accent-amber);
+      color: #ffffff;
+    }
+
+    /* Collapsible Top Drawers */
+    .drawer-panel {
+      position: fixed;
+      top: 58px;
+      z-index: 18;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: var(--shadow-panel);
+      display: none;
+      flex-direction: column;
+      max-height: calc(100vh - 202px);
+      overflow: hidden;
+    }
+
+    .drawer-panel.open {
+      display: flex;
+    }
+
+    body.panels-collapsed .drawer-panel {
+      display: none !important;
+    }
+
+    .drawer-left {
+      left: 10px;
+      width: 360px;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-right {
+      right: 10px;
+      width: 425px;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-center {
+      left: 50%;
+      transform: translateX(-50%);
+      width: 375px;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-views {
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(56, 189, 248, 0.08);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .btn-close-drawer {
+      width: 24px;
+      height: 22px;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-item);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-close-drawer:hover {
+      border-color: var(--accent-rose);
+      color: var(--accent-rose);
+    }
+
+    .drawer-body {
+      padding: 11px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .section-header {
+      font-size: 0.71rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent-cyan);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 4px;
+    }
+
+    /* Aim, Caution & Hypothesis Styling */
+    .aim-box {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(45, 212, 191, 0.10));
+      border: 1px solid var(--border-strong);
+      border-radius: 9px;
+      padding: 9px 10px;
+    }
+
+    .aim-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 4px;
+    }
+
+    .aim-en {
+      font-size: 0.74rem;
+      line-height: 1.42;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .aim-zh {
+      font-size: 0.74rem;
+      line-height: 1.45;
+      color: var(--text-secondary);
+      padding-top: 4px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+
+    .caution-box {
+      background: rgba(251, 113, 133, 0.12);
+      border: 1px solid rgba(251, 113, 133, 0.5);
+      border-left: 4px solid var(--accent-rose);
+      border-radius: 9px;
+      padding: 9px 10px;
+    }
+
+    .caution-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-rose);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .caution-list {
+      padding-left: 16px;
+      font-size: 0.72rem;
+      line-height: 1.44;
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hypothesis-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 9px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .hyp-card {
+      background: var(--bg-item);
+      border-radius: 7px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 0.72rem;
+    }
+
+    .hyp-toggle-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .hyp-btn {
+      font-size: 0.67rem;
+      font-weight: 600;
+      padding: 4px 6px;
+      border-radius: 5px;
+      border: 1px solid var(--border-subtle);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .hyp-btn.active-teal {
+      background: var(--accent-teal);
+      border-color: var(--accent-teal);
+      color: #fff;
+    }
+
+    .hyp-btn.active-amber {
+      background: var(--accent-amber);
+      border-color: var(--accent-amber);
+      color: #fff;
+    }
+
+    .hyp-textarea {
+      width: 100%;
+      min-height: 46px;
+      resize: vertical;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      padding: 6px 8px;
+      line-height: 1.38;
+    }
+
+    .hyp-textarea:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+    }
+
+    /* Textbook Material & Apparatus Grid */
+    .apparatus-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 7px;
+      font-size: 0.69rem;
+    }
+
+    .app-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      border-radius: 5px;
+      background: var(--bg-item);
+    }
+
+    .app-qty {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--accent-amber);
+      font-size: 0.67rem;
+      white-space: nowrap;
+    }
+
+    /* Step 3(c) Mass Table */
+    .mass-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      font-size: 0.71rem;
+    }
+
+    .mass-table th {
+      background: linear-gradient(135deg, #ea580c, #f59e0b);
+      color: #ffffff;
+      font-weight: 700;
+      padding: 6px 8px;
+      text-align: center;
+      border-right: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .mass-table td {
+      padding: 6px 8px;
+      text-align: center;
+      border-right: 1px solid var(--border-subtle);
+      border-top: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    .mass-input {
+      width: 82px;
+      padding: 3px 6px;
+      border-radius: 5px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* Discussion Questions & Key Point Box */
+    .q-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 8px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 0.71rem;
+    }
+
+    .q-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .tbl-select {
+      width: 100%;
+      padding: 4px 6px;
+      border-radius: 5px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.69rem;
+      cursor: pointer;
+    }
+
+    .tbl-select.correct {
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 0 1px var(--accent-teal);
+    }
+
+    .tbl-select.wrong {
+      border-color: var(--accent-rose);
+      box-shadow: 0 0 0 1px var(--accent-rose);
+    }
+
+    .keypoint-box {
+      background: linear-gradient(135deg, rgba(132, 204, 22, 0.12), rgba(45, 212, 191, 0.10));
+      border: 1px solid rgba(132, 204, 22, 0.4);
+      border-radius: 9px;
+      padding: 8px 10px;
+      font-size: 0.70rem;
+      line-height: 1.42;
+    }
+
+    .cycle-flow {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .cycle-step {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 5px 6px;
+      font-size: 0.67rem;
+    }
+
+    .table-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .feedback-msg {
+      font-size: 0.71rem;
+      font-weight: 600;
+      color: var(--accent-teal);
+    }
+
+    /* =====================================================================
+       ALWAYS-VISIBLE ULTRA-COMPACT BOTTOM EXPERIMENT OPERATION BAR
+       ===================================================================== */
+    .op-dock {
+      position: fixed;
+      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      width: min(860px, calc(100vw - 16px));
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      padding: 7px 9px;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .op-status-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 4px 8px;
+      border-radius: 7px;
+      background: rgba(56, 189, 248, 0.12);
+      border-left: 3px solid var(--accent-cyan);
+      font-size: 0.72rem;
+      line-height: 1.3;
+      color: var(--text-primary);
+    }
+
+    .op-status-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .telemetry-pills {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .tele-pill {
+      font-family: var(--font-mono);
+      font-size: 0.67rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--bg-item);
+      border: 1px solid var(--border-subtle);
+      color: var(--accent-cyan);
+      white-space: nowrap;
+    }
+
+    .tele-pill.mass {
+      color: var(--accent-amber);
+      border-color: rgba(245, 158, 11, 0.45);
+    }
+
+    .tele-pill.rain {
+      color: var(--accent-teal);
+      border-color: rgba(45, 212, 191, 0.45);
+    }
+
+    .op-buttons-row {
+      display: grid;
+      grid-template-columns: 1.15fr 1.35fr 1.1fr 0.9fr 0.75fr;
+      gap: 5px;
+    }
+
+    .op-btn {
+      padding: 7px 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.71rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .op-btn:hover:not(:disabled) {
+      background: var(--accent-cyan);
+      color: #ffffff;
+    }
+
+    .op-btn:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+
+    .op-btn.done {
+      border-color: var(--accent-teal);
+      background: rgba(45, 212, 191, 0.22);
+      color: var(--accent-teal);
+    }
+
+    .op-btn.lamp {
+      border-color: var(--accent-amber);
+      background: rgba(245, 158, 11, 0.18);
+    }
+
+    .op-btn.lamp:hover:not(:disabled) {
+      background: var(--accent-amber);
+      color: #ffffff;
+    }
+
+    .op-btn.demo {
+      border-color: var(--accent-teal);
+      background: rgba(45, 212, 191, 0.2);
+      color: var(--accent-teal);
+    }
+
+    .op-btn.demo:hover:not(:disabled) {
+      background: var(--accent-teal);
+      color: #ffffff;
+    }
+
+    .op-btn.speed {
+      border-color: var(--border-subtle);
+      background: var(--bg-item);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    .op-btn.speed:hover {
+      border-color: var(--accent-cyan);
+      color: var(--text-primary);
+    }
+
+    .op-btn.reset {
+      border-color: var(--accent-rose);
+      background: rgba(251, 113, 133, 0.15);
+      color: var(--accent-rose);
+    }
+
+    .op-btn.reset:hover:not(:disabled) {
+      background: var(--accent-rose);
+      color: #ffffff;
+    }
+
+    .drawer-body::-webkit-scrollbar { width: 4px; }
+    .drawer-body::-webkit-scrollbar-thumb {
+      background: rgba(56, 189, 248, 0.35);
+      border-radius: 4px;
+    }
+
+    @media (max-width: 760px) {
+      .hud-header {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        padding: 5px 8px;
+      }
+      .brand-title {
+        display: none;
+      }
+      .btn-pill {
+        font-size: 0.67rem;
+        padding: 4px 6px;
+      }
+      .drawer-panel {
+        top: 48px;
+        max-height: calc(100vh - 205px);
+      }
+      .op-dock {
+        bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+        width: calc(100vw - 12px);
+        padding: 6px 7px;
+        gap: 5px;
+      }
+      .op-buttons-row {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .op-btn {
+        font-size: 0.68rem;
+        padding: 6px 4px;
+      }
+      .tele-pill.rain {
+        display: none;
+      }
+    }
+  </style>
+
+  <!-- Three.js CDN Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="canvas-container"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Compact Single-Row Top Header -->
+  <header class="hud-header">
+    <div class="brand-block">
+      <span class="exp-badge">Exp 2.2</span>
+      <span class="brand-title">Simulating the formation of rain 模擬雨的形成 (Demonstration 示範)</span>
+    </div>
+
+    <div class="header-nav-tabs">
+      <button type="button" class="btn-pill" data-drawer-btn="drawer-aim">🎯 目的/假設 Aim &amp; Hyp</button>
+      <button type="button" class="btn-pill" data-drawer-btn="drawer-table">📋 觀察與討論 Obs &amp; Qs</button>
+      <button type="button" class="btn-pill caution-btn" data-drawer-btn="drawer-caution">⚠️ 安全 Caution</button>
+      <button type="button" class="btn-pill" data-drawer-btn="drawer-views">🎥 視角 Views</button>
+      <button type="button" id="theme-toggle" class="btn-pill" title="Light / Dark Mode">☀️ 淺色</button>
+      <button type="button" id="audio-toggle" class="btn-pill" title="Sound Effects">🔇</button>
+      <button type="button" id="collapse-panels-btn" class="btn-pill collapse-btn">👁️ 收起面板</button>
+    </div>
+  </header>
+
+  <!-- Drawer 1: Aim, Hypothesis & Textbook Materials -->
+  <aside class="drawer-panel drawer-left" id="drawer-aim">
+    <div class="drawer-header">
+      <span>🎯 Aim, Hypothesis &amp; Apparatus 目的、假設與器材</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-aim">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="aim-box">
+        <div class="aim-label">🎯 Aim / Purpose 實驗目的</div>
+        <div class="aim-en">
+          To build a laboratory model simulating parts of the <strong>water cycle</strong> (evaporation, condensation, and rainfall), observe the colour of the collected 'rain', and verify whether the total mass of water in the system stays constant.
+        </div>
+        <div class="aim-zh">
+          在實驗室建立模擬<strong>水循環</strong>（蒸發、凝結及降雨）的模型，觀察收集所得「雨水」的顏色，並驗證系統內水的總質量是否保持不變。
+        </div>
+      </div>
+
+      <div class="hypothesis-box">
+        <div class="section-header">
+          <span>💡 Pre-Experiment Hypothesis 實驗假設</span>
+          <span id="hyp-status-badge" style="color: var(--accent-amber);">Editable 可填寫</span>
+        </div>
+
+        <div class="hyp-card">
+          <div style="font-weight: 600;">Prediction 1 — Colour of the 'rain' collected in the beaker (燒杯收集到的「雨水」顏色):</div>
+          <div class="hyp-toggle-group">
+            <button type="button" class="hyp-btn" data-hyp-step="colour" data-val="colourless">Colourless 無色（色素留下）</button>
+            <button type="button" class="hyp-btn" data-hyp-step="colour" data-val="coloured">Coloured 粉紅色（帶色素）</button>
+          </div>
+        </div>
+
+        <div class="hyp-card">
+          <div style="font-weight: 600;">Prediction 2 — Top pan balance reading after 10 minutes (10 分鐘後頂盤天平讀數):</div>
+          <div class="hyp-toggle-group">
+            <button type="button" class="hyp-btn" data-hyp-step="mass" data-val="constant">Remains ~1425.0 g 保持不變</button>
+            <button type="button" class="hyp-btn" data-hyp-step="mass" data-val="decrease">Decreases significantly 大幅減少</button>
+          </div>
+        </div>
+
+        <textarea id="hyp-statement" class="hyp-textarea" placeholder="Write your hypothesis here or click Generate... 在此輸入假設句，或點擊自動生成..."></textarea>
+        <div style="display: flex; gap: 6px;">
+          <button type="button" id="btn-autofill-hyp" class="btn-pill" style="flex: 1; justify-content: center;">✨ Generate 生成假設</button>
+          <button type="button" id="btn-lock-hyp" class="btn-pill active" style="flex: 1.1; justify-content: center;">🔒 Save 儲存假設</button>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span>🧰 Material &amp; Apparatus 材料及儀器</span>
+        <span style="font-family: var(--font-mono); font-size: 0.67rem;">Unit 2 p.87</span>
+      </div>
+      <div class="apparatus-grid">
+        <div class="app-item"><span>transparent plastic container 透明塑膠容器</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>top pan balance 頂盤天平</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>beaker (100 cm³) 燒杯</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>tongs 鉗子</span><span class="app-qty">1 pair</span></div>
+        <div class="app-item"><span>zipper bag 密實袋</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>metal dish 金屬碟</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>table lamp 檯燈</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>pebbles (warm) 熱卵石</span><span class="app-qty">Bottom layer</span></div>
+        <div class="app-item"><span>hot water 熱水</span><span class="app-qty">Covers pebbles</span></div>
+        <div class="app-item"><span>food colouring 食用色素</span><span class="app-qty">Few drops</span></div>
+        <div class="app-item" style="grid-column: span 2;"><span>ice cubes 冰粒 (inside zipper bag)</span><span class="app-qty">On metal dish</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Drawer 2: Step 3 Mass Table, Observations, Discussion Q1-Q5 & Key Point -->
+  <aside class="drawer-panel drawer-right" id="drawer-table">
+    <div class="drawer-header">
+      <span>📋 Observations, Mass Table &amp; Discussion (p.88)</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-table">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="section-header">
+        <span>⚖️ Step 2 &amp; 3(c): Top Pan Balance Reading 頂盤天平讀數</span>
+        <span style="font-family: var(--font-mono); font-size: 0.66rem;">p.88</span>
+      </div>
+
+      <table class="mass-table">
+        <thead>
+          <tr>
+            <th style="width: 26%;">Measurement<br>測量項目</th>
+            <th style="width: 37%;">Beginning of experiment<br>實驗開始時 (0 min)</th>
+            <th style="width: 37%;">After 10 minutes<br>10 分鐘後 (10 min)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mass (g)<br>質量 (克)</td>
+            <td><input type="number" step="0.1" id="mass-start-inp" class="mass-input" placeholder="1425.0" /></td>
+            <td><input type="number" step="0.1" id="mass-end-inp" class="mass-input" placeholder="1425.0" /></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-header">
+        <span>✍️ Step 3(a)–(b) &amp; Discussion Questions 討論問題 (p.88)</span>
+        <span id="q-score" style="color: var(--accent-teal);">0 / 7</span>
+      </div>
+
+      <div class="q-box">
+        <div class="q-row">
+          <div style="font-weight: 600;">3(a) What do you observe inside the container? 容器內觀察到甚麼？</div>
+          <select class="tbl-select" id="q-3a">
+            <option value="">-- Select 選擇觀察 --</option>
+            <option value="condense_drip">Water droplets condense under the metal dish, grow heavy and fall as 'rain' 水滴在金屬碟底凝結並變重滴下成「雨」</option>
+            <option value="ice_melts_into">Ice cubes leak directly through the metal dish 冰粒直接穿過金屬碟漏入杯中</option>
+          </select>
+        </div>
+
+        <div class="q-row">
+          <div style="font-weight: 600;">3(b) What is the colour of the 'rain'? 「雨水」是甚麼顏色的？</div>
+          <select class="tbl-select" id="q-3b">
+            <option value="">-- Select 選擇顏色 --</option>
+            <option value="colourless">Colourless 無色</option>
+            <option value="pink">Pink / Coloured 粉紅色（有色）</option>
+          </select>
+        </div>
+
+        <div class="q-row">
+          <div style="font-weight: 600;">Q1. What is the purpose of the table lamp? 檯燈有甚麼作用？</div>
+          <select class="tbl-select" id="q-d1">
+            <option value="">-- Select 選擇答案 --</option>
+            <option value="supply_energy">To supply heat energy (like the Sun) for water to evaporate 提供熱能（模擬太陽）使水蒸發</option>
+            <option value="cool_dish">To cool down the metal dish 使金屬碟冷卻</option>
+          </select>
+        </div>
+
+        <div class="q-row">
+          <div style="font-weight: 600;">Q2. What is the purpose of the ice cubes? 冰粒有甚麼作用？</div>
+          <select class="tbl-select" id="q-d2">
+            <option value="">-- Select 選擇答案 --</option>
+            <option value="cool_condense">To keep the metal dish cold enough for water vapour to condense 保持金屬碟低溫，使水蒸氣凝結成小水滴</option>
+            <option value="heat_water">To heat the water in the container 加熱容器內的水</option>
+          </select>
+        </div>
+
+        <div class="q-row">
+          <div style="font-weight: 600;">Q3. How is 'rain' formed in this experiment? 「雨」是怎樣形成的？</div>
+          <select class="tbl-select" id="q-d3">
+            <option value="">-- Select 選擇過程 --</option>
+            <option value="evap_condense">Lamp heats water → evaporates to water vapour → cooled by metal dish → condenses into water droplets 檯燈加熱水→蒸發成水蒸氣→遇冷金屬碟凝結成水滴落下</option>
+            <option value="boil_splash">Water splashes directly into the beaker 水直接濺入燒杯中</option>
+          </select>
+        </div>
+
+        <div class="q-row">
+          <div style="font-weight: 600;">Q4. Explain Step 3(b): Why is the 'rain' colourless? 為什麼「雨」是無色的？</div>
+          <select class="tbl-select" id="q-d4">
+            <option value="">-- Select 選擇解釋 --</option>
+            <option value="dye_stays">When water evaporates, the food colouring stays behind in the container 水蒸發時，食用色素會留在原處，只有純水蒸氣上升凝結</option>
+            <option value="lamp_bleaches">The lamp light bleaches the pink colour 燈光把色素漂白了</option>
+          </select>
+        </div>
+
+        <div class="q-row">
+          <div style="font-weight: 600;">Q5. Does this keep total water on Earth constant? 地球上水的總量是否保持不變？</div>
+          <select class="tbl-select" id="q-d5">
+            <option value="">-- Select 選擇結論 --</option>
+            <option value="yes_constant">Yes, because the mass of the set-up is the same before and after 是，因為實驗前後裝置的總質量幾乎相同（水循環守恆）</option>
+            <option value="no_lost">No, water is permanently destroyed 否，水已永久消失</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="keypoint-box">
+        <div style="font-weight: 700; color: var(--accent-teal);">🌿 Key Point: Water Cycle 水循環重點 (p.88)</div>
+        <div class="cycle-flow">
+          <div class="cycle-step">1️⃣ Seas/rivers absorb energy from the <strong>Sun</strong> 吸收太陽熱能</div>
+          <div class="cycle-step">2️⃣ Water <strong>evaporates</strong> to become <strong>water vapour</strong> 蒸發成水蒸氣</div>
+          <div class="cycle-step">3️⃣ Water vapour cools &amp; <strong>condenses</strong> into clouds 遇冷凝結成雲</div>
+          <div class="cycle-step">4️⃣ Water droplets fall as <strong>rain, snow or hail</strong> 降下成雨、雪或雹</div>
+        </div>
+      </div>
+
+      <div class="table-actions">
+        <span id="table-feedback" class="feedback-msg">Complete table &amp; questions above ↑</span>
+        <div style="display: flex; gap: 6px;">
+          <button type="button" id="btn-autofill-all" class="btn-pill" style="font-size: 0.69rem;">Auto-Fill 填入答案</button>
+          <button type="button" id="btn-check-all" class="btn-pill active" style="font-size: 0.69rem;">✔ Check 核對答案</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Drawer 3: Textbook Caution Card (p.87) -->
+  <aside class="drawer-panel drawer-center" id="drawer-caution">
+    <div class="drawer-header" style="color: var(--accent-rose); background: rgba(251, 113, 133, 0.12);">
+      <span>⚠️ Safety Caution 安全注意事項 (p.87)</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-caution">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="caution-box">
+        <div class="caution-title">⚠️ Caution 注意事項</div>
+        <ul class="caution-list">
+          <li><strong>Handle the hot pebbles and hot water with care.</strong> Use tongs when transferring warmed pebbles into the transparent plastic container to avoid burns.<br><span style="color: var(--text-secondary);">小心處理熱卵石和熱水。把加熱後的卵石放入透明塑膠容器時，應使用鉗子夾取，以免燙傷。</span></li>
+          <li><strong>Ensure the zipper bag of ice cubes is sealed tightly</strong> on the metal dish so melted ice water cannot drip into the container.<br><span style="color: var(--text-secondary);">確保裝有冰粒的密實袋緊密封好並放在金屬碟上，防止冰水滲入容器內影響實驗結果。</span></li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Drawer 4: 3D Camera Views -->
+  <aside class="drawer-panel drawer-views" id="drawer-views">
+    <div class="drawer-header">
+      <span>🎥 3D Camera Views 視角切換</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-views">✕</button>
+    </div>
+    <div class="drawer-body" style="flex-direction: row; flex-wrap: wrap; gap: 6px;">
+      <button type="button" class="btn-pill active" data-cam="full">全景裝置 Full Set-Up</button>
+      <button type="button" class="btn-pill" data-cam="condense">金屬碟底凝結 Condensation &amp; Rain</button>
+      <button type="button" class="btn-pill" data-cam="balance">頂盤天平讀數 Top Pan Balance</button>
+      <button type="button" class="btn-pill" data-cam="top">俯視冰袋與燒杯 Top Ice Bag View</button>
+    </div>
+  </aside>
+
+  <!-- ALWAYS-VISIBLE ULTRA-COMPACT BOTTOM EXPERIMENT OPERATION BAR -->
+  <section class="op-dock" aria-label="Experiment 2.2 Operations">
+    <div class="op-status-strip">
+      <span id="op-status-text" class="op-status-text">
+        Step 1: Tap <strong>1️⃣ 裝置模型 Set Up Model</strong> to place hot pebbles, coloured water, beaker &amp; ice dish
+      </span>
+      <div class="telemetry-pills">
+        <span id="pill-time" class="tele-pill">⏱ 00:00 / 10:00</span>
+        <span id="pill-mass" class="tele-pill mass">⚖️ — g</span>
+        <span id="pill-rain" class="tele-pill rain">💧 Rain: 0.0 cm³</span>
+      </div>
+    </div>
+
+    <div class="op-buttons-row">
+      <button type="button" id="btn-setup" class="op-btn">1️⃣ 裝置模型 Set Up</button>
+      <button type="button" id="btn-lamp" class="op-btn lamp" disabled>2️⃣ 開燈計時 Turn ON Lamp</button>
+      <button type="button" id="btn-demo" class="op-btn demo">▶ 一鍵完整示範 Auto Demo</button>
+      <button type="button" id="btn-speed" class="op-btn speed">⏩ 3x</button>
+      <button type="button" id="btn-reset" class="op-btn reset">↺ 重設</button>
+    </div>
+  </section>
+
+  <!-- Three.js 3D Interactive Water Cycle & Rain Formation Simulation -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    // =========================================================================
+    // 1. SIMULATION STATE & BILINGUAL HYPOTHESIS / DISCUSSION LOGIC
+    // =========================================================================
+    const INITIAL_MASS_G = 1425.0;
+
+    const sim = {
+      isSetUp: false,
+      lampOn: false,
+      elapsedMin: 0.0,     // 0.0 to 10.0 minutes
+      speedMult: 3,        // 1x, 3x, 6x
+      rainCollectedML: 0.0,
+      setupAnimTimer: 0,
+      recordedStart: false,
+      recordedEnd: false
+    };
+
+    const hypState = { colour: '', mass: '', locked: false };
+
+    document.querySelectorAll('[data-hyp-step]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (hypState.locked) return;
+        const stepKey = btn.dataset.hypStep;
+        const val = btn.dataset.val;
+        hypState[stepKey] = val;
+
+        document.querySelectorAll(`[data-hyp-step="${stepKey}"]`).forEach(b => {
+          b.classList.remove('active-teal', 'active-amber');
+        });
+        btn.classList.add((val === 'colourless' || val === 'constant') ? 'active-teal' : 'active-amber');
+      });
+    });
+
+    document.getElementById('btn-autofill-hyp').addEventListener('click', () => {
+      if (hypState.locked) return;
+      if (!hypState.colour) document.querySelector('[data-hyp-step="colour"][data-val="colourless"]').click();
+      if (!hypState.mass) document.querySelector('[data-hyp-step="mass"][data-val="constant"]').click();
+
+      const cEn = hypState.colour === 'colourless' ? 'colourless (food colouring stays behind)' : 'coloured pink';
+      const mEn = hypState.mass === 'constant' ? 'remain constant at 1425.0 g' : 'decrease significantly';
+      const cZh = hypState.colour === 'colourless' ? '無色的（食用色素留在原處）' : '粉紅色的';
+      const mZh = hypState.mass === 'constant' ? '維持在 1425.0 g 不變' : '大幅減少';
+
+      document.getElementById('hyp-statement').value =
+        `I predict that the collected 'rain' will be ${cEn}, and the mass on the top pan balance after 10 minutes will ${mEn}.\n我預測收集到的「雨水」是${cZh}，而 10 分鐘後頂盤天平的讀數會${mZh}。`;
+    });
+
+    document.getElementById('btn-lock-hyp').addEventListener('click', () => {
+      hypState.locked = !hypState.locked;
+      const badge = document.getElementById('hyp-status-badge');
+      const btn = document.getElementById('btn-lock-hyp');
+      const textarea = document.getElementById('hyp-statement');
+      badge.textContent = hypState.locked ? 'Saved 已儲存' : 'Editable 可填寫';
+      badge.style.color = hypState.locked ? 'var(--accent-teal)' : 'var(--accent-amber)';
+      btn.textContent = hypState.locked ? '✏️ Edit 修改假設' : '🔒 Save 儲存假設';
+      textarea.disabled = hypState.locked;
+    });
+
+    // Check Step 3 Observations & Discussion Q1–Q5
+    document.getElementById('btn-check-all').addEventListener('click', () => {
+      const checks = [
+        { id: 'q-3a', expected: 'condense_drip' },
+        { id: 'q-3b', expected: 'colourless' },
+        { id: 'q-d1', expected: 'supply_energy' },
+        { id: 'q-d2', expected: 'cool_condense' },
+        { id: 'q-d3', expected: 'evap_condense' },
+        { id: 'q-d4', expected: 'dye_stays' },
+        { id: 'q-d5', expected: 'yes_constant' }
+      ];
+
+      let score = 0;
+      checks.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (el.value === item.expected) {
+          el.classList.add('correct');
+          el.classList.remove('wrong');
+          score++;
+        } else {
+          el.classList.add('wrong');
+          el.classList.remove('correct');
+        }
+      });
+
+      document.getElementById('q-score').textContent = `${score} / 7`;
+      const fb = document.getElementById('table-feedback');
+      if (score === 7) {
+        fb.textContent = '🎉 7/7 All correct! 全部觀察與討論題完全正確！';
+        fb.style.color = 'var(--accent-teal)';
+      } else {
+        fb.textContent = `Score: ${score}/7 — Check red boxes 再檢查紅框項目`;
+        fb.style.color = 'var(--accent-rose)';
+      }
+    });
+
+    document.getElementById('btn-autofill-all').addEventListener('click', () => {
+      document.getElementById('mass-start-inp').value = '1425.0';
+      document.getElementById('mass-end-inp').value = '1425.0';
+      document.getElementById('q-3a').value = 'condense_drip';
+      document.getElementById('q-3b').value = 'colourless';
+      document.getElementById('q-d1').value = 'supply_energy';
+      document.getElementById('q-d2').value = 'cool_condense';
+      document.getElementById('q-d3').value = 'evap_condense';
+      document.getElementById('q-d4').value = 'dye_stays';
+      document.getElementById('q-d5').value = 'yes_constant';
+      document.getElementById('btn-check-all').click();
+    });
+
+    // =========================================================================
+    // 2. WEB AUDIO LABORATORY SOUND EFFECTS (Lamp Click & Gentle Raindrops)
+    // =========================================================================
+    class LabSFX {
+      constructor() {
+        this.ctx = null;
+        this.enabled = false;
+      }
+
+      toggle() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        this.enabled = !this.enabled;
+        return this.enabled;
+      }
+
+      playSwitch() {
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(640, now);
+        osc.frequency.exponentialRampToValueAtTime(1120, now + 0.06);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      }
+
+      playRaindrop() {
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        const f = 1050 + Math.random() * 350;
+        osc.frequency.setValueAtTime(f, now);
+        osc.frequency.exponentialRampToValueAtTime(f * 1.55, now + 0.065);
+        gain.gain.setValueAtTime(0.045, now);
+        gain.gain.exponentialRampToValueAtTime(0.0005, now + 0.075);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      }
+    }
+
+    const sfx = new LabSFX();
+
+    // =========================================================================
+    // 3. THREE.JS 3D SCENE & EXACT PAGE 87 APPARATUS MODELS
+    // =========================================================================
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    const sceneFog = new THREE.FogExp2(0x0b1120, 0.022);
+    scene.fog = sceneFog;
+
+    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0.6, 4.4, 10.2);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.target.set(0.1, 2.35, 0);
+    controls.minDistance = 2.6;
+    controls.maxDistance = 18;
+    controls.maxPolarAngle = Math.PI * 0.49;
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.DirectionalLight(0xe0f2fe, 2.1);
+    keyLight.position.set(5, 12, 7);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(1024, 1024);
+    scene.add(keyLight);
+
+    const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.3);
+    rimLight.position.set(-7, 6, -5);
+    scene.add(rimLight);
+
+    // Table Lamp Point Light (illuminates container when switched ON)
+    const lampPointLight = new THREE.PointLight(0xfef08a, 0, 7.5);
+    lampPointLight.position.set(1.85, 2.85, 0.25);
+    scene.add(lampPointLight);
+
+    // Lab Bench Surface
+    const benchMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.65, metalness: 0.18 });
+    const bench = new THREE.Mesh(new THREE.BoxGeometry(14.5, 0.3, 6.4), benchMat);
+    bench.position.set(0.2, 0, 0);
+    bench.receiveShadow = true;
+    scene.add(bench);
+
+    const benchLineMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.38 });
+    const benchLine = new THREE.Mesh(new THREE.BoxGeometry(14.54, 0.03, 6.44), benchLineMat);
+    benchLine.position.set(0.2, 0.15, 0);
+    scene.add(benchLine);
+
+    // Shared Materials
+    const clearPlasticMat = new THREE.MeshPhysicalMaterial({
+      color: 0xe0f2fe,
+      transparent: true,
+      opacity: 0.30,
+      roughness: 0.08,
+      ior: 1.49,
+      clearcoat: 1.0,
+      depthWrite: false,
+      side: THREE.DoubleSide
+    });
+
+    const glassBeakerMat = new THREE.MeshPhysicalMaterial({
+      color: 0xf0f9ff,
+      transparent: true,
+      opacity: 0.38,
+      roughness: 0.06,
+      ior: 1.47,
+      clearcoat: 1.0,
+      depthWrite: false,
+      side: THREE.DoubleSide
+    });
+
+    const brushedMetalMat = new THREE.MeshStandardMaterial({
+      color: 0xcbd5e1,
+      metalness: 0.86,
+      roughness: 0.22
+    });
+
+    // Helper: Label Plaque Texture
+    function createLabelTexture(line1, line2, accent = '#38bdf8') {
+      const cvs = document.createElement('canvas');
+      cvs.width = 256;
+      cvs.height = 112;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.90)';
+      ctx.beginPath();
+      ctx.roundRect(6, 6, 244, 100, 14);
+      ctx.fill();
+      ctx.strokeStyle = accent;
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = 'bold 23px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(line1, 128, 48);
+
+      ctx.fillStyle = accent;
+      ctx.font = 'bold 25px "Noto Sans TC", sans-serif';
+      ctx.fillText(line2, 128, 86);
+
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    // --- A. TOP PAN BALANCE × 1 (Left-Center, matching Page 87 diagram) ---
+    const BAL_X = -1.25;
+    const PAN_TOP_Y = 1.48;
+    const balanceGroup = new THREE.Group();
+    balanceGroup.position.set(BAL_X, 0.16, 0);
+
+    // Orange-Red Balance Housing (matching textbook Page 87 illustration)
+    const balBody = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.05, 1.25, 1.15, 32),
+      new THREE.MeshStandardMaterial({ color: 0xea580c, roughness: 0.42, metalness: 0.15 })
+    );
+    balBody.position.y = 0.58;
+    balBody.castShadow = true;
+    balanceGroup.add(balBody);
+
+    // Weighing Pan Stem & Steel Pan
+    const panStem = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.18, 0.22, 20), brushedMetalMat);
+    panStem.position.y = 1.22;
+    balanceGroup.add(panStem);
+
+    const weighingPan = new THREE.Mesh(new THREE.CylinderGeometry(1.38, 1.28, 0.08, 36), brushedMetalMat);
+    weighingPan.position.y = PAN_TOP_Y - 0.16;
+    balanceGroup.add(weighingPan);
+
+    // Live Top Pan Balance Dial + Digital Mass Display
+    const dialCanvas = document.createElement('canvas');
+    dialCanvas.width = 256;
+    dialCanvas.height = 256;
+    const dCtx = dialCanvas.getContext('2d');
+    const dialTex = new THREE.CanvasTexture(dialCanvas);
+
+    function updateBalanceDial(massVal) {
+      dCtx.fillStyle = '#f8fafc';
+      dCtx.beginPath();
+      dCtx.arc(128, 128, 122, 0, Math.PI * 2);
+      dCtx.fill();
+
+      dCtx.strokeStyle = '#334155';
+      dCtx.lineWidth = 8;
+      dCtx.stroke();
+
+      // Graduation ticks around dial
+      for (let i = 0; i < 24; i++) {
+        const a = (i / 24) * Math.PI * 2 - Math.PI / 2;
+        dCtx.strokeStyle = i % 6 === 0 ? '#ea580c' : '#64748b';
+        dCtx.lineWidth = i % 6 === 0 ? 4 : 2;
+        dCtx.beginPath();
+        dCtx.moveTo(128 + Math.cos(a) * 95, 128 + Math.sin(a) * 95);
+        dCtx.lineTo(128 + Math.cos(a) * 112, 128 + Math.sin(a) * 112);
+        dCtx.stroke();
+      }
+
+      // Pointer needle
+      const needleAng = massVal > 0 ? (Math.PI * 0.72) : (-Math.PI * 0.5);
+      dCtx.strokeStyle = '#e11d48';
+      dCtx.lineWidth = 5;
+      dCtx.beginPath();
+      dCtx.moveTo(128, 128);
+      dCtx.lineTo(128 + Math.cos(needleAng) * 86, 128 + Math.sin(needleAng) * 86);
+      dCtx.stroke();
+
+      dCtx.fillStyle = '#0f172a';
+      dCtx.beginPath();
+      dCtx.arc(128, 128, 11, 0, Math.PI * 2);
+      dCtx.fill();
+
+      // Digital LCD readout box on face
+      dCtx.fillStyle = '#0f172a';
+      dCtx.beginPath();
+      dCtx.roundRect(44, 152, 168, 44, 8);
+      dCtx.fill();
+
+      dCtx.fillStyle = '#38bdf8';
+      dCtx.font = 'bold 26px "JetBrains Mono", monospace';
+      dCtx.textAlign = 'center';
+      dCtx.fillText(massVal > 0 ? `${massVal.toFixed(1)} g` : '0.0 g', 128, 182);
+
+      dialTex.needsUpdate = true;
+    }
+    updateBalanceDial(0);
+
+    const dialMesh = new THREE.Mesh(
+      new THREE.CircleGeometry(0.44, 32),
+      new THREE.MeshBasicMaterial({ map: dialTex })
+    );
+    dialMesh.position.set(0, 0.58, 1.16);
+    dialMesh.rotation.x = -0.16;
+    balanceGroup.add(dialMesh);
+
+    scene.add(balanceGroup);
+
+    // --- B. TRANSPARENT PLASTIC CONTAINER × 1, HOT PEBBLES, COLOURED HOT WATER & 100 cm³ BEAKER ---
+    const CONT_R = 1.18;
+    const CONT_H = 2.25;
+    const containerGroup = new THREE.Group();
+    containerGroup.position.set(BAL_X, PAN_TOP_Y + 0.04, 0);
+
+    // Outer Transparent Plastic Container Wall & Base
+    const plasticWall = new THREE.Mesh(
+      new THREE.CylinderGeometry(CONT_R, CONT_R * 0.96, CONT_H, 40, 1, true),
+      clearPlasticMat
+    );
+    plasticWall.position.y = CONT_H * 0.5;
+    containerGroup.add(plasticWall);
+
+    const plasticBase = new THREE.Mesh(
+      new THREE.CylinderGeometry(CONT_R * 0.96, CONT_R * 0.96, 0.05, 40),
+      clearPlasticMat
+    );
+    plasticBase.position.y = 0.025;
+    containerGroup.add(plasticBase);
+
+    const plasticRim = new THREE.Mesh(new THREE.TorusGeometry(CONT_R, 0.03, 12, 40), clearPlasticMat);
+    plasticRim.rotation.x = Math.PI / 2;
+    plasticRim.position.y = CONT_H;
+    containerGroup.add(plasticRim);
+
+    // Sub-assembly group revealed when Step 1 ("Set Up Model") is triggered
+    const modelContentsGroup = new THREE.Group();
+    modelContentsGroup.visible = false;
+    containerGroup.add(modelContentsGroup);
+
+    // 1. Hot Pebbles Layer at Bottom
+    const PEBBLE_COUNT = 55;
+    const pebbleGeo = new THREE.DodecahedronGeometry(0.16, 1);
+    const pebbleMat = new THREE.MeshStandardMaterial({
+      color: 0x78716c,
+      emissive: 0x9a3412,
+      emissiveIntensity: 0.22,
+      roughness: 0.78
+    });
+    const pebbleInst = new THREE.InstancedMesh(pebbleGeo, pebbleMat, PEBBLE_COUNT);
+    const dummy = new THREE.Object3D();
+    for (let i = 0; i < PEBBLE_COUNT; i++) {
+      const ang = (i * 2.39996) % (Math.PI * 2);
+      const rad = 0.48 + ((i * 17) % 10) * 0.058; // Keep center clear for 100 cm³ beaker!
+      const layer = i % 2;
+      dummy.position.set(Math.cos(ang) * rad, 0.14 + layer * 0.16, Math.sin(ang) * rad);
+      dummy.rotation.set(i * 0.7, i * 1.1, i * 0.4);
+      dummy.scale.set(1.15, 0.72, 0.95);
+      dummy.updateMatrix();
+      pebbleInst.setMatrixAt(i, dummy.matrix);
+    }
+    pebbleInst.instanceMatrix.needsUpdate = true;
+    modelContentsGroup.add(pebbleInst);
+
+    // 2. Coloured Hot Water (Pink/Magenta food colouring covering hot pebbles)
+    const HOT_WATER_H = 0.62;
+    const colouredWaterMat = new THREE.MeshPhysicalMaterial({
+      color: 0xf43f5e,
+      transparent: true,
+      opacity: 0.62,
+      roughness: 0.08,
+      ior: 1.33,
+      depthWrite: false
+    });
+    const colouredWaterMesh = new THREE.Mesh(
+      new THREE.CylinderGeometry(CONT_R * 0.94, CONT_R * 0.92, HOT_WATER_H, 36),
+      colouredWaterMat
+    );
+    colouredWaterMesh.position.y = 0.05 + HOT_WATER_H * 0.5;
+    modelContentsGroup.add(colouredWaterMesh);
+
+    // 3. Central 100 cm³ Beaker (collects the colourless 'rain'!)
+    const INNER_BEAKER_R = 0.42;
+    const INNER_BEAKER_H = 1.05;
+    const innerBeakerGroup = new THREE.Group();
+    innerBeakerGroup.position.set(0, 0.05, 0);
+
+    const innerWall = new THREE.Mesh(
+      new THREE.CylinderGeometry(INNER_BEAKER_R, INNER_BEAKER_R * 0.96, INNER_BEAKER_H, 28, 1, true),
+      glassBeakerMat
+    );
+    innerWall.position.y = INNER_BEAKER_H * 0.5;
+    innerBeakerGroup.add(innerWall);
+
+    const innerRim = new THREE.Mesh(new THREE.TorusGeometry(INNER_BEAKER_R, 0.018, 10, 28), glassBeakerMat);
+    innerRim.rotation.x = Math.PI / 2;
+    innerRim.position.y = INNER_BEAKER_H;
+    innerBeakerGroup.add(innerRim);
+
+    // Collected Colourless 'Rain' Water inside Central Beaker
+    const rainWaterMat = new THREE.MeshPhysicalMaterial({
+      color: 0x38bdf8,
+      transparent: true,
+      opacity: 0.42,
+      roughness: 0.06,
+      ior: 1.33,
+      depthWrite: false
+    });
+    const rainWaterMesh = new THREE.Mesh(
+      new THREE.CylinderGeometry(INNER_BEAKER_R * 0.92, INNER_BEAKER_R * 0.90, 0.65, 24),
+      rainWaterMat
+    );
+    rainWaterMesh.position.y = 0.02;
+    rainWaterMesh.scale.set(1, 0.01, 1);
+    innerBeakerGroup.add(rainWaterMesh);
+
+    modelContentsGroup.add(innerBeakerGroup);
+
+    // 4. Metal Dish × 1 & Zipper Bag of Ice Cubes × 1 on top of Plastic Container
+    const topColdGroup = new THREE.Group();
+    topColdGroup.position.y = CONT_H + 0.02;
+
+    const metalDish = new THREE.Mesh(
+      new THREE.CylinderGeometry(CONT_R + 0.14, CONT_R * 0.95, 0.14, 36),
+      brushedMetalMat
+    );
+    metalDish.position.y = 0.05;
+    topColdGroup.add(metalDish);
+
+    // Translucent Zipper Bag containing 3D Ice Cubes
+    const zipperBagMat = new THREE.MeshPhysicalMaterial({
+      color: 0xe0f2fe,
+      transparent: true,
+      opacity: 0.36,
+      roughness: 0.18,
+      depthWrite: false
+    });
+    const zipperBag = new THREE.Mesh(new THREE.BoxGeometry(1.65, 0.48, 1.35), zipperBagMat);
+    zipperBag.position.y = 0.34;
+    topColdGroup.add(zipperBag);
+
+    // Zipper Seal Strip
+    const zipStrip = new THREE.Mesh(
+      new THREE.BoxGeometry(1.72, 0.05, 0.08),
+      new THREE.MeshBasicMaterial({ color: 0x38bdf8 })
+    );
+    zipStrip.position.set(0, 0.56, 0.66);
+    topColdGroup.add(zipStrip);
+
+    // 3D Ice Cubes inside the Zipper Bag
+    const iceCubeMat = new THREE.MeshPhysicalMaterial({
+      color: 0xf0f9ff,
+      transparent: true,
+      opacity: 0.85,
+      roughness: 0.12,
+      ior: 1.31
+    });
+    for (let i = 0; i < 14; i++) {
+      const cube = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.24, 0.28), iceCubeMat);
+      cube.position.set(
+        ((i % 4) - 1.5) * 0.34 + (Math.random() - 0.5) * 0.08,
+        0.25 + Math.floor(i / 7) * 0.18,
+        (Math.floor((i % 7) / 4) - 0.5) * 0.45 + (Math.random() - 0.5) * 0.12
+      );
+      cube.rotation.set(Math.random() * 0.4, Math.random() * 1.2, Math.random() * 0.4);
+      topColdGroup.add(cube);
+    }
+
+    modelContentsGroup.add(topColdGroup);
+
+    // --- C. INSTANCED WATER VAPOUR, CONDENSATION DROPLETS & FALLING 'RAIN' ---
+    // C1. Rising Invisible/Translucent Water Vapour Particles
+    const VAPOUR_COUNT = 75;
+    const vapourGeo = new THREE.SphereGeometry(0.055, 8, 8);
+    const vapourMat = new THREE.MeshBasicMaterial({
+      color: 0xf8fafc,
+      transparent: true,
+      opacity: 0.32
+    });
+    const vapourInst = new THREE.InstancedMesh(vapourGeo, vapourMat, VAPOUR_COUNT);
+    containerGroup.add(vapourInst);
+
+    const vapourData = Array.from({ length: VAPOUR_COUNT }, (_, i) => {
+      const ang = Math.random() * Math.PI * 2;
+      const rad = 0.25 + Math.random() * (CONT_R * 0.68);
+      return {
+        progress: i / VAPOUR_COUNT,
+        ang,
+        rad,
+        speed: 0.38 + Math.random() * 0.25
+      };
+    });
+
+    // C2. Condensation Droplets clinging to the underside of the Metal Dish
+    const COND_DROP_COUNT = 42;
+    const condDropGeo = new THREE.SphereGeometry(0.048, 10, 10);
+    const condDropMat = new THREE.MeshPhysicalMaterial({
+      color: 0xe0f2fe,
+      transparent: true,
+      opacity: 0.85,
+      roughness: 0.05,
+      ior: 1.33
+    });
+    const condDropInst = new THREE.InstancedMesh(condDropGeo, condDropMat, COND_DROP_COUNT);
+    containerGroup.add(condDropInst);
+
+    const condDropData = Array.from({ length: COND_DROP_COUNT }, (_, i) => {
+      const ang = (i * 2.39996) % (Math.PI * 2);
+      const rad = (i / COND_DROP_COUNT) * (CONT_R * 0.82);
+      return {
+        x: Math.cos(ang) * rad,
+        z: Math.sin(ang) * rad,
+        growth: Math.random()
+      };
+    });
+
+    // C3. Falling Colourless 'Rain' Droplets dripping into the Central 100 cm³ Beaker
+    const RAIN_DROP_COUNT = 24;
+    const rainDropGeo = new THREE.SphereGeometry(0.042, 10, 10);
+    const rainDropMat = new THREE.MeshPhysicalMaterial({
+      color: 0x38bdf8,
+      emissive: 0x0284c7,
+      emissiveIntensity: 0.35,
+      roughness: 0.04
+    });
+    const rainDropInst = new THREE.InstancedMesh(rainDropGeo, rainDropMat, RAIN_DROP_COUNT);
+    containerGroup.add(rainDropInst);
+
+    const rainDropData = Array.from({ length: RAIN_DROP_COUNT }, (_, i) => ({
+      x: (Math.random() - 0.5) * (INNER_BEAKER_R * 1.15),
+      z: (Math.random() - 0.5) * (INNER_BEAKER_R * 1.15),
+      y: CONT_H - 0.08 - (i / RAIN_DROP_COUNT) * 1.8,
+      vy: 0.3 + Math.random() * 0.5
+    }));
+
+    scene.add(containerGroup);
+
+    // --- D. TABLE LAMP × 1 & VOLUMETRIC LIGHT BEAM (Right side, matching Page 87) ---
+    const LAMP_X = 2.35;
+    const lampGroup = new THREE.Group();
+    lampGroup.position.set(LAMP_X, 0.16, 0.15);
+
+    const lampBaseMat = new THREE.MeshStandardMaterial({ color: 0x0284c7, roughness: 0.35, metalness: 0.35 });
+    const lampBase = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.68, 0.24, 28), lampBaseMat);
+    lampBase.position.y = 0.12;
+    lampBase.castShadow = true;
+    lampGroup.add(lampBase);
+
+    // Flexible Gooseneck Arm
+    const neckCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0, 0.24, 0),
+      new THREE.Vector3(0.15, 1.35, 0),
+      new THREE.Vector3(-0.08, 2.35, 0),
+      new THREE.Vector3(-0.45, 2.75, 0)
+    ]);
+    const neckMesh = new THREE.Mesh(
+      new THREE.TubeGeometry(neckCurve, 24, 0.065, 12, false),
+      new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.55, metalness: 0.5 })
+    );
+    lampGroup.add(neckMesh);
+
+    // Lamp Shade Cone pointing at the plastic container
+    const shadeGroup = new THREE.Group();
+    shadeGroup.position.set(-0.55, 2.72, 0);
+    shadeGroup.rotation.z = Math.PI * 0.44;
+
+    const lampShade = new THREE.Mesh(new THREE.ConeGeometry(0.56, 0.85, 28, 1, true), lampBaseMat);
+    shadeGroup.add(lampShade);
+
+    const bulbMat = new THREE.MeshStandardMaterial({
+      color: 0xfef9c3,
+      emissive: 0xfacc15,
+      emissiveIntensity: 0.0
+    });
+    const lampBulb = new THREE.Mesh(new THREE.SphereGeometry(0.22, 18, 16), bulbMat);
+    lampBulb.position.y = -0.15;
+    shadeGroup.add(lampBulb);
+
+    // Volumetric Warm Light Beam Cone
+    const beamMat = new THREE.MeshBasicMaterial({
+      color: 0xfef08a,
+      transparent: true,
+      opacity: 0.14,
+      depthWrite: false,
+      side: THREE.DoubleSide
+    });
+    const lightBeam = new THREE.Mesh(new THREE.ConeGeometry(1.35, 3.3, 28, 1, true), beamMat);
+    lightBeam.position.y = -1.85;
+    lightBeam.visible = false;
+    shadeGroup.add(lightBeam);
+
+    lampGroup.add(shadeGroup);
+    scene.add(lampGroup);
+
+    // Tongs × 1 resting beside bench
+    const tongsGroup = new THREE.Group();
+    tongsGroup.position.set(-3.35, 0.20, 1.35);
+    tongsGroup.rotation.set(Math.PI * 0.5, 0, -0.35);
+    [-0.04, 0.04].forEach((offset, idx) => {
+      const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 1.65, 10), brushedMetalMat);
+      arm.position.x = offset;
+      arm.rotation.z = idx === 0 ? -0.05 : 0.05;
+      tongsGroup.add(arm);
+    });
+    scene.add(tongsGroup);
+
+    // =========================================================================
+    // 4. DRAWER TOGGLES, COLLAPSE/EXPAND & LIGHT/DARK MODE
+    // =========================================================================
+    let isLightMode = false;
+    const themeBtn = document.getElementById('theme-toggle');
+
+    function applyTheme(light) {
+      isLightMode = light;
+      document.body.classList.toggle('light-mode', light);
+
+      if (light) {
+        themeBtn.textContent = '🌙 深色';
+        sceneFog.color.setHex(0xe2ecf6);
+        ambientLight.intensity = 1.15;
+        keyLight.intensity = 2.4;
+        benchMat.color.setHex(0xcbd5e1);
+        benchLineMat.color.setHex(0x0284c7);
+      } else {
+        themeBtn.textContent = '☀️ 淺色';
+        sceneFog.color.setHex(0x0b1120);
+        ambientLight.intensity = 0.85;
+        keyLight.intensity = 2.1;
+        benchMat.color.setHex(0x0f172a);
+        benchLineMat.color.setHex(0x38bdf8);
+      }
+    }
+
+    themeBtn.addEventListener('click', () => applyTheme(!isLightMode));
+
+    let panelsCollapsed = false;
+    const collapseBtn = document.getElementById('collapse-panels-btn');
+
+    function setPanelsCollapsed(collapsed) {
+      panelsCollapsed = collapsed;
+      document.body.classList.toggle('panels-collapsed', collapsed);
+      collapseBtn.textContent = collapsed ? '👁️ 展開面板' : '👁️ 收起面板';
+      if (collapsed) {
+        document.querySelectorAll('[data-drawer-btn]').forEach(b => b.classList.remove('active'));
+      } else {
+        document.querySelectorAll('.drawer-panel.open').forEach(d => {
+          const btn = document.querySelector(`[data-drawer-btn="${d.id}"]`);
+          if (btn) btn.classList.add('active');
+        });
+      }
+    }
+
+    collapseBtn.addEventListener('click', () => setPanelsCollapsed(!panelsCollapsed));
+
+    document.querySelectorAll('[data-drawer-btn]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (panelsCollapsed) setPanelsCollapsed(false);
+        const targetId = btn.dataset.drawerBtn;
+        const targetDrawer = document.getElementById(targetId);
+        const willOpen = !targetDrawer.classList.contains('open');
+
+        if (window.innerWidth <= 980) {
+          document.querySelectorAll('.drawer-panel').forEach(d => d.classList.remove('open'));
+          document.querySelectorAll('[data-drawer-btn]').forEach(b => b.classList.remove('active'));
+        }
+
+        if (willOpen) {
+          targetDrawer.classList.add('open');
+          btn.classList.add('active');
+        } else {
+          targetDrawer.classList.remove('open');
+          btn.classList.remove('active');
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-close-drawer]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.closeDrawer;
+        const drawer = document.getElementById(targetId);
+        if (drawer) drawer.classList.remove('open');
+        const navBtn = document.querySelector(`[data-drawer-btn="${targetId}"]`);
+        if (navBtn) navBtn.classList.remove('active');
+      });
+    });
+
+    // =========================================================================
+    // 5. EXPERIMENT CONTROLS & CAMERA PRESETS
+    // =========================================================================
+    const CAM_PRESETS = {
+      full: { pos: new THREE.Vector3(0.6, 4.4, 10.2), target: new THREE.Vector3(0.1, 2.35, 0) },
+      condense: { pos: new THREE.Vector3(0.2, 3.3, 4.8), target: new THREE.Vector3(BAL_X, 2.85, 0) },
+      balance: { pos: new THREE.Vector3(-1.25, 1.45, 4.4), target: new THREE.Vector3(BAL_X, 0.85, 0) },
+      top: { pos: new THREE.Vector3(-1.1, 6.2, 3.2), target: new THREE.Vector3(BAL_X, 2.8, 0) }
+    };
+
+    let camGoalPos = null;
+    let camGoalTarget = null;
+
+    document.querySelectorAll('[data-cam]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-cam]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const p = CAM_PRESETS[btn.dataset.cam];
+        if (p) {
+          camGoalPos = p.pos.clone();
+          camGoalTarget = p.target.clone();
+        }
+      });
+    });
+
+    renderer.domElement.addEventListener('pointerdown', () => {
+      camGoalPos = null;
+    });
+
+    const btnSetup = document.getElementById('btn-setup');
+    const btnLamp = document.getElementById('btn-lamp');
+    const btnDemo = document.getElementById('btn-demo');
+    const btnSpeed = document.getElementById('btn-speed');
+    const statusText = document.getElementById('op-status-text');
+
+    function performSetUp() {
+      if (sim.isSetUp) return;
+      sim.isSetUp = true;
+      modelContentsGroup.visible = true;
+      updateBalanceDial(INITIAL_MASS_G);
+
+      // Auto-populate beginning mass on balance & table input
+      document.getElementById('pill-mass').textContent = `⚖️ ${INITIAL_MASS_G.toFixed(1)} g`;
+      document.getElementById('mass-start-inp').value = INITIAL_MASS_G.toFixed(1);
+
+      btnSetup.classList.add('done');
+      btnSetup.disabled = true;
+      btnLamp.disabled = false;
+      sfx.playSwitch();
+
+      statusText.innerHTML = '<strong>Step 2:</strong> Initial mass = 1425.0 g. Tap <strong>2️⃣ 開燈計時 Turn ON Lamp</strong> to simulate 10 min of rain formation!';
+    }
+
+    function performTurnOnLamp() {
+      if (!sim.isSetUp || sim.lampOn) return;
+      sim.lampOn = true;
+      bulbMat.emissiveIntensity = 2.4;
+      lightBeam.visible = true;
+      lampPointLight.intensity = 3.2;
+
+      btnLamp.classList.add('done');
+      btnLamp.disabled = true;
+      sfx.playSwitch();
+
+      camGoalPos = CAM_PRESETS.condense.pos.clone();
+      camGoalTarget = CAM_PRESETS.condense.target.clone();
+
+      statusText.innerHTML = '<strong>Running (10 min):</strong> Lamp heats water → vapour condenses under cold metal dish → <strong>colourless rain</strong> drips into beaker!';
+    }
+
+    btnSetup.addEventListener('click', performSetUp);
+    btnLamp.addEventListener('click', performTurnOnLamp);
+
+    btnDemo.addEventListener('click', () => {
+      if (!sim.isSetUp) {
+        performSetUp();
+        setTimeout(() => performTurnOnLamp(), 650);
+      } else if (!sim.lampOn) {
+        performTurnOnLamp();
+      }
+      sim.speedMult = 6;
+      btnSpeed.textContent = '⏩ 6x';
+    });
+
+    const SPEEDS = [1, 3, 6];
+    btnSpeed.addEventListener('click', () => {
+      const nextIdx = (SPEEDS.indexOf(sim.speedMult) + 1) % SPEEDS.length;
+      sim.speedMult = SPEEDS[nextIdx];
+      btnSpeed.textContent = `⏩ ${sim.speedMult}x`;
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      sim.isSetUp = false;
+      sim.lampOn = false;
+      sim.elapsedMin = 0.0;
+      sim.rainCollectedML = 0.0;
+      sim.recordedStart = false;
+      sim.recordedEnd = false;
+
+      modelContentsGroup.visible = false;
+      bulbMat.emissiveIntensity = 0.0;
+      lightBeam.visible = false;
+      lampPointLight.intensity = 0.0;
+      updateBalanceDial(0);
+
+      rainWaterMesh.scale.set(1, 0.01, 1);
+      rainWaterMesh.position.y = 0.02;
+      colouredWaterMesh.scale.set(1, 1, 1);
+      colouredWaterMesh.position.y = 0.05 + HOT_WATER_H * 0.5;
+
+      btnSetup.classList.remove('done');
+      btnSetup.disabled = false;
+      btnLamp.classList.remove('done');
+      btnLamp.disabled = true;
+
+      document.getElementById('pill-time').textContent = '⏱ 00:00 / 10:00';
+      document.getElementById('pill-mass').textContent = '⚖️ — g';
+      document.getElementById('pill-rain').textContent = '💧 Rain: 0.0 cm³';
+      statusText.innerHTML = 'Step 1: Tap <strong>1️⃣ 裝置模型 Set Up Model</strong> to place hot pebbles, coloured water, beaker &amp; ice dish';
+
+      document.getElementById('mass-start-inp').value = '';
+      document.getElementById('mass-end-inp').value = '';
+      ['q-3a', 'q-3b', 'q-d1', 'q-d2', 'q-d3', 'q-d4', 'q-d5'].forEach(id => {
+        const el = document.getElementById(id);
+        el.value = '';
+        el.classList.remove('correct', 'wrong');
+      });
+      document.getElementById('q-score').textContent = '0 / 7';
+      document.getElementById('table-feedback').textContent = 'Complete table & questions above ↑';
+      document.getElementById('table-feedback').style.color = 'var(--accent-teal)';
+
+      camGoalPos = CAM_PRESETS.full.pos.clone();
+      camGoalTarget = CAM_PRESETS.full.target.clone();
+    });
+
+    const audioBtn = document.getElementById('audio-toggle');
+    audioBtn.addEventListener('click', () => {
+      const on = sfx.toggle();
+      audioBtn.textContent = on ? '🔊' : '🔇';
+      audioBtn.classList.toggle('audio-on', on);
+    });
+
+    // =========================================================================
+    // 6. MAIN 3D ANIMATION & RAIN CYCLE PARTICLE LOOP
+    // =========================================================================
+    const clock = new THREE.Clock();
+
+    function animate() {
+      const dt = Math.min(clock.getDelta(), 0.05);
+      const elapsed = clock.elapsedTime;
+
+      // Advance 10-minute timer when lamp is ON
+      if (sim.lampOn && sim.elapsedMin < 10.0) {
+        sim.elapsedMin = Math.min(10.0, sim.elapsedMin + dt * 0.14 * sim.speedMult);
+        sim.rainCollectedML = (sim.elapsedMin / 10.0) * 18.5; // ~18.5 cm³ of pure colourless rain collected
+
+        if (sim.elapsedMin >= 10.0 && !sim.recordedEnd) {
+          sim.recordedEnd = true;
+          document.getElementById('mass-end-inp').value = INITIAL_MASS_G.toFixed(1);
+          statusText.innerHTML = '<strong>10 Minutes Complete!</strong> Mass stays <strong>1425.0 g</strong> &amp; collected rain is <strong>colourless</strong>. Open <strong>📋 觀察與討論</strong>!';
+        }
+      }
+
+      const cycleActivity = sim.lampOn ? (sim.elapsedMin < 10.0 ? 1.0 : 0.45) : 0.0;
+
+      // 1. Update Water Levels (Coloured outer water lowers slightly; colourless rain in inner beaker rises)
+      if (sim.isSetUp) {
+        const rainFrac = sim.rainCollectedML / 18.5;
+        const innerScaleY = Math.max(0.01, rainFrac * 0.85);
+        rainWaterMesh.scale.set(1, innerScaleY, 1);
+        rainWaterMesh.position.y = 0.02 + (0.65 * innerScaleY) * 0.5;
+
+        const outerScaleY = Math.max(0.76, 1.0 - rainFrac * 0.18);
+        colouredWaterMesh.scale.set(1, outerScaleY, 1);
+        colouredWaterMesh.position.y = 0.05 + (HOT_WATER_H * outerScaleY) * 0.5;
+      }
+
+      // 2. Instanced Rising Water Vapour Particles
+      for (let i = 0; i < VAPOUR_COUNT; i++) {
+        if (cycleActivity <= 0.01) {
+          dummy.scale.setScalar(0);
+          dummy.updateMatrix();
+          vapourInst.setMatrixAt(i, dummy.matrix);
+          continue;
+        }
+        const v = vapourData[i];
+        v.progress += v.speed * dt * (0.5 + cycleActivity * 0.7);
+        if (v.progress > 1.0) v.progress -= 1.0;
+
+        const vy = HOT_WATER_H + v.progress * (CONT_H - HOT_WATER_H - 0.12);
+        const r = v.rad + Math.sin(elapsed * 2 + i) * 0.08;
+        dummy.position.set(Math.cos(v.ang) * r, vy, Math.sin(v.ang) * r);
+        dummy.scale.setScalar(Math.sin(v.progress * Math.PI) * 0.95);
+        dummy.updateMatrix();
+        vapourInst.setMatrixAt(i, dummy.matrix);
+      }
+      vapourInst.instanceMatrix.needsUpdate = true;
+
+      // 3. Instanced Condensation Droplets on Underside of Metal Dish
+      for (let i = 0; i < COND_DROP_COUNT; i++) {
+        if (cycleActivity <= 0.01) {
+          dummy.scale.setScalar(0);
+          dummy.updateMatrix();
+          condDropInst.setMatrixAt(i, dummy.matrix);
+          continue;
+        }
+        const c = condDropData[i];
+        c.growth += dt * 0.35 * cycleActivity;
+        if (c.growth > 1.0) c.growth = 0.15;
+
+        dummy.position.set(c.x, CONT_H - 0.04 - c.growth * 0.02, c.z);
+        dummy.scale.set(0.5 + c.growth * 0.85, 0.4 + c.growth * 1.1, 0.5 + c.growth * 0.85);
+        dummy.updateMatrix();
+        condDropInst.setMatrixAt(i, dummy.matrix);
+      }
+      condDropInst.instanceMatrix.needsUpdate = true;
+
+      // 4. Instanced Falling Colourless 'Rain' Droplets into Central Beaker
+      const activeRainDrops = cycleActivity > 0.01 ? Math.floor(RAIN_DROP_COUNT * cycleActivity) : 0;
+      for (let i = 0; i < RAIN_DROP_COUNT; i++) {
+        if (i >= activeRainDrops) {
+          dummy.scale.setScalar(0);
+          dummy.updateMatrix();
+          rainDropInst.setMatrixAt(i, dummy.matrix);
+          continue;
+        }
+        const rd = rainDropData[i];
+        rd.vy += 3.8 * dt;
+        rd.y -= rd.vy * dt;
+
+        const beakerWaterTop = 0.07 + 0.65 * Math.max(0.01, (sim.rainCollectedML / 18.5) * 0.85);
+        if (rd.y <= beakerWaterTop) {
+          rd.y = CONT_H - 0.06;
+          rd.vy = 0.25 + Math.random() * 0.35;
+          if (i === 0 && sim.elapsedMin < 10.0) sfx.playRaindrop();
+        }
+        dummy.position.set(rd.x, rd.y, rd.z);
+        dummy.scale.set(0.85, 1.35, 0.85);
+        dummy.updateMatrix();
+        rainDropInst.setMatrixAt(i, dummy.matrix);
+      }
+      rainDropInst.instanceMatrix.needsUpdate = true;
+
+      // 5. Update Telemetry Pills
+      const totalSec = Math.floor(sim.elapsedMin * 60);
+      const mm = String(Math.floor(totalSec / 60)).padStart(2, '0');
+      const ss = String(totalSec % 60).padStart(2, '0');
+      document.getElementById('pill-time').textContent = `⏱ ${mm}:${ss} / 10:00`;
+      document.getElementById('pill-rain').textContent = `💧 Rain: ${sim.rainCollectedML.toFixed(1)} cm³`;
+
+      if (camGoalPos && camGoalTarget) {
+        camera.position.lerp(camGoalPos, 0.08);
+        controls.target.lerp(camGoalTarget, 0.08);
+        if (camera.position.distanceTo(camGoalPos) < 0.04) {
+          camGoalPos = null;
+          camGoalTarget = null;
+        }
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    renderer.setAnimationLoop(animate);
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
