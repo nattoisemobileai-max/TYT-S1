@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Experiment 2.1 | Measuring Temperatures as Ice Changes to Steam (3D Lab)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #0b1120;
+      --bg-canvas-grad: radial-gradient(circle at 50% 40%, #14223e 0%, #0b1120 75%, #060a14 100%);
+      --bg-panel: rgba(15, 23, 42, 0.91);
+      --bg-card: rgba(15, 23, 42, 0.84);
+      --bg-item: rgba(30, 41, 59, 0.80);
+      --bg-input: rgba(15, 23, 42, 0.95);
+      --grid-line: rgba(56, 189, 248, 0.04);
+      --border-subtle: rgba(56, 189, 248, 0.28);
+      --border-strong: rgba(56, 189, 248, 0.58);
+      --accent-cyan: #38bdf8;
+      --accent-teal: #2dd4bf;
+      --accent-amber: #f59e0b;
+      --accent-rose: #fb7185;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --shadow-panel: 0 10px 30px rgba(0, 0, 0, 0.48);
+      --font-sans: 'Inter', 'Noto Sans TC', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body.light-mode {
+      --bg-deep: #eef4fa;
+      --bg-canvas-grad: radial-gradient(circle at 50% 35%, #ffffff 0%, #e2ecf6 72%, #cbd8e8 100%);
+      --bg-panel: rgba(255, 255, 255, 0.93);
+      --bg-card: rgba(248, 250, 252, 0.95);
+      --bg-item: rgba(241, 245, 249, 0.96);
+      --bg-input: #ffffff;
+      --grid-line: rgba(14, 116, 144, 0.055);
+      --border-subtle: rgba(14, 116, 144, 0.26);
+      --border-strong: rgba(2, 132, 199, 0.58);
+      --accent-cyan: #0284c7;
+      --accent-teal: #0d9488;
+      --accent-amber: #d97706;
+      --accent-rose: #e11d48;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --shadow-panel: 0 10px 28px rgba(15, 23, 42, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    input, textarea, select {
+      user-select: text;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    #canvas-container {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background: var(--bg-canvas-grad);
+      transition: background 0.3s ease;
+    }
+
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
+    /* Compact Single-Row Top Header */
+    .hud-header {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 6px 10px;
+      background: var(--bg-panel);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: var(--shadow-panel);
+      flex-wrap: wrap;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .exp-badge {
+      background: linear-gradient(135deg, #ea580c, #f59e0b);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.72rem;
+      padding: 3px 7px;
+      border-radius: 6px;
+      letter-spacing: 0.02em;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+      white-space: nowrap;
+    }
+
+    .brand-title {
+      font-size: 0.81rem;
+      font-weight: 700;
+      line-height: 1.15;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .btn-pill {
+      font-family: var(--font-sans);
+      font-size: 0.71rem;
+      font-weight: 600;
+      padding: 5px 8px;
+      border-radius: 7px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-item);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.16s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .btn-pill:hover {
+      border-color: var(--accent-cyan);
+      color: var(--text-primary);
+    }
+
+    .btn-pill.active {
+      border-color: var(--accent-cyan);
+      color: #ffffff;
+      background: var(--accent-cyan);
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.28);
+    }
+
+    .btn-pill.audio-on {
+      border-color: var(--accent-teal);
+      color: #ffffff;
+      background: var(--accent-teal);
+    }
+
+    .btn-pill.caution-btn {
+      border-color: rgba(251, 113, 133, 0.45);
+      color: var(--accent-rose);
+    }
+
+    .btn-pill.caution-btn.active {
+      background: var(--accent-rose);
+      border-color: var(--accent-rose);
+      color: #ffffff;
+    }
+
+    .btn-pill.collapse-btn {
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+    }
+
+    .btn-pill.collapse-btn:hover {
+      background: var(--accent-amber);
+      color: #ffffff;
+    }
+
+    /* Collapsible Top Drawers */
+    .drawer-panel {
+      position: fixed;
+      top: 58px;
+      z-index: 18;
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      box-shadow: var(--shadow-panel);
+      display: none;
+      flex-direction: column;
+      max-height: calc(100vh - 202px);
+      overflow: hidden;
+    }
+
+    .drawer-panel.open {
+      display: flex;
+    }
+
+    body.panels-collapsed .drawer-panel {
+      display: none !important;
+    }
+
+    .drawer-left {
+      left: 10px;
+      width: 355px;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-right {
+      right: 10px;
+      width: 410px;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-center {
+      left: 50%;
+      transform: translateX(-50%);
+      width: 375px;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-views {
+      left: 50%;
+      transform: translateX(-50%);
+      width: auto;
+      max-width: calc(100vw - 20px);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(56, 189, 248, 0.08);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .btn-close-drawer {
+      width: 24px;
+      height: 22px;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-item);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-close-drawer:hover {
+      border-color: var(--accent-rose);
+      color: var(--accent-rose);
+    }
+
+    .drawer-body {
+      padding: 11px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .section-header {
+      font-size: 0.71rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent-cyan);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 4px;
+    }
+
+    /* Aim, Safety & Hypothesis Styling */
+    .aim-box {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(45, 212, 191, 0.10));
+      border: 1px solid var(--border-strong);
+      border-radius: 9px;
+      padding: 9px 10px;
+    }
+
+    .aim-label {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 4px;
+    }
+
+    .aim-en {
+      font-size: 0.74rem;
+      line-height: 1.42;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .aim-zh {
+      font-size: 0.74rem;
+      line-height: 1.45;
+      color: var(--text-secondary);
+      padding-top: 4px;
+      border-top: 1px dashed var(--border-subtle);
+    }
+
+    .caution-box {
+      background: rgba(251, 113, 133, 0.12);
+      border: 1px solid rgba(251, 113, 133, 0.5);
+      border-left: 4px solid var(--accent-rose);
+      border-radius: 9px;
+      padding: 9px 10px;
+    }
+
+    .tip-box {
+      background: rgba(56, 189, 248, 0.10);
+      border: 1px solid rgba(56, 189, 248, 0.42);
+      border-left: 4px solid var(--accent-cyan);
+      border-radius: 9px;
+      padding: 9px 10px;
+    }
+
+    .caution-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-rose);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tip-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .caution-list {
+      padding-left: 16px;
+      font-size: 0.72rem;
+      line-height: 1.44;
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hypothesis-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 9px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .hyp-card {
+      background: var(--bg-item);
+      border-radius: 7px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 0.72rem;
+    }
+
+    .hyp-toggle-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .hyp-btn {
+      font-size: 0.67rem;
+      font-weight: 600;
+      padding: 4px 6px;
+      border-radius: 5px;
+      border: 1px solid var(--border-subtle);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .hyp-btn.active-teal {
+      background: var(--accent-teal);
+      border-color: var(--accent-teal);
+      color: #fff;
+    }
+
+    .hyp-btn.active-amber {
+      background: var(--accent-amber);
+      border-color: var(--accent-amber);
+      color: #fff;
+    }
+
+    .hyp-textarea {
+      width: 100%;
+      min-height: 46px;
+      resize: vertical;
+      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      padding: 6px 8px;
+      line-height: 1.38;
+    }
+
+    .hyp-textarea:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+    }
+
+    /* Textbook Material & Apparatus Grid */
+    .apparatus-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 7px;
+      font-size: 0.70rem;
+    }
+
+    .app-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 6px;
+      border-radius: 5px;
+      background: var(--bg-item);
+    }
+
+    .app-qty {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--accent-amber);
+      font-size: 0.68rem;
+      white-space: nowrap;
+    }
+
+    /* Data Table & Heating Curve Graph Styling */
+    .table-wrapper {
+      width: 100%;
+      max-height: 175px;
+      overflow: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.7rem;
+    }
+
+    .results-table th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: var(--bg-panel);
+      color: var(--text-primary);
+      font-weight: 700;
+      padding: 5px 6px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-subtle);
+      line-height: 1.25;
+    }
+
+    .results-table td {
+      padding: 4px 6px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
+    }
+
+    .temp-input {
+      width: 62px;
+      padding: 3px 5px;
+      border-radius: 4px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .temp-input:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+    }
+
+    .graph-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    #heating-graph-canvas {
+      width: 100%;
+      height: 165px;
+      display: block;
+      border-radius: 6px;
+    }
+
+    .q5-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9px;
+      padding: 8px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 0.71rem;
+    }
+
+    .q5-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .tbl-select {
+      width: 100%;
+      padding: 4px 6px;
+      border-radius: 5px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.69rem;
+      cursor: pointer;
+    }
+
+    .tbl-select.correct {
+      border-color: var(--accent-teal);
+      box-shadow: 0 0 0 1px var(--accent-teal);
+    }
+
+    .tbl-select.wrong {
+      border-color: var(--accent-rose);
+      box-shadow: 0 0 0 1px var(--accent-rose);
+    }
+
+    .table-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .feedback-msg {
+      font-size: 0.71rem;
+      font-weight: 600;
+      color: var(--accent-teal);
+    }
+
+    /* =====================================================================
+       ALWAYS-VISIBLE ULTRA-COMPACT BOTTOM EXPERIMENT OPERATION BAR
+       ===================================================================== */
+    .op-dock {
+      position: fixed;
+      bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      width: min(860px, calc(100vw - 16px));
+      background: var(--bg-panel);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-strong);
+      border-radius: 14px;
+      padding: 7px 9px;
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.55);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .op-status-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 4px 8px;
+      border-radius: 7px;
+      background: rgba(56, 189, 248, 0.12);
+      border-left: 3px solid var(--accent-cyan);
+      font-size: 0.72rem;
+      line-height: 1.3;
+      color: var(--text-primary);
+    }
+
+    .op-status-text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
+    .telemetry-pills {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+
+    .tele-pill {
+      font-family: var(--font-mono);
+      font-size: 0.67rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: var(--bg-item);
+      border: 1px solid var(--border-subtle);
+      color: var(--accent-cyan);
+      white-space: nowrap;
+    }
+
+    .tele-pill.temp {
+      color: var(--accent-amber);
+      border-color: rgba(245, 158, 11, 0.45);
+    }
+
+    .tele-pill.state {
+      color: var(--accent-teal);
+      border-color: rgba(45, 212, 191, 0.45);
+    }
+
+    .op-buttons-row {
+      display: grid;
+      grid-template-columns: 1.05fr 1.15fr 1.25fr 1.15fr 0.75fr;
+      gap: 5px;
+    }
+
+    .op-btn {
+      padding: 7px 6px;
+      border-radius: 8px;
+      border: 1px solid var(--border-strong);
+      background: rgba(56, 189, 248, 0.16);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.71rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.16s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .op-btn:hover:not(:disabled) {
+      background: var(--accent-cyan);
+      color: #ffffff;
+    }
+
+    .op-btn:disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+
+    .op-btn.done {
+      border-color: var(--accent-teal);
+      background: rgba(45, 212, 191, 0.22);
+      color: var(--accent-teal);
+    }
+
+    .op-btn.flame {
+      border-color: var(--accent-amber);
+      background: rgba(245, 158, 11, 0.18);
+    }
+
+    .op-btn.flame:hover:not(:disabled) {
+      background: var(--accent-amber);
+      color: #ffffff;
+    }
+
+    .op-btn.stir-rec {
+      border-color: var(--accent-teal);
+      background: rgba(45, 212, 191, 0.2);
+    }
+
+    .op-btn.stir-rec:hover:not(:disabled) {
+      background: var(--accent-teal);
+      color: #ffffff;
+    }
+
+    .op-btn.speed {
+      border-color: var(--border-subtle);
+      background: var(--bg-item);
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    .op-btn.speed:hover {
+      border-color: var(--accent-cyan);
+      color: var(--text-primary);
+    }
+
+    .op-btn.reset {
+      border-color: var(--accent-rose);
+      background: rgba(251, 113, 133, 0.15);
+      color: var(--accent-rose);
+    }
+
+    .op-btn.reset:hover:not(:disabled) {
+      background: var(--accent-rose);
+      color: #ffffff;
+    }
+
+    /* Safety Goggles Toast */
+    .safety-toast {
+      position: fixed;
+      top: 58px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 35;
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: var(--bg-panel);
+      border: 1px solid var(--accent-teal);
+      color: var(--accent-teal);
+      font-size: 0.73rem;
+      font-weight: 700;
+      display: none;
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-panel);
+      white-space: nowrap;
+    }
+
+    .drawer-body::-webkit-scrollbar,
+    .table-wrapper::-webkit-scrollbar { width: 4px; height: 4px; }
+    .drawer-body::-webkit-scrollbar-thumb,
+    .table-wrapper::-webkit-scrollbar-thumb {
+      background: rgba(56, 189, 248, 0.35);
+      border-radius: 4px;
+    }
+
+    @media (max-width: 760px) {
+      .hud-header {
+        top: 6px;
+        left: 6px;
+        right: 6px;
+        padding: 5px 8px;
+      }
+      .brand-title {
+        display: none;
+      }
+      .btn-pill {
+        font-size: 0.67rem;
+        padding: 4px 6px;
+      }
+      .drawer-panel {
+        top: 48px;
+        max-height: calc(100vh - 205px);
+      }
+      .op-dock {
+        bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+        width: calc(100vw - 12px);
+        padding: 6px 7px;
+        gap: 5px;
+      }
+      .op-buttons-row {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .op-btn {
+        font-size: 0.68rem;
+        padding: 6px 4px;
+      }
+      .tele-pill.state {
+        display: none;
+      }
+    }
+  </style>
+
+  <!-- Three.js CDN Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="canvas-container"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Compact Single-Row Top Header -->
+  <header class="hud-header">
+    <div class="brand-block">
+      <span class="exp-badge">Exp 2.1</span>
+      <span class="brand-title">Measuring temperatures as ice changes to steam 測量冰變成水蒸氣時的溫度</span>
+    </div>
+
+    <div class="header-nav-tabs">
+      <button type="button" class="btn-pill" data-drawer-btn="drawer-aim">🎯 目的/假設 Aim &amp; Hyp</button>
+      <button type="button" class="btn-pill" data-drawer-btn="drawer-table">📋 數據與繪圖 Table &amp; Graph</button>
+      <button type="button" class="btn-pill caution-btn" data-drawer-btn="drawer-caution">⚠️ 安全與貼士 Safety &amp; Tips</button>
+      <button type="button" class="btn-pill" data-drawer-btn="drawer-views">🎥 視角 Views</button>
+      <button type="button" id="theme-toggle" class="btn-pill" title="Light / Dark Mode">☀️ Light</button>
+      <button type="button" id="audio-toggle" class="btn-pill" title="Sound Effects">🔇</button>
+      <button type="button" id="collapse-panels-btn" class="btn-pill collapse-btn">👁️ 收起面板</button>
+    </div>
+  </header>
+
+  <div id="safety-toast" class="safety-toast">
+    🥽 Safety goggles worn! Thermometer bulb immersed without touching bottom. 已佩戴護目鏡並確認溫度計位置正確！
+  </div>
+
+  <!-- Drawer 1: Aim, Hypothesis & Textbook Materials -->
+  <aside class="drawer-panel drawer-left" id="drawer-aim">
+    <div class="drawer-header">
+      <span>🎯 Aim, Hypothesis &amp; Apparatus 目的、假設與器材</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-aim">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="aim-box">
+        <div class="aim-label">🎯 Aim / Purpose 實驗目的</div>
+        <div class="aim-en">
+          To measure the temperature changes of <strong>crushed ice</strong> as it is heated until it melts into <strong>liquid water</strong> and boils into <strong>steam</strong>, and to plot a heating curve (Temperature vs. Time).
+        </div>
+        <div class="aim-zh">
+          測量<strong>碎冰</strong>受熱熔化成<strong>液態水</strong>並沸騰變成<strong>水蒸氣</strong>過程中的溫度變化，並繪製加熱線圖（溫度與時間關係圖）。
+        </div>
+      </div>
+
+      <div class="hypothesis-box">
+        <div class="section-header">
+          <span>💡 Pre-Experiment Hypothesis 實驗假設</span>
+          <span id="hyp-status-badge" style="color: var(--accent-amber);">Editable 可填寫</span>
+        </div>
+
+        <div class="hyp-card">
+          <div style="font-weight: 600;">During Melting (冰熔化期間, 0 °C):</div>
+          <div class="hyp-toggle-group">
+            <button type="button" class="hyp-btn" data-hyp-step="melt" data-val="constant">Remains constant at 0 °C 維持在 0 °C 不變</button>
+            <button type="button" class="hyp-btn" data-hyp-step="melt" data-val="rises">Rises continuously 溫度持續上升</button>
+          </div>
+        </div>
+
+        <div class="hyp-card">
+          <div style="font-weight: 600;">During Boiling (水沸騰期間, 100 °C):</div>
+          <div class="hyp-toggle-group">
+            <button type="button" class="hyp-btn" data-hyp-step="boil" data-val="constant">Remains constant at 100 °C 維持在 100 °C 不變</button>
+            <button type="button" class="hyp-btn" data-hyp-step="boil" data-val="rises">Rises above 100 °C 溫度持續升破 100 °C</button>
+          </div>
+        </div>
+
+        <textarea id="hyp-statement" class="hyp-textarea" placeholder="Write your hypothesis here or click Generate... 在此輸入假設句，或點擊自動生成..."></textarea>
+        <div style="display: flex; gap: 6px;">
+          <button type="button" id="btn-autofill-hyp" class="btn-pill" style="flex: 1; justify-content: center;">✨ Generate 生成假設</button>
+          <button type="button" id="btn-lock-hyp" class="btn-pill active" style="flex: 1.1; justify-content: center;">🔒 Save 儲存假設</button>
+        </div>
+      </div>
+
+      <div class="section-header">
+        <span>🧰 Material &amp; Apparatus 材料及儀器</span>
+        <span style="font-family: var(--font-mono); font-size: 0.67rem;">Unit 2 p.80</span>
+      </div>
+      <div class="apparatus-grid">
+        <div class="app-item"><span>beaker (250 cm³) 燒杯</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>thermometer 溫度計</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>stand and clamp 支架及夾</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>Bunsen burner 本生燈</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>tripod 三腳架</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>wire gauze 鐵絲網</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>heat-proof mat 隔熱墊</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>gas lighter 氣體點火器</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>glass rod 玻璃棒</span><span class="app-qty">× 1</span></div>
+        <div class="app-item"><span>stopwatch 秒錶</span><span class="app-qty">× 1</span></div>
+        <div class="app-item" style="grid-column: span 2;"><span>crushed ice 碎冰</span><span class="app-qty">~150 cm³</span></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Drawer 2: Step 3 Data Table, Step 4 Graph & Step 5 Questions -->
+  <aside class="drawer-panel drawer-right" id="drawer-table">
+    <div class="drawer-header">
+      <span>📋 Data Table, Graph &amp; Questions 數據表、繪圖與問答</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-table">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="section-header">
+        <span>⏱️ Step 3: Time–Temperature Table (0–12 min)</span>
+        <span id="recorded-count" style="color: var(--accent-teal);">1 / 13</span>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th style="width: 22%;">Time 時間<br>(min)</th>
+              <th style="width: 30%;">Temp. 溫度<br>(°C)</th>
+              <th style="width: 48%;">State of Water 水的狀態</th>
+            </tr>
+          </thead>
+          <tbody id="temp-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="section-header">
+        <span>📈 Step 4: Heating Curve 溫度與時間關係線圖</span>
+        <span style="font-size: 0.66rem; color: var(--text-secondary);">p.81 Grid</span>
+      </div>
+
+      <div class="graph-box">
+        <canvas id="heating-graph-canvas" width="380" height="165"></canvas>
+      </div>
+
+      <div class="section-header">
+        <span>✍️ Step 5: Textbook Questions 課本問題 (p.81)</span>
+        <span id="q5-score" style="color: var(--accent-teal);">0 / 4</span>
+      </div>
+
+      <div class="q5-box">
+        <div class="q5-row">
+          <div style="font-weight: 600;">5(a)(i) At what temperature does the ice start to melt? 冰在甚麼溫度開始熔化？</div>
+          <select class="tbl-select" id="q5-a1">
+            <option value="">-- Select 選擇答案 --</option>
+            <option value="0">0 °C (Melting point of ice 冰的熔點)</option>
+            <option value="-6">-6 °C</option>
+            <option value="100">100 °C</option>
+          </select>
+        </div>
+
+        <div class="q5-row">
+          <div style="font-weight: 600;">5(a)(ii) Does the temperature of ice change when it melts? 冰熔化時溫度會改變嗎？</div>
+          <select class="tbl-select" id="q5-a2">
+            <option value="">-- Select 選擇答案 --</option>
+            <option value="no">No, it remains constant at 0 °C 不會，溫度維持在 0 °C 不變</option>
+            <option value="yes">Yes, it keeps increasing 會，溫度不斷上升</option>
+          </select>
+        </div>
+
+        <div class="q5-row">
+          <div style="font-weight: 600;">5(b)(i) At what temperature does the water start to boil? 水在甚麼溫度開始沸騰？</div>
+          <select class="tbl-select" id="q5-b1">
+            <option value="">-- Select 選擇答案 --</option>
+            <option value="100">100 °C (Boiling point of water 水的沸點)</option>
+            <option value="80">80 °C</option>
+            <option value="0">0 °C</option>
+          </select>
+        </div>
+
+        <div class="q5-row">
+          <div style="font-weight: 600;">5(b)(ii) Does the temperature of water change when it boils? 水沸騰時溫度會改變嗎？</div>
+          <select class="tbl-select" id="q5-b2">
+            <option value="">-- Select 選擇答案 --</option>
+            <option value="no">No, it remains constant at 100 °C 不會，溫度維持在 100 °C 不變</option>
+            <option value="yes">Yes, it keeps rising above 100 °C 會，溫度升破 100 °C</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-actions">
+        <span id="table-feedback" class="feedback-msg">Stir &amp; record every minute ↑</span>
+        <div style="display: flex; gap: 6px;">
+          <button type="button" id="btn-autofill-all" class="btn-pill" style="font-size: 0.69rem;">Auto-Fill 填入完整數據</button>
+          <button type="button" id="btn-check-q5" class="btn-pill active" style="font-size: 0.69rem;">✔ Check 核對答案</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Drawer 3: Textbook Safety & Tips (Pages 80-81) -->
+  <aside class="drawer-panel drawer-center" id="drawer-caution">
+    <div class="drawer-header" style="color: var(--accent-rose); background: rgba(251, 113, 133, 0.12);">
+      <span>⚠️ Safety &amp; Experimental Tips 安全與貼士 (p.80–81)</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-caution">✕</button>
+    </div>
+    <div class="drawer-body">
+      <div class="caution-box">
+        <div class="caution-title">🥽 Wear safety goggles 佩戴安全護目鏡 &amp; Caution 注意事項</div>
+        <ul class="caution-list">
+          <li><strong>Wear safety goggles</strong> throughout the heating experiment.<br><span style="color: var(--text-secondary);">整個加熱實驗期間必須佩戴安全護目鏡。</span></li>
+          <li><strong>Do not clamp the thermometer too tightly.</strong> Otherwise, you will break it.<br><span style="color: var(--text-secondary);">切勿把溫度計夾得太緊，否則會弄破溫度計。</span></li>
+          <li><strong>Allow the beaker to cool</strong> before removing it from the tripod after the experiment.<br><span style="color: var(--text-secondary);">實驗後，須待燒杯冷卻才可把它從三腳架上移開。</span></li>
+        </ul>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-title">💡 Experimental Tips 實驗小貼士</div>
+        <ul class="caution-list">
+          <li><strong>Page 80 Tip:</strong> Make sure the <strong>bulb of the thermometer is completely immersed</strong> in the crushed ice and <strong>does not touch the bottom</strong> of the beaker.<br><span style="color: var(--text-secondary);">確保溫度計的液泡完全浸沒在碎冰中，且沒有觸及燒杯底部。</span></li>
+          <li><strong>Page 81 Tip:</strong> Each time you record the temperature of the water, <strong>stir it with a glass rod</strong> to make sure that the temperature is the same throughout the water.<br><span style="color: var(--text-secondary);">每次記錄水溫前，先用玻璃棒攪拌，確保整杯水的溫度均勻一致。</span></li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Drawer 4: 3D Camera Views -->
+  <aside class="drawer-panel drawer-views" id="drawer-views">
+    <div class="drawer-header">
+      <span>🎥 3D Camera Views 視角切換</span>
+      <button type="button" class="btn-close-drawer" data-close-drawer="drawer-views">✕</button>
+    </div>
+    <div class="drawer-body" style="flex-direction: row; flex-wrap: wrap; gap: 6px;">
+      <button type="button" class="btn-pill active" data-cam="full">實驗台全景 Full Bench</button>
+      <button type="button" class="btn-pill" data-cam="beaker">溫度計與冰水 Thermometer &amp; Ice</button>
+      <button type="button" class="btn-pill" data-cam="burner">本生燈與三腳架 Bunsen Flame</button>
+      <button type="button" class="btn-pill" data-cam="top">俯視燒杯 Top Beaker View</button>
+    </div>
+  </aside>
+
+  <!-- ALWAYS-VISIBLE ULTRA-COMPACT BOTTOM EXPERIMENT OPERATION BAR -->
+  <section class="op-dock" aria-label="Experiment 2.1 Operations">
+    <div class="op-status-strip">
+      <span id="op-status-text" class="op-status-text">
+        Step 1: Tap <strong>🥽 戴護目鏡 Goggles</strong> to verify safety &amp; thermometer bulb position
+      </span>
+      <div class="telemetry-pills">
+        <span id="pill-time" class="tele-pill">⏱ 00:00 (0 min)</span>
+        <span id="pill-temp" class="tele-pill temp">🌡 -6.0 °C</span>
+        <span id="pill-state" class="tele-pill state">🧊 Solid Ice 固態冰</span>
+      </div>
+    </div>
+
+    <div class="op-buttons-row">
+      <button type="button" id="btn-goggles" class="op-btn">🥽 戴護目鏡 Goggles</button>
+      <button type="button" id="btn-ignite" class="op-btn flame" disabled>🔥 點燃本生燈 Light Burner</button>
+      <button type="button" id="btn-stir-record" class="op-btn stir-rec" disabled>🥢 攪拌並記錄 Stir &amp; Record</button>
+      <button type="button" id="btn-speed" class="op-btn speed">⏩ Speed: 3x</button>
+      <button type="button" id="btn-reset" class="op-btn reset">↺ 重設 Reset</button>
+    </div>
+  </section>
+
+  <!-- Three.js 3D Interactive Laboratory & Thermodynamic Phase-Change Engine -->
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    // =========================================================================
+    // 1. THERMODYNAMIC HEATING CURVE DATA (0 to 12 Minutes, Pages 80-81)
+    // =========================================================================
+    // Realistic school lab heating curve for crushed ice -> melting (0°C) -> heating -> boiling (100°C)
+    const HEATING_CURVE = [
+      { min: 0,  temp: -6.0, iceFrac: 1.00, waterFrac: 0.12, boil: 0.0, stateEn: 'Solid ice', stateZh: '固態冰' },
+      { min: 1,  temp: -2.0, iceFrac: 0.96, waterFrac: 0.16, boil: 0.0, stateEn: 'Solid ice', stateZh: '固態冰' },
+      { min: 2,  temp:  0.0, iceFrac: 0.72, waterFrac: 0.36, boil: 0.0, stateEn: 'Melting (Ice + Water)', stateZh: '熔化中（冰水混合物）' },
+      { min: 3,  temp:  0.0, iceFrac: 0.38, waterFrac: 0.65, boil: 0.0, stateEn: 'Melting (Ice + Water)', stateZh: '熔化中（冰水混合物）' },
+      { min: 4,  temp:  0.0, iceFrac: 0.06, waterFrac: 0.92, boil: 0.0, stateEn: 'Melting completing', stateZh: '即將完全熔化' },
+      { min: 5,  temp: 20.0, iceFrac: 0.00, waterFrac: 1.00, boil: 0.0, stateEn: 'Liquid water', stateZh: '液態水' },
+      { min: 6,  temp: 40.0, iceFrac: 0.00, waterFrac: 1.00, boil: 0.05, stateEn: 'Liquid water', stateZh: '液態水' },
+      { min: 7,  temp: 60.0, iceFrac: 0.00, waterFrac: 1.00, boil: 0.15, stateEn: 'Warm liquid water', stateZh: '溫熱液態水' },
+      { min: 8,  temp: 80.0, iceFrac: 0.00, waterFrac: 0.99, boil: 0.35, stateEn: 'Hot liquid water', stateZh: '熱液態水' },
+      { min: 9,  temp: 95.0, iceFrac: 0.00, waterFrac: 0.98, boil: 0.65, stateEn: 'Simmering water', stateZh: '微沸水' },
+      { min: 10, temp: 100.0, iceFrac: 0.00, waterFrac: 0.96, boil: 1.00, stateEn: 'Boiling (Water + Steam)', stateZh: '沸騰（水與水蒸氣）' },
+      { min: 11, temp: 100.0, iceFrac: 0.00, waterFrac: 0.93, boil: 1.00, stateEn: 'Boiling (Water + Steam)', stateZh: '沸騰（水與水蒸氣）' },
+      { min: 12, temp: 100.0, iceFrac: 0.00, waterFrac: 0.90, boil: 1.00, stateEn: 'Boiling (Water + Steam)', stateZh: '沸騰（水與水蒸氣）' }
+    ];
+
+    const sim = {
+      gogglesWorn: false,
+      burnerLit: false,
+      elapsedMin: 0.0,      // 0.0 to 12.0 minutes
+      speedMult: 3,         // 1x, 3x, 6x
+      currentTemp: -6.0,
+      iceFrac: 1.0,
+      waterFrac: 0.12,
+      boilIntensity: 0.0,
+      stirAnimTimer: 0,
+      lighterAnimTimer: 0,
+      lastBeepMinute: 0,
+      recordedData: new Array(13).fill(null)
+    };
+
+    // Pre-record Minute 0 initial temperature (-6.0 °C)
+    sim.recordedData[0] = -6.0;
+
+    function getInterpolatedState(minVal) {
+      const clamped = Math.max(0, Math.min(12, minVal));
+      const idx0 = Math.floor(clamped);
+      const idx1 = Math.min(12, idx0 + 1);
+      const frac = clamped - idx0;
+      const d0 = HEATING_CURVE[idx0];
+      const d1 = HEATING_CURVE[idx1];
+
+      return {
+        temp: d0.temp + (d1.temp - d0.temp) * frac,
+        iceFrac: d0.iceFrac + (d1.iceFrac - d0.iceFrac) * frac,
+        waterFrac: d0.waterFrac + (d1.waterFrac - d0.waterFrac) * frac,
+        boil: d0.boil + (d1.boil - d0.boil) * frac,
+        stateEn: d0.stateEn,
+        stateZh: d0.stateZh
+      };
+    }
+
+    // =========================================================================
+    // 2. HYPOTHESIS, DATA TABLE, HEATING CURVE GRAPH & STEP 5 QUESTIONS
+    // =========================================================================
+    const hypState = { melt: '', boil: '', locked: false };
+
+    document.querySelectorAll('[data-hyp-step]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (hypState.locked) return;
+        const stepKey = btn.dataset.hypStep;
+        const val = btn.dataset.val;
+        hypState[stepKey] = val;
+
+        document.querySelectorAll(`[data-hyp-step="${stepKey}"]`).forEach(b => {
+          b.classList.remove('active-teal', 'active-amber');
+        });
+        btn.classList.add(val === 'constant' ? 'active-teal' : 'active-amber');
+      });
+    });
+
+    document.getElementById('btn-autofill-hyp').addEventListener('click', () => {
+      if (hypState.locked) return;
+      if (!hypState.melt) document.querySelector('[data-hyp-step="melt"][data-val="constant"]').click();
+      if (!hypState.boil) document.querySelector('[data-hyp-step="boil"][data-val="constant"]').click();
+
+      const mEn = hypState.melt === 'constant' ? 'remains constant at 0 °C during melting' : 'rises continuously during melting';
+      const bEn = hypState.boil === 'constant' ? 'remains constant at 100 °C during boiling' : 'rises above 100 °C during boiling';
+      const mZh = hypState.melt === 'constant' ? '在熔化期間溫度維持在 0 °C 不變' : '在熔化期間溫度持續上升';
+      const bZh = hypState.boil === 'constant' ? '在沸騰期間溫度維持在 100 °C 不變' : '在沸騰期間溫度升破 100 °C';
+
+      document.getElementById('hyp-statement').value =
+        `I predict that the temperature ${mEn}, and ${bEn}.\n我預測${mZh}，而${bZh}。`;
+    });
+
+    document.getElementById('btn-lock-hyp').addEventListener('click', () => {
+      hypState.locked = !hypState.locked;
+      const badge = document.getElementById('hyp-status-badge');
+      const btn = document.getElementById('btn-lock-hyp');
+      const textarea = document.getElementById('hyp-statement');
+      badge.textContent = hypState.locked ? 'Saved 已儲存' : 'Editable 可填寫';
+      badge.style.color = hypState.locked ? 'var(--accent-teal)' : 'var(--accent-amber)';
+      btn.textContent = hypState.locked ? '✏️ Edit 修改假設' : '🔒 Save 儲存假設';
+      textarea.disabled = hypState.locked;
+    });
+
+    function renderDataTable() {
+      const tbody = document.getElementById('temp-tbody');
+      tbody.innerHTML = '';
+      let count = 0;
+
+      HEATING_CURVE.forEach((row) => {
+        const val = sim.recordedData[row.min];
+        if (val !== null) count++;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-family: var(--font-mono); font-weight: 700;">${row.min} min</td>
+          <td>
+            <input type="number" step="0.5" class="temp-input" data-min="${row.min}" value="${val !== null ? val.toFixed(1) : ''}" placeholder="—" />
+          </td>
+          <td style="font-size: 0.68rem; color: var(--text-secondary);">
+            ${val !== null ? `${row.stateEn} <span style="color: var(--accent-cyan);">${row.stateZh}</span>` : '—'}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('recorded-count').textContent = `${count} / 13`;
+
+      tbody.querySelectorAll('.temp-input').forEach(inp => {
+        inp.addEventListener('change', () => {
+          const m = Number(inp.dataset.min);
+          const v = parseFloat(inp.value);
+          sim.recordedData[m] = isNaN(v) ? null : v;
+          renderDataTable();
+          drawHeatingGraph();
+        });
+      });
+
+      drawHeatingGraph();
+    }
+
+    function drawHeatingGraph() {
+      const cvs = document.getElementById('heating-graph-canvas');
+      const ctx = cvs.getContext('2d');
+      const W = cvs.width;
+      const H = cvs.height;
+
+      const isLight = document.body.classList.contains('light-mode');
+      ctx.clearRect(0, 0, W, H);
+
+      // Background
+      ctx.fillStyle = isLight ? '#f8fafc' : '#090f1d';
+      ctx.fillRect(0, 0, W, H);
+
+      const padL = 38, padR = 14, padT = 14, padB = 26;
+      const plotW = W - padL - padR;
+      const plotH = H - padT - padB;
+
+      // Grid lines (Textbook p.81 style grid)
+      ctx.strokeStyle = isLight ? 'rgba(14, 165, 233, 0.22)' : 'rgba(56, 189, 248, 0.14)';
+      ctx.lineWidth = 1;
+
+      // Vertical grid (0 to 12 min)
+      for (let m = 0; m <= 12; m++) {
+        const x = padL + (m / 12) * plotW;
+        ctx.beginPath();
+        ctx.moveTo(x, padT);
+        ctx.lineTo(x, padT + plotH);
+        ctx.stroke();
+
+        if (m % 2 === 0) {
+          ctx.fillStyle = isLight ? '#475569' : '#94a3b8';
+          ctx.font = '10px "JetBrains Mono", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(String(m), x, H - 10);
+        }
+      }
+
+      // Horizontal grid (-20°C to 120°C)
+      const temps = [-20, 0, 20, 40, 60, 80, 100, 120];
+      temps.forEach(t => {
+        const y = padT + plotH - ((t - (-20)) / 140) * plotH;
+        ctx.strokeStyle = (t === 0 || t === 100)
+          ? (isLight ? 'rgba(217, 119, 6, 0.45)' : 'rgba(245, 158, 11, 0.35)')
+          : (isLight ? 'rgba(14, 165, 233, 0.20)' : 'rgba(56, 189, 248, 0.12)');
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(padL + plotW, y);
+        ctx.stroke();
+
+        ctx.fillStyle = (t === 0 || t === 100)
+          ? (isLight ? '#b45309' : '#fbbf24')
+          : (isLight ? '#475569' : '#94a3b8');
+        ctx.font = '9px "JetBrains Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText(`${t}°`, padL - 4, y + 3);
+      });
+
+      // Axis Titles
+      ctx.fillStyle = isLight ? '#0f172a' : '#cbd5e1';
+      ctx.font = 'bold 9px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Time 時間 (min)', padL + plotW * 0.5, H - 1);
+
+      // Plot Recorded Points & Line
+      const pts = [];
+      for (let m = 0; m <= 12; m++) {
+        const val = sim.recordedData[m];
+        if (val !== null) {
+          const x = padL + (m / 12) * plotW;
+          const y = padT + plotH - ((val - (-20)) / 140) * plotH;
+          pts.push({ x, y, val, m });
+        }
+      }
+
+      if (pts.length > 1) {
+        ctx.strokeStyle = isLight ? '#0284c7' : '#38bdf8';
+        ctx.lineWidth = 2.4;
+        ctx.beginPath();
+        pts.forEach((p, idx) => {
+          if (idx === 0) ctx.moveTo(p.x, p.y);
+          else ctx.lineTo(p.x, p.y);
+        });
+        ctx.stroke();
+      }
+
+      pts.forEach(p => {
+        ctx.fillStyle = (p.val === 0 || p.val === 100) ? '#f59e0b' : '#2dd4bf';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 3.6, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    // Step 5 Questions Verification
+    document.getElementById('btn-check-q5').addEventListener('click', () => {
+      const answers = [
+        { id: 'q5-a1', expected: '0' },
+        { id: 'q5-a2', expected: 'no' },
+        { id: 'q5-b1', expected: '100' },
+        { id: 'q5-b2', expected: 'no' }
+      ];
+      let score = 0;
+      answers.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (el.value === item.expected) {
+          el.classList.add('correct');
+          el.classList.remove('wrong');
+          score++;
+        } else {
+          el.classList.add('wrong');
+          el.classList.remove('correct');
+        }
+      });
+
+      document.getElementById('q5-score').textContent = `${score} / 4`;
+      const fb = document.getElementById('table-feedback');
+      if (score === 4) {
+        fb.textContent = '🎉 4/4 Correct! Temperature stays constant during melting (0°C) & boiling (100°C)!';
+        fb.style.color = 'var(--accent-teal)';
+      } else {
+        fb.textContent = `Score: ${score}/4 — Check red boxes 再檢查紅框項目`;
+        fb.style.color = 'var(--accent-rose)';
+      }
+    });
+
+    document.getElementById('btn-autofill-all').addEventListener('click', () => {
+      HEATING_CURVE.forEach(row => {
+        sim.recordedData[row.min] = row.temp;
+      });
+      renderDataTable();
+      document.getElementById('q5-a1').value = '0';
+      document.getElementById('q5-a2').value = 'no';
+      document.getElementById('q5-b1').value = '100';
+      document.getElementById('q5-b2').value = 'no';
+      document.getElementById('btn-check-q5').click();
+    });
+
+    renderDataTable();
+
+    // =========================================================================
+    // 3. WEB AUDIO LABORATORY SOUND SYNTHESIZER
+    // =========================================================================
+    class LabSFX {
+      constructor() {
+        this.ctx = null;
+        this.enabled = false;
+        this.flameGain = null;
+        this.boilGain = null;
+      }
+
+      toggle() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+          this.initLoops();
+        }
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        this.enabled = !this.enabled;
+        if (!this.enabled && this.flameGain && this.boilGain) {
+          const now = this.ctx.currentTime;
+          this.flameGain.gain.setTargetAtTime(0, now, 0.08);
+          this.boilGain.gain.setTargetAtTime(0, now, 0.08);
+        }
+        return this.enabled;
+      }
+
+      initLoops() {
+        const size = this.ctx.sampleRate * 2;
+        const buf = this.ctx.createBuffer(1, size, this.ctx.sampleRate);
+        const data = buf.getChannelData(0);
+        let last = 0;
+        for (let i = 0; i < size; i++) {
+          const w = Math.random() * 2 - 1;
+          data[i] = (last + 0.04 * w) / 1.04;
+          last = data[i];
+          data[i] *= 2.3;
+        }
+
+        // Gentle blue Bunsen flame hiss
+        const fSrc = this.ctx.createBufferSource();
+        fSrc.buffer = buf;
+        fSrc.loop = true;
+        const fFilter = this.ctx.createBiquadFilter();
+        fFilter.type = 'bandpass';
+        fFilter.frequency.value = 520;
+        fFilter.Q.value = 1.4;
+        this.flameGain = this.ctx.createGain();
+        this.flameGain.gain.value = 0;
+        fSrc.connect(fFilter);
+        fFilter.connect(this.flameGain);
+        this.flameGain.connect(this.ctx.destination);
+        fSrc.start();
+
+        // Boiling water simmer
+        const bSrc = this.ctx.createBufferSource();
+        bSrc.buffer = buf;
+        bSrc.loop = true;
+        const bFilter = this.ctx.createBiquadFilter();
+        bFilter.type = 'lowpass';
+        bFilter.frequency.value = 250;
+        this.boilGain = this.ctx.createGain();
+        this.boilGain.gain.value = 0;
+        bSrc.connect(bFilter);
+        bFilter.connect(this.boilGain);
+        this.boilGain.connect(this.ctx.destination);
+        bSrc.start();
+      }
+
+      updateLoops(burnerLit, boilIntensity) {
+        if (!this.enabled || !this.ctx || !this.flameGain) return;
+        const now = this.ctx.currentTime;
+        this.flameGain.gain.setTargetAtTime(burnerLit ? 0.045 : 0, now, 0.12);
+        this.boilGain.gain.setTargetAtTime(burnerLit ? boilIntensity * 0.12 : 0, now, 0.12);
+      }
+
+      playBeep() {
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1180, now);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.0005, now + 0.09);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.1);
+      }
+
+      playClink() {
+        if (!this.enabled || !this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(2200 + Math.random() * 300, now);
+        gain.gain.setValueAtTime(0.04, now);
+        gain.gain.exponentialRampToValueAtTime(0.0005, now + 0.08);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.09);
+      }
+    }
+
+    const sfx = new LabSFX();
+
+    // =========================================================================
+    // 4. THREE.JS 3D SCENE & EXACT PAGE 80 APPARATUS MODELS
+    // =========================================================================
+    const container = document.getElementById('canvas-container');
+    const scene = new THREE.Scene();
+    const sceneFog = new THREE.FogExp2(0x0b1120, 0.022);
+    scene.fog = sceneFog;
+
+    const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(1.5, 4.3, 9.6);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.06;
+    controls.target.set(0.2, 2.55, 0);
+    controls.minDistance = 2.5;
+    controls.maxDistance = 18;
+    controls.maxPolarAngle = Math.PI * 0.49;
+
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.DirectionalLight(0xe0f2fe, 2.2);
+    keyLight.position.set(5, 12, 7);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(1024, 1024);
+    scene.add(keyLight);
+
+    const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.3);
+    rimLight.position.set(-7, 6, -5);
+    scene.add(rimLight);
+
+    const flameLight = new THREE.PointLight(0x38bdf8, 0, 5.5);
+    flameLight.position.set(0, 1.85, 0);
+    scene.add(flameLight);
+
+    // Lab Bench Surface
+    const benchMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.65, metalness: 0.18 });
+    const bench = new THREE.Mesh(new THREE.BoxGeometry(14.5, 0.3, 6.2), benchMat);
+    bench.position.set(0.2, 0, 0);
+    bench.receiveShadow = true;
+    scene.add(bench);
+
+    const benchLineMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.38 });
+    const benchLine = new THREE.Mesh(new THREE.BoxGeometry(14.54, 0.03, 6.24), benchLineMat);
+    benchLine.position.set(0.2, 0.15, 0);
+    scene.add(benchLine);
+
+    // Shared Materials
+    const ironMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.78, roughness: 0.32 });
+    const chromeMat = new THREE.MeshStandardMaterial({ color: 0xcbd5e1, metalness: 0.88, roughness: 0.20 });
+    const brassMat = new THREE.MeshStandardMaterial({ color: 0xd97706, metalness: 0.82, roughness: 0.28 });
+    const glassMat = new THREE.MeshPhysicalMaterial({
+      color: 0xe0f2fe,
+      transparent: true,
+      opacity: 0.34,
+      roughness: 0.08,
+      ior: 1.47,
+      clearcoat: 1.0,
+      depthWrite: false,
+      side: THREE.DoubleSide
+    });
+
+    // Helper: Label Plaque Texture
+    function createLabelTexture(line1, line2, accent = '#38bdf8') {
+      const cvs = document.createElement('canvas');
+      cvs.width = 256;
+      cvs.height = 112;
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.90)';
+      ctx.beginPath();
+      ctx.roundRect(6, 6, 244, 100, 14);
+      ctx.fill();
+      ctx.strokeStyle = accent;
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = 'bold 24px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(line1, 128, 48);
+
+      ctx.fillStyle = accent;
+      ctx.font = 'bold 26px "Noto Sans TC", sans-serif';
+      ctx.fillText(line2, 128, 86);
+
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    // --- A. HEAT-PROOF MAT × 1 ---
+    const matMesh = new THREE.Mesh(
+      new THREE.BoxGeometry(3.4, 0.08, 3.0),
+      new THREE.MeshStandardMaterial({ color: 0x64748b, roughness: 0.88, metalness: 0.05 })
+    );
+    matMesh.position.set(0, 0.19, 0);
+    matMesh.receiveShadow = true;
+    scene.add(matMesh);
+
+    // --- B. BUNSEN BURNER × 1 & GENTLE BLUE FLAME CONE ---
+    const burnerGroup = new THREE.Group();
+    burnerGroup.position.set(0, 0.23, 0);
+
+    const burnerBase = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.45, 0.56, 0.16, 28),
+      new THREE.MeshStandardMaterial({ color: 0x0284c7, metalness: 0.55, roughness: 0.35 })
+    );
+    burnerBase.position.y = 0.08;
+    burnerGroup.add(burnerBase);
+
+    // Gas Inlet Tube
+    const gasInlet = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.75, 14), brassMat);
+    gasInlet.rotation.z = Math.PI / 2;
+    gasInlet.position.set(0.52, 0.14, 0);
+    burnerGroup.add(gasInlet);
+
+    // Air Collar
+    const airCollar = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.14, 0.22, 20), brassMat);
+    airCollar.position.y = 0.28;
+    burnerGroup.add(airCollar);
+
+    // Chimney Tube
+    const chimney = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.12, 1.05, 24), chromeMat);
+    chimney.position.y = 0.82;
+    burnerGroup.add(chimney);
+
+    // Gentle Blue Flame (Outer & Inner Cone)
+    const outerFlameMat = new THREE.MeshBasicMaterial({
+      color: 0x38bdf8,
+      transparent: true,
+      opacity: 0.68
+    });
+    const outerFlame = new THREE.Mesh(new THREE.ConeGeometry(0.17, 0.78, 24), outerFlameMat);
+    outerFlame.position.y = 1.72;
+    outerFlame.visible = false;
+    burnerGroup.add(outerFlame);
+
+    const innerFlame = new THREE.Mesh(
+      new THREE.ConeGeometry(0.08, 0.36, 20),
+      new THREE.MeshBasicMaterial({ color: 0x0284c7, transparent: true, opacity: 0.92 })
+    );
+    innerFlame.position.y = 1.52;
+    innerFlame.visible = false;
+    burnerGroup.add(innerFlame);
+
+    scene.add(burnerGroup);
+
+    // --- C. TRIPOD × 1 & WIRE GAUZE × 1 ---
+    const TRIPOD_TOP_Y = 2.15;
+    const tripodRing = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.045, 12, 36), ironMat);
+    tripodRing.rotation.x = Math.PI / 2;
+    tripodRing.position.set(0, TRIPOD_TOP_Y, 0);
+    scene.add(tripodRing);
+
+    // 3 Slanted Tripod Legs
+    for (let i = 0; i < 3; i++) {
+      const ang = (i * Math.PI * 2) / 3 + 0.35;
+      const topPt = new THREE.Vector3(Math.cos(ang) * 0.92, TRIPOD_TOP_Y, Math.sin(ang) * 0.92);
+      const botPt = new THREE.Vector3(Math.cos(ang) * 1.18, 0.23, Math.sin(ang) * 1.18);
+      const legVec = new THREE.Vector3().subVectors(topPt, botPt);
+      const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.036, legVec.length(), 12), ironMat);
+      leg.position.addVectors(topPt, botPt).multiplyScalar(0.5);
+      leg.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), legVec.normalize());
+      scene.add(leg);
+    }
+
+    // Wire Gauze with Ceramic Center
+    const wireGauze = new THREE.Mesh(
+      new THREE.BoxGeometry(2.15, 0.03, 2.15),
+      new THREE.MeshStandardMaterial({ color: 0x64748b, metalness: 0.7, roughness: 0.45 })
+    );
+    wireGauze.position.set(0, TRIPOD_TOP_Y + 0.04, 0);
+    scene.add(wireGauze);
+
+    const ceramicCenterMat = new THREE.MeshStandardMaterial({
+      color: 0xe2e8f0,
+      emissive: 0xf97316,
+      emissiveIntensity: 0.0,
+      roughness: 0.85
+    });
+    const ceramicCenter = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.036, 28), ceramicCenterMat);
+    ceramicCenter.position.set(0, TRIPOD_TOP_Y + 0.042, 0);
+    scene.add(ceramicCenter);
+
+    // --- D. BEAKER (250 cm³) × 1, CRUSHED ICE, WATER & STEAM ---
+    const BEAKER_BASE_Y = TRIPOD_TOP_Y + 0.06;
+    const BEAKER_R = 0.74;
+    const BEAKER_H = 1.75;
+
+    const beakerGroup = new THREE.Group();
+    beakerGroup.position.set(0, BEAKER_BASE_Y, 0);
+
+    const beakerWall = new THREE.Mesh(
+      new THREE.CylinderGeometry(BEAKER_R, BEAKER_R * 0.96, BEAKER_H, 36, 1, true),
+      glassMat
+    );
+    beakerWall.position.y = BEAKER_H * 0.5;
+    beakerGroup.add(beakerWall);
+
+    const beakerBottom = new THREE.Mesh(
+      new THREE.CylinderGeometry(BEAKER_R * 0.96, BEAKER_R * 0.96, 0.06, 36),
+      glassMat
+    );
+    beakerBottom.position.y = 0.03;
+    beakerGroup.add(beakerBottom);
+
+    const beakerRim = new THREE.Mesh(new THREE.TorusGeometry(BEAKER_R, 0.024, 12, 36), glassMat);
+    beakerRim.rotation.x = Math.PI / 2;
+    beakerRim.position.y = BEAKER_H;
+    beakerGroup.add(beakerRim);
+
+    // Graduation Ticks (50, 100, 150, 200, 250 cm³)
+    const tickMat = new THREE.MeshBasicMaterial({ color: 0x94a3b8, transparent: true, opacity: 0.75 });
+    [0.25, 0.42, 0.59, 0.76, 0.92].forEach(frac => {
+      const tick = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.015, 0.02), tickMat);
+      tick.position.set(0, BEAKER_H * frac, BEAKER_R * 0.98);
+      beakerGroup.add(tick);
+    });
+
+    // Liquid Water Volume (rises as crushed ice melts)
+    const waterMat = new THREE.MeshPhysicalMaterial({
+      color: 0x38bdf8,
+      transparent: true,
+      opacity: 0.42,
+      roughness: 0.08,
+      ior: 1.33,
+      depthWrite: false
+    });
+    const waterMesh = new THREE.Mesh(
+      new THREE.CylinderGeometry(BEAKER_R * 0.93, BEAKER_R * 0.91, 1.0, 32),
+      waterMat
+    );
+    waterMesh.position.y = 0.15;
+    beakerGroup.add(waterMesh);
+
+    // Instanced Crushed Ice Chunks (shrinks & disappears from 0°C melting)
+    const ICE_COUNT = 68;
+    const iceGeo = new THREE.DodecahedronGeometry(0.13, 0);
+    const iceMat = new THREE.MeshPhysicalMaterial({
+      color: 0xf0f9ff,
+      transparent: true,
+      opacity: 0.86,
+      roughness: 0.18,
+      ior: 1.31
+    });
+    const iceInst = new THREE.InstancedMesh(iceGeo, iceMat, ICE_COUNT);
+    beakerGroup.add(iceInst);
+
+    const iceData = Array.from({ length: ICE_COUNT }, (_, i) => {
+      const layer = Math.floor(i / 17);
+      const ang = (i % 17) * 0.42 + layer * 0.7;
+      const rad = (0.14 + ((i * 7) % 10) * 0.048);
+      return {
+        x: Math.cos(ang) * rad,
+        y: 0.16 + layer * 0.23,
+        z: Math.sin(ang) * rad,
+        rx: Math.random() * Math.PI,
+        ry: Math.random() * Math.PI,
+        baseScale: 0.75 + Math.random() * 0.45
+      };
+    });
+
+    // Instanced Boiling Bubbles inside Liquid Water
+    const BUBBLE_COUNT = 80;
+    const bubbleGeo = new THREE.SphereGeometry(0.036, 8, 8);
+    const bubbleMat = new THREE.MeshBasicMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.75 });
+    const bubbleInst = new THREE.InstancedMesh(bubbleGeo, bubbleMat, BUBBLE_COUNT);
+    beakerGroup.add(bubbleInst);
+
+    const bubbleData = Array.from({ length: BUBBLE_COUNT }, () => {
+      const ang = Math.random() * Math.PI * 2;
+      const rad = Math.random() * (BEAKER_R * 0.78);
+      return {
+        x: Math.cos(ang) * rad,
+        y: 0.08 + Math.random() * 0.85,
+        z: Math.sin(ang) * rad,
+        speed: 0.6 + Math.random() * 0.9
+      };
+    });
+
+    // Instanced Rising Steam Plumes above Beaker
+    const STEAM_COUNT = 75;
+    const steamGeo = new THREE.SphereGeometry(0.095, 10, 10);
+    const steamMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc, transparent: true, opacity: 0.32 });
+    const steamInst = new THREE.InstancedMesh(steamGeo, steamMat, STEAM_COUNT);
+    beakerGroup.add(steamInst);
+
+    const steamData = Array.from({ length: STEAM_COUNT }, (_, i) => ({
+      progress: i / STEAM_COUNT,
+      ang: Math.random() * Math.PI * 2,
+      rad: Math.random() * 0.45,
+      speed: 0.35 + Math.random() * 0.25
+    }));
+
+    scene.add(beakerGroup);
+
+    // --- E. STAND AND CLAMP × 1 + THERMOMETER × 1 (Page 80 Setup) ---
+    const STAND_X = -1.75;
+    const standBase = new THREE.Mesh(new THREE.BoxGeometry(1.15, 0.16, 1.55), chromeMat);
+    standBase.position.set(STAND_X, 0.23, -0.15);
+    standBase.castShadow = true;
+    scene.add(standBase);
+
+    const standRod = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 5.4, 16), ironMat);
+    standRod.position.set(STAND_X, 2.9, -0.35);
+    scene.add(standRod);
+
+    // Bosshead & Horizontal Clamp Arm holding Thermometer vertically in center of beaker
+    const CLAMP_Y = 4.45;
+    const bossHead = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.26, 0.22), ironMat);
+    bossHead.position.set(STAND_X, CLAMP_Y, -0.35);
+    scene.add(bossHead);
+
+    const clampArm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, Math.abs(STAND_X), 14), chromeMat);
+    clampArm.rotation.z = Math.PI / 2;
+    clampArm.position.set(STAND_X * 0.5, CLAMP_Y, -0.18);
+    scene.add(clampArm);
+
+    const clampJaws = new THREE.Mesh(new THREE.TorusGeometry(0.09, 0.025, 10, 20), ironMat);
+    clampJaws.rotation.x = Math.PI / 2;
+    clampJaws.position.set(0, CLAMP_Y, 0);
+    scene.add(clampJaws);
+
+    // Thermometer × 1 (Bulb completely immersed at y = BEAKER_BASE_Y + 0.42, NOT touching bottom!)
+    const THERM_BOT_Y = BEAKER_BASE_Y + 0.42;
+    const THERM_LEN = 3.35;
+    const thermTube = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.048, 0.048, THERM_LEN, 18),
+      glassMat
+    );
+    thermTube.position.set(0, THERM_BOT_Y + THERM_LEN * 0.5, 0);
+    scene.add(thermTube);
+
+    const redLiquidMat = new THREE.MeshStandardMaterial({
+      color: 0xf43f5e,
+      emissive: 0xe11d48,
+      emissiveIntensity: 0.55
+    });
+
+    const thermBulb = new THREE.Mesh(new THREE.SphereGeometry(0.088, 20, 16), redLiquidMat);
+    thermBulb.position.set(0, THERM_BOT_Y, 0);
+    scene.add(thermBulb);
+
+    const thermColumn = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 1.0, 12), redLiquidMat);
+    thermColumn.position.set(0, THERM_BOT_Y + 0.5, 0);
+    scene.add(thermColumn);
+
+    // --- F. GLASS ROD × 1, GAS LIGHTER × 1 & LIVE 3D STOPWATCH × 1 ---
+    const glassRod = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.032, 0.032, 2.35, 16),
+      new THREE.MeshPhysicalMaterial({ color: 0xe0f2fe, transparent: true, opacity: 0.72, ior: 1.47 })
+    );
+    const ROD_REST_POS = new THREE.Vector3(2.25, 0.22, 1.15);
+    glassRod.position.copy(ROD_REST_POS);
+    glassRod.rotation.set(Math.PI * 0.5, 0, 0.35);
+    scene.add(glassRod);
+
+    // Gas Lighter × 1
+    const lighterGroup = new THREE.Group();
+    const lighterHandle = new THREE.Mesh(
+      new THREE.BoxGeometry(0.18, 0.14, 0.75),
+      new THREE.MeshStandardMaterial({ color: 0xea580c, roughness: 0.45 })
+    );
+    lighterGroup.add(lighterHandle);
+    const lighterNozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.65, 12), chromeMat);
+    lighterNozzle.rotation.x = Math.PI / 2;
+    lighterNozzle.position.z = -0.68;
+    lighterGroup.add(lighterNozzle);
+
+    const LIGHTER_REST_POS = new THREE.Vector3(2.45, 0.25, -0.35);
+    lighterGroup.position.copy(LIGHTER_REST_POS);
+    lighterGroup.rotation.y = 0.45;
+    scene.add(lighterGroup);
+
+    // Live 3D Digital Stopwatch & Thermometer Readout Board on Right Bench
+    const watchCanvas = document.createElement('canvas');
+    watchCanvas.width = 320;
+    watchCanvas.height = 180;
+    const wCtx = watchCanvas.getContext('2d');
+    const watchTex = new THREE.CanvasTexture(watchCanvas);
+
+    function updateStopwatchTexture() {
+      const totalSec = Math.floor(sim.elapsedMin * 60);
+      const mm = String(Math.floor(totalSec / 60)).padStart(2, '0');
+      const ss = String(totalSec % 60).padStart(2, '0');
+
+      wCtx.fillStyle = '#090f1d';
+      wCtx.fillRect(0, 0, 320, 180);
+      wCtx.strokeStyle = '#38bdf8';
+      wCtx.lineWidth = 6;
+      wCtx.strokeRect(4, 4, 312, 172);
+
+      wCtx.fillStyle = '#94a3b8';
+      wCtx.font = 'bold 18px Inter, sans-serif';
+      wCtx.textAlign = 'center';
+      wCtx.fillText('STOPWATCH & THERMOMETER', 160, 34);
+
+      wCtx.fillStyle = '#38bdf8';
+      wCtx.font = 'bold 42px "JetBrains Mono", monospace';
+      wCtx.fillText(`${mm}:${ss}`, 160, 86);
+
+      wCtx.fillStyle = sim.currentTemp >= 100 ? '#fb7185' : (sim.currentTemp <= 0 ? '#2dd4bf' : '#f59e0b');
+      wCtx.font = 'bold 46px "JetBrains Mono", monospace';
+      wCtx.fillText(`${sim.currentTemp.toFixed(1)} °C`, 160, 146);
+
+      watchTex.needsUpdate = true;
+    }
+    updateStopwatchTexture();
+
+    const watchBoard = new THREE.Mesh(
+      new THREE.BoxGeometry(1.75, 1.0, 0.14),
+      new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.4 })
+    );
+    watchBoard.position.set(2.45, 0.85, -1.35);
+    watchBoard.rotation.y = -0.35;
+    scene.add(watchBoard);
+
+    const watchScreen = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.62, 0.90),
+      new THREE.MeshBasicMaterial({ map: watchTex })
+    );
+    watchScreen.position.set(2.42, 0.85, -1.27);
+    watchScreen.rotation.y = -0.35;
+    scene.add(watchScreen);
+
+    // =========================================================================
+    // 5. DRAWER TOGGLES, COLLAPSE/EXPAND & LIGHT/DARK MODE
+    // =========================================================================
+    let isLightMode = false;
+    const themeBtn = document.getElementById('theme-toggle');
+
+    function applyTheme(light) {
+      isLightMode = light;
+      document.body.classList.toggle('light-mode', light);
+
+      if (light) {
+        themeBtn.textContent = '🌙 Dark';
+        sceneFog.color.setHex(0xe2ecf6);
+        ambientLight.intensity = 1.15;
+        keyLight.intensity = 2.4;
+        benchMat.color.setHex(0xcbd5e1);
+        benchLineMat.color.setHex(0x0284c7);
+      } else {
+        themeBtn.textContent = '☀️ Light';
+        sceneFog.color.setHex(0x0b1120);
+        ambientLight.intensity = 0.85;
+        keyLight.intensity = 2.2;
+        benchMat.color.setHex(0x0f172a);
+        benchLineMat.color.setHex(0x38bdf8);
+      }
+      drawHeatingGraph();
+    }
+
+    themeBtn.addEventListener('click', () => applyTheme(!isLightMode));
+
+    let panelsCollapsed = false;
+    const collapseBtn = document.getElementById('collapse-panels-btn');
+
+    function setPanelsCollapsed(collapsed) {
+      panelsCollapsed = collapsed;
+      document.body.classList.toggle('panels-collapsed', collapsed);
+      collapseBtn.textContent = collapsed ? '👁️ 展開面板' : '👁️ 收起面板';
+      if (collapsed) {
+        document.querySelectorAll('[data-drawer-btn]').forEach(b => b.classList.remove('active'));
+      } else {
+        document.querySelectorAll('.drawer-panel.open').forEach(d => {
+          const btn = document.querySelector(`[data-drawer-btn="${d.id}"]`);
+          if (btn) btn.classList.add('active');
+        });
+      }
+    }
+
+    collapseBtn.addEventListener('click', () => setPanelsCollapsed(!panelsCollapsed));
+
+    document.querySelectorAll('[data-drawer-btn]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (panelsCollapsed) setPanelsCollapsed(false);
+        const targetId = btn.dataset.drawerBtn;
+        const targetDrawer = document.getElementById(targetId);
+        const willOpen = !targetDrawer.classList.contains('open');
+
+        if (window.innerWidth <= 980) {
+          document.querySelectorAll('.drawer-panel').forEach(d => d.classList.remove('open'));
+          document.querySelectorAll('[data-drawer-btn]').forEach(b => b.classList.remove('active'));
+        }
+
+        if (willOpen) {
+          targetDrawer.classList.add('open');
+          btn.classList.add('active');
+        } else {
+          targetDrawer.classList.remove('open');
+          btn.classList.remove('active');
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-close-drawer]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.closeDrawer;
+        const drawer = document.getElementById(targetId);
+        if (drawer) drawer.classList.remove('open');
+        const navBtn = document.querySelector(`[data-drawer-btn="${targetId}"]`);
+        if (navBtn) navBtn.classList.remove('active');
+      });
+    });
+
+    // =========================================================================
+    // 6. EXPERIMENT CONTROLS & CAMERA PRESETS
+    // =========================================================================
+    const CAM_PRESETS = {
+      full: { pos: new THREE.Vector3(1.5, 4.3, 9.6), target: new THREE.Vector3(0.2, 2.55, 0) },
+      beaker: { pos: new THREE.Vector3(1.1, 3.6, 4.5), target: new THREE.Vector3(0, 3.05, 0) },
+      burner: { pos: new THREE.Vector3(1.4, 2.1, 4.6), target: new THREE.Vector3(0, 1.55, 0) },
+      top: { pos: new THREE.Vector3(0.1, 6.2, 2.8), target: new THREE.Vector3(0, 2.8, 0) }
+    };
+
+    let camGoalPos = null;
+    let camGoalTarget = null;
+
+    document.querySelectorAll('[data-cam]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-cam]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const p = CAM_PRESETS[btn.dataset.cam];
+        if (p) {
+          camGoalPos = p.pos.clone();
+          camGoalTarget = p.target.clone();
+        }
+      });
+    });
+
+    renderer.domElement.addEventListener('pointerdown', () => {
+      camGoalPos = null;
+    });
+
+    const btnGoggles = document.getElementById('btn-goggles');
+    const btnIgnite = document.getElementById('btn-ignite');
+    const btnStirRec = document.getElementById('btn-stir-record');
+    const btnSpeed = document.getElementById('btn-speed');
+    const statusText = document.getElementById('op-status-text');
+
+    btnGoggles.addEventListener('click', () => {
+      if (sim.gogglesWorn) return;
+      sim.gogglesWorn = true;
+      btnGoggles.classList.add('done');
+      btnGoggles.disabled = true;
+      btnIgnite.disabled = false;
+      sfx.playBeep();
+
+      const toast = document.getElementById('safety-toast');
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 3200);
+
+      statusText.innerHTML = '<strong>Step 2:</strong> Tap <strong>🔥 點燃本生燈 Light Burner</strong> to heat the crushed ice with a gentle blue flame';
+    });
+
+    btnIgnite.addEventListener('click', () => {
+      if (!sim.gogglesWorn || sim.burnerLit) return;
+      sim.burnerLit = true;
+      sim.lighterAnimTimer = 1.1;
+      btnIgnite.classList.add('done');
+      btnIgnite.disabled = true;
+      btnStirRec.disabled = false;
+      sfx.playBeep();
+
+      outerFlame.visible = true;
+      innerFlame.visible = true;
+
+      statusText.innerHTML = '<strong>Step 3:</strong> Heating! Tap <strong>🥢 攪拌並記錄 Stir &amp; Record</strong> every minute (auto-logs at each minute mark too)';
+    });
+
+    function stirAndRecordNow() {
+      if (!sim.burnerLit) return;
+      sim.stirAnimTimer = 1.1;
+      sfx.playClink();
+
+      const nearestMin = Math.min(12, Math.max(0, Math.round(sim.elapsedMin)));
+      const st = getInterpolatedState(nearestMin);
+      sim.recordedData[nearestMin] = Number(st.temp.toFixed(1));
+      renderDataTable();
+    }
+
+    btnStirRec.addEventListener('click', stirAndRecordNow);
+
+    const SPEEDS = [1, 3, 6];
+    btnSpeed.addEventListener('click', () => {
+      const nextIdx = (SPEEDS.indexOf(sim.speedMult) + 1) % SPEEDS.length;
+      sim.speedMult = SPEEDS[nextIdx];
+      btnSpeed.textContent = `⏩ Speed: ${sim.speedMult}x`;
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      sim.gogglesWorn = false;
+      sim.burnerLit = false;
+      sim.elapsedMin = 0.0;
+      sim.currentTemp = -6.0;
+      sim.iceFrac = 1.0;
+      sim.waterFrac = 0.12;
+      sim.boilIntensity = 0.0;
+      sim.stirAnimTimer = 0;
+      sim.lighterAnimTimer = 0;
+      sim.lastBeepMinute = 0;
+      sim.recordedData = new Array(13).fill(null);
+      sim.recordedData[0] = -6.0;
+
+      outerFlame.visible = false;
+      innerFlame.visible = false;
+      flameLight.intensity = 0;
+      ceramicCenterMat.emissiveIntensity = 0;
+
+      btnGoggles.classList.remove('done');
+      btnGoggles.disabled = false;
+      btnIgnite.classList.remove('done');
+      btnIgnite.disabled = true;
+      btnStirRec.disabled = true;
+
+      statusText.innerHTML = 'Step 1: Tap <strong>🥽 戴護目鏡 Goggles</strong> to verify safety &amp; thermometer bulb position';
+
+      ['q5-a1', 'q5-a2', 'q5-b1', 'q5-b2'].forEach(id => {
+        const el = document.getElementById(id);
+        el.value = '';
+        el.classList.remove('correct', 'wrong');
+      });
+      document.getElementById('q5-score').textContent = '0 / 4';
+      document.getElementById('table-feedback').textContent = 'Stir & record every minute ↑';
+      document.getElementById('table-feedback').style.color = 'var(--accent-teal)';
+
+      renderDataTable();
+      updateStopwatchTexture();
+      camGoalPos = CAM_PRESETS.full.pos.clone();
+      camGoalTarget = CAM_PRESETS.full.target.clone();
+    });
+
+    const audioBtn = document.getElementById('audio-toggle');
+    audioBtn.addEventListener('click', () => {
+      const on = sfx.toggle();
+      audioBtn.textContent = on ? '🔊' : '🔇';
+      audioBtn.classList.toggle('audio-on', on);
+    });
+
+    // =========================================================================
+    // 7. MAIN 3D ANIMATION & PHASE-CHANGE PHYSICS LOOP
+    // =========================================================================
+    const clock = new THREE.Clock();
+    const dummy = new THREE.Object3D();
+
+    function animate() {
+      const dt = Math.min(clock.getDelta(), 0.05);
+      const elapsed = clock.elapsedTime;
+
+      // Advance experiment clock when Bunsen burner is lit (1 real sec = 0.15 min * speedMult)
+      if (sim.burnerLit && sim.elapsedMin < 12.0) {
+        sim.elapsedMin = Math.min(12.0, sim.elapsedMin + dt * 0.14 * sim.speedMult);
+
+        const currentWholeMin = Math.floor(sim.elapsedMin);
+        if (currentWholeMin > sim.lastBeepMinute && currentWholeMin <= 12) {
+          sim.lastBeepMinute = currentWholeMin;
+          sfx.playBeep();
+          // Automatically stir & record each minute if student hasn't manually entered it yet
+          if (sim.recordedData[currentWholeMin] === null) {
+            const st = getInterpolatedState(currentWholeMin);
+            sim.recordedData[currentWholeMin] = Number(st.temp.toFixed(1));
+            sim.stirAnimTimer = 0.85;
+            renderDataTable();
+          }
+        }
+
+        if (sim.elapsedMin >= 12.0) {
+          statusText.innerHTML = '<strong>Complete (12 min):</strong> Open <strong>📋 數據與繪圖 Table &amp; Graph</strong> to inspect the heating curve &amp; answer Step 5!';
+        }
+      }
+
+      const phys = getInterpolatedState(sim.elapsedMin);
+      sim.currentTemp = phys.temp;
+      sim.iceFrac = phys.iceFrac;
+      sim.waterFrac = phys.waterFrac;
+      sim.boilIntensity = phys.boil;
+
+      // 1. Gas Lighter Ignition Animation
+      if (sim.lighterAnimTimer > 0) {
+        sim.lighterAnimTimer = Math.max(0, sim.lighterAnimTimer - dt);
+        const lt = Math.sin((sim.lighterAnimTimer / 1.1) * Math.PI);
+        lighterGroup.position.lerpVectors(LIGHTER_REST_POS, new THREE.Vector3(0.85, 1.65, 0), lt);
+        lighterGroup.rotation.y = THREE.MathUtils.lerp(0.45, Math.PI * 0.5, lt);
+      } else {
+        lighterGroup.position.copy(LIGHTER_REST_POS);
+        lighterGroup.rotation.y = 0.45;
+      }
+
+      // 2. Glass Rod Stirring Animation (Page 81 Tip)
+      if (sim.stirAnimTimer > 0) {
+        sim.stirAnimTimer = Math.max(0, sim.stirAnimTimer - dt);
+        const ang = elapsed * 14;
+        glassRod.position.set(0.32 + Math.cos(ang) * 0.16, BEAKER_BASE_Y + 1.05, Math.sin(ang) * 0.16);
+        glassRod.rotation.set(Math.sin(ang) * 0.16, 0, -0.18 + Math.cos(ang) * 0.14);
+      } else {
+        glassRod.position.copy(ROD_REST_POS);
+        glassRod.rotation.set(Math.PI * 0.5, 0, 0.35);
+      }
+
+      // 3. Gentle Blue Bunsen Flame Flicker & Wire Gauze Glow
+      if (sim.burnerLit) {
+        const flicker = 1.0 + Math.sin(elapsed * 26) * 0.06 + Math.cos(elapsed * 19) * 0.05;
+        outerFlame.scale.set(1, flicker, 1);
+        innerFlame.scale.set(1, flicker * 0.95, 1);
+        flameLight.intensity = 2.2 + Math.sin(elapsed * 20) * 0.25;
+        ceramicCenterMat.emissiveIntensity = Math.min(0.65, ceramicCenterMat.emissiveIntensity + dt * 0.15);
+      }
+
+      // 4. Thermometer Red Liquid Column Height (-10°C to 110°C)
+      const tempNorm = Math.max(0.06, Math.min(1.0, (sim.currentTemp - (-15)) / 130));
+      const colH = THERM_LEN * 0.88 * tempNorm;
+      thermColumn.scale.set(1, colH, 1);
+      thermColumn.position.y = THERM_BOT_Y + colH * 0.5;
+
+      // 5. Liquid Water Level inside Beaker
+      const wH = Math.max(0.14, 1.08 * sim.waterFrac);
+      waterMesh.scale.set(1, wH, 1);
+      waterMesh.position.y = 0.06 + wH * 0.5;
+
+      // 6. Instanced Crushed Ice Cubes (Shrink & disappear during 0 °C melting plateau)
+      for (let i = 0; i < ICE_COUNT; i++) {
+        const ic = iceData[i];
+        const threshold = i / ICE_COUNT;
+        if (sim.iceFrac <= threshold) {
+          dummy.scale.setScalar(0);
+          dummy.updateMatrix();
+          iceInst.setMatrixAt(i, dummy.matrix);
+          continue;
+        }
+        const localScale = ic.baseScale * Math.min(1.0, (sim.iceFrac - threshold) * 5.0);
+        const floatY = Math.min(ic.y, 0.12 + wH * 0.82);
+        dummy.position.set(ic.x, floatY, ic.z);
+        dummy.rotation.set(ic.rx, ic.ry + elapsed * 0.15 * (1 - sim.iceFrac), 0);
+        dummy.scale.setScalar(localScale);
+        dummy.updateMatrix();
+        iceInst.setMatrixAt(i, dummy.matrix);
+      }
+      iceInst.instanceMatrix.needsUpdate = true;
+
+      // 7. Instanced Boiling Bubbles inside Water
+      const activeBubbles = Math.floor(BUBBLE_COUNT * sim.boilIntensity);
+      for (let i = 0; i < BUBBLE_COUNT; i++) {
+        if (i >= activeBubbles) {
+          dummy.scale.setScalar(0);
+          dummy.updateMatrix();
+          bubbleInst.setMatrixAt(i, dummy.matrix);
+          continue;
+        }
+        const b = bubbleData[i];
+        b.y += b.speed * dt * (0.6 + sim.boilIntensity * 1.4);
+        if (b.y > wH) {
+          b.y = 0.08;
+        }
+        dummy.position.set(b.x, b.y, b.z);
+        dummy.scale.setScalar(0.6 + (b.y / wH) * 0.8);
+        dummy.updateMatrix();
+        bubbleInst.setMatrixAt(i, dummy.matrix);
+      }
+      bubbleInst.instanceMatrix.needsUpdate = true;
+
+      // 8. Instanced Rising Steam Plumes above Beaker (at 95–100 °C)
+      const steamFactor = sim.currentTemp >= 85 ? Math.min(1.0, (sim.currentTemp - 85) / 15) : 0;
+      const activeSteam = Math.floor(STEAM_COUNT * steamFactor);
+      for (let i = 0; i < STEAM_COUNT; i++) {
+        if (i >= activeSteam) {
+          dummy.scale.setScalar(0);
+          dummy.updateMatrix();
+          steamInst.setMatrixAt(i, dummy.matrix);
+          continue;
+        }
+        const st = steamData[i];
+        st.progress += st.speed * dt * (0.6 + steamFactor);
+        if (st.progress > 1.0) st.progress -= 1.0;
+
+        const sy = 0.06 + wH + st.progress * 2.35;
+        const spread = st.rad * (1.0 + st.progress * 1.8);
+        dummy.position.set(
+          Math.cos(st.ang + elapsed * 0.8) * spread,
+          sy,
+          Math.sin(st.ang + elapsed * 0.8) * spread
+        );
+        dummy.scale.setScalar((0.6 + st.progress * 1.8) * Math.sin(st.progress * Math.PI));
+        dummy.updateMatrix();
+        steamInst.setMatrixAt(i, dummy.matrix);
+      }
+      steamInst.instanceMatrix.needsUpdate = true;
+
+      // 9. Update Telemetry Pills, 3D Stopwatch & Web Audio
+      const totalSec = Math.floor(sim.elapsedMin * 60);
+      const mm = String(Math.floor(totalSec / 60)).padStart(2, '0');
+      const ss = String(totalSec % 60).padStart(2, '0');
+      document.getElementById('pill-time').textContent = `⏱ ${mm}:${ss} (${Math.floor(sim.elapsedMin)} min)`;
+      document.getElementById('pill-temp').textContent = `🌡 ${sim.currentTemp.toFixed(1)} °C`;
+      document.getElementById('pill-state').textContent = `${sim.currentTemp >= 100 ? '♨️' : (sim.currentTemp <= 0 ? '🧊' : '💧')} ${phys.stateZh}`;
+
+      updateStopwatchTexture();
+      sfx.updateLoops(sim.burnerLit, sim.boilIntensity);
+
+      if (camGoalPos && camGoalTarget) {
+        camera.position.lerp(camGoalPos, 0.08);
+        controls.target.lerp(camGoalTarget, 0.08);
+        if (camera.position.distanceTo(camGoalPos) < 0.04) {
+          camGoalPos = null;
+          camGoalTarget = null;
+        }
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    renderer.setAnimationLoop(animate);
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
