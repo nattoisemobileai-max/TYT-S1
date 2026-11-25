@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unit 2: Water — Interactive 3D Science Lab | 第2章：水 3D互動實驗室</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-page: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8fafc;
+      --bg-header: rgba(255, 255, 255, 0.88);
+      --border-color: #cbd5e1;
+      --border-accent: #0284c7;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --accent-blue: #0284c7;
+      --accent-orange: #ea580c;
+      --accent-teal: #0d9488;
+      --canvas-bg: radial-gradient(circle at 50% 45%, #e0f2fe 0%, #bae6fd 100%);
+      --shadow-card: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 4px 10px -4px rgba(15, 23, 42, 0.04);
+      --shadow-hover: 0 20px 35px -8px rgba(2, 132, 199, 0.18), 0 8px 16px -6px rgba(15, 23, 42, 0.08);
+    }
+
+    body.dark {
+      --bg-page: #0b1120;
+      --bg-card: #111827;
+      --bg-card-hover: #172136;
+      --bg-header: rgba(15, 23, 42, 0.88);
+      --border-color: rgba(56, 189, 248, 0.22);
+      --border-accent: #38bdf8;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-orange: #fb923c;
+      --accent-teal: #2dd4bf;
+      --canvas-bg: radial-gradient(circle at 50% 45%, #172a4a 0%, #0b1120 100%);
+      --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.45);
+      --shadow-hover: 0 20px 40px rgba(56, 189, 248, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      min-height: 100vh;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      line-height: 1.5;
+    }
+
+    /* Sticky Top Navigation Bar */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--bg-header);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+    }
+
+    .nav-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .unit-badge {
+      background: linear-gradient(135deg, #0284c7, #0ea5e9);
+      color: #fff;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 6px 11px;
+      border-radius: 8px;
+      letter-spacing: 0.04em;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28);
+    }
+
+    .brand-text h1 {
+      font-size: 1.08rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-text p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box input {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 7px 12px 7px 32px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      width: 220px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--border-accent);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .theme-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .theme-btn:hover {
+      border-color: var(--border-accent);
+      color: var(--accent-blue);
+    }
+
+    /* Hero Banner */
+    .hero {
+      max-width: 1240px;
+      margin: 26px auto 18px;
+      padding: 0 24px;
+    }
+
+    .hero-banner {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 22px 26px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .hero-copy h2 {
+      font-size: 1.38rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .hero-copy p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      max-width: 720px;
+    }
+
+    .repo-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      padding: 8px 13px;
+      border-radius: 10px;
+      background: rgba(2, 132, 199, 0.1);
+      border: 1px solid rgba(2, 132, 199, 0.28);
+      color: var(--accent-blue);
+    }
+
+    /* Experiment Grid */
+    .grid-container {
+      max-width: 1240px;
+      margin: 0 auto 48px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 22px;
+    }
+
+    .exp-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+
+    .exp-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--border-accent);
+    }
+
+    /* Live 3D Canvas Preview Box */
+    .preview-stage {
+      position: relative;
+      width: 100%;
+      height: 210px;
+      background: var(--canvas-bg);
+      border-bottom: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .preview-stage canvas {
+      width: 100% !important;
+      height: 100% !important;
+      display: block;
+    }
+
+    .exp-number-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--accent-orange);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.8rem;
+      padding: 5px 11px;
+      border-radius: 7px;
+      box-shadow: 0 4px 10px rgba(234, 88, 12, 0.35);
+      letter-spacing: 0.02em;
+    }
+
+    .exp-number-tag.bonus {
+      background: var(--accent-teal);
+      box-shadow: 0 4px 10px rgba(13, 148, 136, 0.35);
+    }
+
+    .page-ref-tag {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(15, 23, 42, 0.72);
+      color: #f8fafc;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      padding: 4px 9px;
+      border-radius: 6px;
+      backdrop-filter: blur(6px);
+    }
+
+    .live-3d-pill {
+      position: absolute;
+      bottom: 10px;
+      right: 12px;
+      background: rgba(15, 23, 42, 0.65);
+      color: #38bdf8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      padding: 3px 8px;
+      border-radius: 5px;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+
+    /* Card Content */
+    .card-body {
+      padding: 18px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
+    }
+
+    .card-title-en {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.35;
+    }
+
+    .card-title-zh {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--accent-blue);
+      margin-top: 2px;
+    }
+
+    .aim-box {
+      background: rgba(148, 163, 184, 0.08);
+      border-left: 3px solid var(--accent-blue);
+      padding: 10px 12px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      flex: 1;
+    }
+
+    .aim-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+      margin-bottom: 3px;
+    }
+
+    .aim-zh {
+      margin-top: 4px;
+      color: var(--text-primary);
+      font-size: 0.82rem;
+    }
+
+    .card-footer {
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .file-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      background: rgba(148, 163, 184, 0.12);
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .launch-btn {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .exp-card:hover .launch-btn {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-color);
+    }
+
+    @media (max-width: 640px) {
+      .navbar { padding: 10px 14px; }
+      .hero, .grid-container { padding: 0 14px; }
+      .search-box input { width: 165px; }
+    }
+  </style>
+
+  <!-- Three.js Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="unit-badge">UNIT 2</div>
+        <div class="brand-text">
+          <h1>Water — 3D Science Lab Portal</h1>
+          <p>第2章：水｜互動三維科學實驗室目錄</p>
+        </div>
+      </div>
+
+      <div class="nav-controls">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input id="search-input" type="text" placeholder="Search exp / 搜尋實驗..." />
+        </div>
+        <button id="theme-toggle" class="theme-btn">🌙 Dark Mode 深色</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-banner">
+      <div class="hero-copy">
+        <h2>Interactive 3D Textbook Experiments (三維課本實驗模擬)</h2>
+        <p>
+          Select any experiment below to launch its interactive 3D apparatus simulation, bilingual hypothesis builder, data recording table, and observation exercises. 點擊下方任何實驗卡片進入 3D 互動實驗模擬頁面。
+        </p>
+      </div>
+      <div class="repo-pill">Route pattern: CH2-exp_&lt;x&gt;.html</div>
+    </div>
+  </section>
+
+  <main id="experiment-grid" class="grid-container"></main>
+
+  <footer>
+    Unit 2: Water • Interactive WebGL &amp; Three.js Science Simulations • Ready for GitHub Pages
+  </footer>
+
+  <script type="module">
+    import * as THREE from 'three';
+
+    // Experiment Catalog (ordered sequentially by experiment number)
+    const experiments = [
+      {
+        id: '2.1',
+        badge: 'Experiment 2.1',
+        page: 'p.80–81',
+        file: 'CH2-exp_2.1.html',
+        titleEn: 'Measuring temperatures as ice changes to steam',
+        titleZh: '測量冰變成水蒸氣時的溫度',
+        aimEn: 'Heat crushed ice with a gentle Bunsen flame, record temperature every minute, and plot a heating curve showing melting (0 °C) and boiling (100 °C) plateaus.',
+        aimZh: '用本生燈微弱藍焰加熱碎冰，每分鐘記錄一次溫度，並繪製溫度—時間曲線以觀察熔化（0 °C）及沸騰（100 °C）期間溫度不變的現象。',
+        sceneType: 'exp2_1',
+        keywords: '2.1 ice steam melting boiling thermometer bunsen burner 冰 水蒸氣 溫度計 本生燈'
+      },
+      {
+        id: '2.4',
+        badge: 'Experiment 2.4',
+        page: 'p.97',
+        file: 'CH2-exp_2.4.html',
+        titleEn: 'Classifying substances as soluble or insoluble',
+        titleZh: '把物質分類為可溶於水和不可溶於水的物質',
+        aimEn: 'Stir table salt, corn flour, rice, jelly powder, and soil into 50 cm³ of water in 100 cm³ beakers and classify each substance as soluble or insoluble.',
+        aimZh: '將食鹽、粟粉、米粒、啫喱粉及泥土分別加入盛有 50 cm³ 水的 100 cm³ 燒杯中攪拌，觀察並分類為可溶於水或不可溶於水的物質。',
+        sceneType: 'exp2_4',
+        keywords: '2.4 soluble insoluble salt corn flour rice jelly powder soil beaker 可溶 不可溶 食鹽 粟粉 米 啫喱粉 泥土'
+      },
+      {
+        id: '2.13',
+        badge: 'Experiment 2.13',
+        page: 'p.125',
+        file: 'CH2-exp_2.13.html',
+        titleEn: 'Effect of chlorine on microorganisms in water',
+        titleZh: '氯對水中微生物的影響（示範實驗）',
+        aimEn: 'Observe living microorganisms in filtered pond water under a video microscope, then add a drop of diluted chlorine bleach to observe chlorination.',
+        aimZh: '透過連接投影機的顯微鏡觀察過濾池塘水中的活微生物，然後滴加稀釋氯漂白水，觀察加氯消毒法殺死微生物的效果。',
+        sceneType: 'exp2_13',
+        keywords: '2.13 chlorine chlorination microorganisms pond water microscope bleach 氯 加氯消毒法 微生物 顯微鏡 池塘水'
+      },
+      {
+        id: 'distillation',
+        badge: 'Lab Simulation',
+        isBonus: true,
+        page: 'Sidearm Joint',
+        file: 'CH2-exp_distillation.html',
+        titleEn: 'Purifying seawater by simple distillation',
+        titleZh: '以簡單蒸餾法淨化海水（側管接頭裝置）',
+        aimEn: 'Heat seawater to boiling, measure equilibrium vapor temperature at the sidearm joint (~100 °C), and condense pure distillate in a Liebig condenser.',
+        aimZh: '加熱海水至沸騰，在側管接頭處量度水蒸氣平衡溫度（約 100 °C），並利用利比希冷凝器收集純淨蒸餾水。',
+        sceneType: 'distillation',
+        keywords: 'distillation seawater condenser sidearm joint 蒸餾 海水 冷凝器 側管'
+      }
+    ];
+
+    const gridEl = document.getElementById('experiment-grid');
+    const previewRenderers = [];
+
+    function renderCards(filterText = '') {
+      // Clean up old renderers before re-rendering
+      while (previewRenderers.length > 0) {
+        const item = previewRenderers.pop();
+        item.renderer.dispose();
+      }
+      gridEl.innerHTML = '';
+
+      const q = filterText.trim().toLowerCase();
+      const filtered = experiments.filter(exp =>
+        !q ||
+        exp.id.toLowerCase().includes(q) ||
+        exp.titleEn.toLowerCase().includes(q) ||
+        exp.titleZh.toLowerCase().includes(q) ||
+        exp.aimEn.toLowerCase().includes(q) ||
+        exp.aimZh.includes(q) ||
+        exp.keywords.toLowerCase().includes(q)
+      );
+
+      filtered.forEach(exp => {
+        const card = document.createElement('a');
+        card.className = 'exp-card';
+        card.href = exp.file;
+
+        card.innerHTML = `
+          <div class="preview-stage" id="stage-${exp.id}">
+            <span class="exp-number-tag ${exp.isBonus ? 'bonus' : ''}">${exp.badge}</span>
+            <span class="page-ref-tag">${exp.page}</span>
+            <span class="live-3d-pill">3D PREVIEW</span>
+          </div>
+          <div class="card-body">
+            <div>
+              <div class="card-title-en">${exp.titleEn}</div>
+              <div class="card-title-zh">${exp.titleZh}</div>
+            </div>
+            <div class="aim-box">
+              <div class="aim-label">Aim / 實驗目的</div>
+              <div>${exp.aimEn}</div>
+              <div class="aim-zh">${exp.aimZh}</div>
+            </div>
+            <div class="card-footer">
+              <span class="file-badge">${exp.file}</span>
+              <span class="launch-btn">Open 3D Lab 進入實驗 →</span>
+            </div>
+          </div>
+        `;
+
+        gridEl.appendChild(card);
+        const stage = card.querySelector('.preview-stage');
+        initMini3DScene(stage, exp.sceneType);
+      });
+    }
+
+    function initMini3DScene(container, type) {
+      const width = container.clientWidth || 340;
+      const height = container.clientHeight || 210;
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 50);
+      camera.position.set(0, 2.3, 5.2);
+      camera.lookAt(0, 0.7, 0);
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.appendChild(renderer.domElement);
+
+      // Studio Lighting
+      scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1.4);
+      dirLight.position.set(4, 7, 5);
+      scene.add(dirLight);
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      const glassMat = new THREE.MeshPhysicalMaterial({
+        color: 0xe0f2fe,
+        transparent: true,
+        opacity: 0.36,
+        roughness: 0.1,
+        metalness: 0.05,
+        side: THREE.DoubleSide
+      });
+
+      const metalMat = new THREE.MeshStandardMaterial({
+        color: 0x475569,
+        metalness: 0.75,
+        roughness: 0.3
+      });
+
+      let animatedParts = {};
+
+      if (type === 'exp2_1') {
+        // Tripod + Bunsen Burner + Beaker with Ice & Thermometer
+        const burnerBase = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.55, 0.14, 24), metalMat);
+        burnerBase.position.y = -0.6;
+        group.add(burnerBase);
+
+        const tube = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.75, 16), metalMat);
+        tube.position.y = -0.2;
+        group.add(tube);
+
+        const flame = new THREE.Mesh(
+          new THREE.ConeGeometry(0.16, 0.55, 20),
+          new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.85 })
+        );
+        flame.position.y = 0.42;
+        group.add(flame);
+        animatedParts.flame = flame;
+
+        // Tripod ring & legs
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(0.72, 0.04, 12, 32), metalMat);
+        ring.rotation.x = Math.PI / 2;
+        ring.position.y = 0.65;
+        group.add(ring);
+
+        for (let i = 0; i < 3; i++) {
+          const ang = (i * Math.PI * 2) / 3;
+          const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.35, 10), metalMat);
+          leg.position.set(Math.cos(ang) * 0.74, 0, Math.sin(ang) * 0.74);
+          leg.rotation.z = -Math.cos(ang) * 0.08;
+          leg.rotation.x = Math.sin(ang) * 0.08;
+          group.add(leg);
+        }
+
+        // Beaker
+        const beaker = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 1.25, 28, 1, true), glassMat);
+        beaker.position.y = 1.3;
+        group.add(beaker);
+
+        const water = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.55, 0.55, 0.65, 24),
+          new THREE.MeshStandardMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.55 })
+        );
+        water.position.y = 1.02;
+        group.add(water);
+
+        // Crushed Ice Cubes
+        const iceMat = new THREE.MeshStandardMaterial({ color: 0xf0f9ff, roughness: 0.2 });
+        for (let i = 0; i < 8; i++) {
+          const cube = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.22, 0.22), iceMat);
+          cube.position.set(
+            (Math.random() - 0.5) * 0.65,
+            1.15 + Math.random() * 0.35,
+            (Math.random() - 0.5) * 0.65
+          );
+          cube.rotation.set(Math.random(), Math.random(), Math.random());
+          group.add(cube);
+        }
+
+        // Thermometer
+        const therm = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 1.85, 16), glassMat);
+        therm.position.set(0, 1.75, 0);
+        group.add(therm);
+
+        const bulb = new THREE.Mesh(
+          new THREE.SphereGeometry(0.08, 16, 16),
+          new THREE.MeshStandardMaterial({ color: 0xef4444 })
+        );
+        bulb.position.set(0, 0.9, 0);
+        group.add(bulb);
+      } else if (type === 'exp2_4') {
+        // 5 Beakers arranged in an arc with distinct substance colors
+        const colors = [0x38bdf8, 0xfef9c3, 0xfde68a, 0xfb7185, 0x92400e];
+        const opacities = [0.42, 0.78, 0.45, 0.62, 0.85];
+
+        for (let i = 0; i < 5; i++) {
+          const x = (i - 2) * 1.15;
+          const z = Math.abs(i - 2) * 0.22;
+
+          const beaker = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 1.05, 24, 1, true), glassMat);
+          beaker.position.set(x, 0.55, z);
+          group.add(beaker);
+
+          const liquid = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.39, 0.39, 0.56, 24),
+            new THREE.MeshStandardMaterial({
+              color: colors[i],
+              transparent: true,
+              opacity: opacities[i]
+            })
+          );
+          liquid.position.set(x, 0.32, z);
+          group.add(liquid);
+        }
+
+        // Stirring Glass Rod in center beaker
+        const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.5, 12), glassMat);
+        rod.position.set(0.08, 0.9, 0);
+        rod.rotation.z = -0.22;
+        group.add(rod);
+        animatedParts.rod = rod;
+      } else if (type === 'exp2_13') {
+        // Microscope + Illuminated Projection Screen
+        const base = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.16, 1.25), metalMat);
+        base.position.set(-1.1, 0.08, 0);
+        group.add(base);
+
+        const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 1.35, 16), metalMat);
+        arm.position.set(-1.1, 0.78, -0.35);
+        arm.rotation.x = 0.2;
+        group.add(arm);
+
+        const stage = new THREE.Mesh(new THREE.BoxGeometry(0.75, 0.07, 0.75), metalMat);
+        stage.position.set(-1.1, 0.68, 0.08);
+        group.add(stage);
+
+        const tube = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.85, 18), metalMat);
+        tube.position.set(-1.1, 1.32, 0.05);
+        group.add(tube);
+
+        // Projection Screen
+        const screenFrame = new THREE.Mesh(new THREE.BoxGeometry(2.1, 1.45, 0.1), metalMat);
+        screenFrame.position.set(0.85, 0.95, -0.15);
+        screenFrame.rotation.y = -0.28;
+        group.add(screenFrame);
+
+        const screenGlow = new THREE.Mesh(
+          new THREE.PlaneGeometry(1.92, 1.28),
+          new THREE.MeshBasicMaterial({ color: 0x0ea5e9 })
+        );
+        screenGlow.position.set(0.83, 0.95, -0.09);
+        screenGlow.rotation.y = -0.28;
+        group.add(screenGlow);
+
+        // Microorganism dots on screen
+        const microbeGroup = new THREE.Group();
+        microbeGroup.position.copy(screenGlow.position);
+        microbeGroup.rotation.copy(screenGlow.rotation);
+        for (let i = 0; i < 7; i++) {
+          const microbe = new THREE.Mesh(
+            new THREE.CapsuleGeometry(0.04, 0.1, 4, 8),
+            new THREE.MeshBasicMaterial({ color: 0xfef08a })
+          );
+          microbe.position.set((Math.random() - 0.5) * 1.3, (Math.random() - 0.5) * 0.85, 0.02);
+          microbe.rotation.z = Math.random() * Math.PI;
+          microbeGroup.add(microbe);
+        }
+        group.add(microbeGroup);
+        animatedParts.microbes = microbeGroup.children;
+      } else {
+        // Seawater Distillation Apparatus (Boiling Flask + Liebig Condenser + Receiving Flask)
+        const boilingFlask = new THREE.Mesh(new THREE.SphereGeometry(0.68, 28, 28), glassMat);
+        boilingFlask.position.set(-1.35, 0.72, 0);
+        group.add(boilingFlask);
+
+        const seawater = new THREE.Mesh(
+          new THREE.SphereGeometry(0.64, 24, 24, 0, Math.PI * 2, Math.PI * 0.45, Math.PI * 0.55),
+          new THREE.MeshStandardMaterial({ color: 0x0284c7, transparent: true, opacity: 0.65 })
+        );
+        seawater.position.set(-1.35, 0.72, 0);
+        group.add(seawater);
+
+        const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.85, 20, 1, true), glassMat);
+        neck.position.set(-1.35, 1.65, 0);
+        group.add(neck);
+
+        // Liebig Condenser
+        const condenser = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 2.05, 24, 1, true), glassMat);
+        condenser.position.set(-0.1, 1.35, 0);
+        condenser.rotation.z = -1.18;
+        group.add(condenser);
+
+        const jacketWater = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.19, 0.19, 1.95, 20),
+          new THREE.MeshStandardMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.35 })
+        );
+        jacketWater.position.copy(condenser.position);
+        jacketWater.rotation.copy(condenser.rotation);
+        group.add(jacketWater);
+
+        // Receiving Flask
+        const receiver = new THREE.Mesh(new THREE.ConeGeometry(0.55, 1.05, 24, 1, true), glassMat);
+        receiver.position.set(1.35, 0.55, 0);
+        group.add(receiver);
+
+        const distillate = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.38, 0.52, 0.32, 24),
+          new THREE.MeshStandardMaterial({ color: 0x2dd4bf, transparent: true, opacity: 0.65 })
+        );
+        distillate.position.set(1.35, 0.2, 0);
+        group.add(distillate);
+      }
+
+      previewRenderers.push({ renderer, scene, camera, group, animatedParts, container });
+    }
+
+    // Continuous Animation Loop for All Visible Preview Canvases
+    const clock = new THREE.Clock();
+    function animatePreviews() {
+      requestAnimationFrame(animatePreviews);
+      const t = clock.getElapsedTime();
+
+      for (const item of previewRenderers) {
+        item.group.rotation.y = Math.sin(t * 0.55) * 0.28;
+
+        if (item.animatedParts.flame) {
+          const s = 1 + Math.sin(t * 14) * 0.08;
+          item.animatedParts.flame.scale.set(1, s, 1);
+        }
+        if (item.animatedParts.rod) {
+          item.animatedParts.rod.position.x = Math.cos(t * 5) * 0.14;
+          item.animatedParts.rod.position.z = Math.sin(t * 5) * 0.14;
+        }
+        if (item.animatedParts.microbes) {
+          item.animatedParts.microbes.forEach((m, idx) => {
+            m.position.x += Math.sin(t * 2 + idx) * 0.002;
+            m.position.y += Math.cos(t * 1.7 + idx) * 0.002;
+            m.rotation.z += 0.015;
+          });
+        }
+
+        item.renderer.render(item.scene, item.camera);
+      }
+    }
+
+    // Search Filter
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      renderCards(e.target.value);
+    });
+
+    // Light / Dark Mode Toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    themeBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      themeBtn.textContent = isDark ? '☀️ Light Mode 淺色' : '🌙 Dark Mode 深色';
+    });
+
+    // Responsive Resize for Preview Canvases
+    window.addEventListener('resize', () => {
+      for (const item of previewRenderers) {
+        const w = item.container.clientWidth;
+        const h = item.container.clientHeight;
+        if (w > 0 && h > 0) {
+          item.camera.aspect = w / h;
+          item.camera.updateProjectionMatrix();
+          item.renderer.setSize(w, h);
+        }
+      }
+    });
+
+    renderCards();
+    animatePreviews();
+  </script>
+</body>
+</html>
