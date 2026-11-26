@@ -1,0 +1,3069 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phrasal Verb Practice — Day 1: Myself &amp; My Family</title>
+  <style>
+    /* =========================================================================
+       1. DESIGN TOKENS & ACCESSIBLE THEMES (LIGHT DEFAULT & DARK MODE)
+       ========================================================================= */
+    :root {
+      --bg-page: #f1f5f9;
+      --bg-surface: #ffffff;
+      --bg-card: #ffffff;
+      --bg-input: #f8fafc;
+      --bg-chip: #e2e8f0;
+      --border-subtle: #cbd5e1;
+      --border-strong: #94a3b8;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --accent-red: #dc2626;
+      --accent-red-hover: #b91c1c;
+      --accent-blue: #0284c7;
+      --accent-blue-soft: rgba(2, 132, 199, 0.12);
+      --accent-green: #059669;
+      --accent-green-soft: rgba(5, 150, 105, 0.14);
+      --accent-amber: #d97706;
+      --accent-purple: #7e22ce;
+      --trap-bg: #fef3c7;
+      --trap-border: #f59e0b;
+      --trap-text: #78350f;
+      --shadow-card: 0 8px 20px -4px rgba(15, 23, 42, 0.1);
+      --base-font-size: 18px;
+    }
+
+    html[data-theme="dark"] {
+      --bg-page: #0b1120;
+      --bg-surface: #111827;
+      --bg-card: #1e293b;
+      --bg-input: #0f172a;
+      --bg-chip: #334155;
+      --border-subtle: #334155;
+      --border-strong: #475569;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --accent-red: #ef4444;
+      --accent-red-hover: #dc2626;
+      --accent-blue: #38bdf8;
+      --accent-blue-soft: rgba(56, 189, 248, 0.16);
+      --accent-green: #10b981;
+      --accent-green-soft: rgba(16, 185, 129, 0.18);
+      --accent-amber: #f59e0b;
+      --accent-purple: #c084fc;
+      --trap-bg: rgba(245, 158, 11, 0.15);
+      --trap-border: rgba(245, 158, 11, 0.5);
+      --trap-text: #fde68a;
+      --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.45);
+    }
+
+    html.font-xl {
+      --base-font-size: 21px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      font-size: var(--base-font-size);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.55;
+      min-height: 100vh;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      overflow-x: hidden;
+    }
+
+    button, select, input, textarea {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    /* =========================================================================
+       2. COMPACT NON-STICKY HEADER & NAVIGATION TABS
+       ========================================================================= */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 14px;
+    }
+
+    header.app-header {
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 0;
+      position: relative;
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .app-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .subtitle-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .xp-badge {
+      background: var(--accent-green-soft);
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+      padding: 4px 10px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 36px;
+    }
+
+    .ctrl-btn {
+      background: var(--bg-input);
+      border: 1.5px solid var(--border-subtle);
+      color: var(--text-primary);
+      padding: 4px 11px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 36px;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .ctrl-btn:hover {
+      border-color: var(--accent-blue);
+    }
+
+    .nav-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: var(--bg-input);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    @media (max-width: 560px) {
+      .nav-tabs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .nav-tab {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 8px 10px;
+      border-radius: 9px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 40px;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .nav-tab:hover {
+      color: var(--text-primary);
+      background: rgba(148, 163, 184, 0.15);
+    }
+
+    .nav-tab.active {
+      background: var(--accent-red);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+    }
+
+    main.main-content {
+      padding: 16px 0 48px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* =========================================================================
+       3. TAB 1: F1 3D GRAND PRIX RACE
+       ========================================================================= */
+    .panel-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .race-top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .mode-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill-btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 2px solid var(--border-subtle);
+      background: var(--bg-input);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      min-height: 40px;
+    }
+
+    .pill-btn.active {
+      background: var(--accent-blue);
+      border-color: var(--accent-blue);
+      color: #ffffff;
+    }
+
+    .telemetry-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .stat-chip {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 11px;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .radio-prompt {
+      background: var(--bg-input);
+      border: 2px solid var(--accent-blue);
+      border-radius: 14px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .radio-badge {
+      display: inline-block;
+      background: var(--accent-red);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-bottom: 4px;
+      letter-spacing: 0.03em;
+    }
+
+    .radio-clue {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .radio-sentence {
+      font-size: 1.06rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .blank-highlight {
+      display: inline-block;
+      background: rgba(220, 38, 38, 0.15);
+      color: var(--accent-red);
+      border: 1.5px dashed var(--accent-red);
+      padding: 0 10px;
+      border-radius: 6px;
+      font-family: monospace;
+    }
+
+    .viewport-box {
+      position: relative;
+      width: 100%;
+      height: 490px;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 2px solid var(--border-strong);
+      background: #090d16;
+      box-shadow: var(--shadow-card);
+      touch-action: pan-y;
+    }
+
+    @media (max-width: 640px) {
+      .viewport-box {
+        height: 435px;
+      }
+    }
+
+    #race-canvas-mount,
+    #fallback-2d-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .viewport-hud {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 15;
+      pointer-events: none;
+    }
+
+    .viewport-hud > * {
+      pointer-events: auto;
+    }
+
+    .engine-pill {
+      background: rgba(15, 23, 42, 0.88);
+      color: #f8fafc;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .hud-btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .hud-btn {
+      background: rgba(15, 23, 42, 0.92);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 7px 12px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      min-height: 36px;
+    }
+
+    .hud-btn.danger {
+      background: rgba(220, 38, 38, 0.94);
+      border-color: #f87171;
+    }
+
+    .race-banner {
+      position: absolute;
+      top: 58px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+      max-width: 680px;
+      z-index: 20;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 0.94rem;
+      font-weight: 700;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+    }
+
+    .race-banner.success {
+      background: rgba(6, 78, 59, 0.96);
+      border: 2px solid #34d399;
+      color: #ecfdf5;
+    }
+
+    .race-banner.error {
+      background: rgba(136, 19, 55, 0.96);
+      border: 2px solid #fb7185;
+      color: #fff1f2;
+    }
+
+    .race-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(9, 13, 22, 0.88);
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .overlay-card {
+      background: #111827;
+      border: 2px solid #ef4444;
+      border-radius: 20px;
+      padding: 22px;
+      max-width: 520px;
+      width: 100%;
+      text-align: center;
+      color: #f8fafc;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.65);
+    }
+
+    .overlay-card h2 {
+      font-size: 1.4rem;
+      margin: 8px 0;
+    }
+
+    .overlay-card p {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      margin-bottom: 16px;
+    }
+
+    .cta-btn {
+      width: 100%;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #ef4444, #f59e0b);
+      color: #ffffff;
+      font-size: 1.02rem;
+      font-weight: 800;
+      min-height: 50px;
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .lane-pad {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 95%;
+      max-width: 760px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      z-index: 18;
+    }
+
+    .lane-btn {
+      background: rgba(15, 23, 42, 0.94);
+      border: 2px solid rgba(56, 189, 248, 0.6);
+      color: #ffffff;
+      border-radius: 14px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 64px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+    }
+
+    .lane-btn.active-lane {
+      background: rgba(2, 132, 199, 0.96);
+      border-color: #fbbf24;
+      transform: translateY(-2px);
+    }
+
+    .lane-dir {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #7dd3fc;
+      text-transform: uppercase;
+    }
+
+    .lane-word {
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+
+    /* =========================================================================
+       4. TAB 2: FLASHCARDS (10 ITEMS + FILTER TAGS + UK/US AUDIO)
+       ========================================================================= */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .legend-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.88rem;
+    }
+
+    .tag-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-weight: 800;
+      font-size: 0.82rem;
+      flex-shrink: 0;
+    }
+
+    .tag-T { background: rgba(2, 132, 199, 0.16); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+    .tag-I { background: rgba(5, 150, 105, 0.16); color: var(--accent-green); border: 1px solid var(--accent-green); }
+    .tag-S { background: rgba(217, 119, 6, 0.16); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 16px;
+    }
+
+    .flashcard {
+      background: var(--bg-card);
+      border: 2px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 270px;
+      transition: border-color 0.18s ease, transform 0.18s ease;
+    }
+
+    .flashcard:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-2px);
+    }
+
+    .flashcard.is-flipped {
+      border-color: var(--accent-blue);
+    }
+
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .flip-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .word-audio-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .pv-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .audio-btns {
+      display: inline-flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .speak-btn {
+      background: var(--bg-input);
+      border: 1.5px solid var(--border-strong);
+      color: var(--text-primary);
+      padding: 5px 10px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 36px;
+    }
+
+    .speak-btn:hover {
+      border-color: var(--accent-blue);
+      background: var(--accent-blue-soft);
+    }
+
+    .speak-btn.speaking {
+      border-color: var(--accent-green);
+      background: var(--accent-green-soft);
+      color: var(--accent-green);
+    }
+
+    .pv-def {
+      font-size: 0.98rem;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+    }
+
+    .syn-box {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+    }
+
+    .trap-box {
+      background: var(--trap-bg);
+      border: 1px solid var(--trap-border);
+      color: var(--trap-text);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 0.9rem;
+      margin-top: 12px;
+    }
+
+    /* =========================================================================
+       5. TAB 3: READING QUIZ LAB (40 QUESTIONS, ADJUSTABLE PER VERB)
+       ========================================================================= */
+    .quiz-toolbar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      align-items: end;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .quiz-toolbar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 540px) {
+      .quiz-toolbar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+    }
+
+    .select-box, .text-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 2px solid var(--border-subtle);
+      color: var(--text-primary);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      min-height: 46px;
+    }
+
+    .select-box:focus, .text-input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+    }
+
+    .primary-btn {
+      background: var(--accent-blue);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      min-height: 46px;
+    }
+
+    .secondary-btn {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 2px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 10px 16px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      min-height: 46px;
+    }
+
+    .quiz-summary-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+
+    .quiz-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .quiz-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-subtle);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .quiz-card.q-correct { border-color: var(--accent-green); }
+    .quiz-card.q-wrong { border-color: var(--accent-red); }
+
+    .q-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .fmt-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 8px;
+      text-transform: uppercase;
+    }
+
+    .fmt-mc { background: var(--accent-blue-soft); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+    .fmt-fitb { background: rgba(126, 34, 206, 0.14); color: var(--accent-purple); border: 1px solid var(--accent-purple); }
+
+    .passage-box {
+      background: var(--bg-input);
+      border-left: 4px solid var(--accent-blue);
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+
+    .q-prompt {
+      font-size: 1.04rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .mc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    @media (max-width: 640px) {
+      .mc-grid { grid-template-columns: 1fr; }
+    }
+
+    .mc-btn {
+      text-align: left;
+      background: var(--bg-input);
+      border: 2px solid var(--border-subtle);
+      color: var(--text-primary);
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 48px;
+    }
+
+    .mc-btn:hover:not(:disabled) {
+      border-color: var(--accent-blue);
+    }
+
+    .mc-btn.opt-right {
+      background: var(--accent-green-soft);
+      border-color: var(--accent-green);
+      color: var(--accent-green);
+    }
+
+    .mc-btn.opt-wrong {
+      background: rgba(220, 38, 38, 0.16);
+      border-color: var(--accent-red);
+      color: var(--accent-red);
+    }
+
+    .fitb-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .fitb-row .text-input {
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .q-feedback {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+    }
+
+    .q-feedback.ok { background: var(--accent-green-soft); border: 1.5px solid var(--accent-green); }
+    .q-feedback.err { background: rgba(220, 38, 38, 0.14); border: 1.5px solid var(--accent-red); }
+
+    /* =========================================================================
+       6. TAB 4: BAND 1 WRITING STUDIO
+       ========================================================================= */
+    .upgrade-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .upgrade-card {
+      background: var(--bg-card);
+      border: 2px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .upgrade-card.is-upgraded {
+      border-color: var(--accent-green);
+    }
+
+    .basic-mark {
+      background: rgba(217, 119, 6, 0.18);
+      color: var(--accent-amber);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 800;
+      border-bottom: 2px dashed var(--accent-amber);
+    }
+
+    .writing-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 20px;
+      margin-top: 14px;
+    }
+
+    @media (max-width: 860px) {
+      .writing-grid { grid-template-columns: 1fr; }
+    }
+
+    .helper-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 10px 0 12px;
+    }
+
+    .verb-chip {
+      background: var(--bg-input);
+      border: 1.5px solid var(--border-subtle);
+      color: var(--text-primary);
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      min-height: 36px;
+    }
+
+    .verb-chip:hover {
+      border-color: var(--accent-blue);
+      background: var(--accent-blue-soft);
+    }
+
+    .essay-textarea {
+      width: 100%;
+      min-height: 190px;
+      background: var(--bg-input);
+      border: 2px solid var(--border-subtle);
+      color: var(--text-primary);
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 1rem;
+      line-height: 1.65;
+      resize: vertical;
+    }
+
+    .essay-textarea:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+    }
+
+    .live-preview-box {
+      background: var(--bg-input);
+      border: 2px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 14px;
+      min-height: 145px;
+      font-size: 0.98rem;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+
+    .pv-hl {
+      background: var(--accent-green-soft);
+      color: var(--accent-green);
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border-bottom: 2px solid var(--accent-green);
+    }
+
+    .grade-report {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 0.92rem;
+    }
+
+    .toast-bar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #0f172a;
+      color: #ffffff;
+      border: 2px solid #38bdf8;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
+      z-index: 80;
+      opacity: 0;
+      transform: translateY(18px);
+      pointer-events: none;
+      transition: all 0.22s ease;
+    }
+
+    .toast-bar.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <!-- ==================== COMPACT NON-STICKY HEADER ==================== -->
+  <header class="app-header">
+    <div class="container">
+      <div class="header-top">
+        <div class="title-wrap">
+          <h1 class="app-title">Phrasal Verb Practice</h1>
+          <span class="subtitle-pill">Day 1: Myself &amp; My Family</span>
+        </div>
+
+        <div class="header-controls">
+          <div class="xp-badge" title="Total Earned XP">
+            <span>🏆</span>
+            <span><span id="xp-value">0</span> XP</span>
+          </div>
+          <button type="button" class="ctrl-btn" data-action="toggle-font" id="btn-font">
+            <span id="font-label">A+</span>
+          </button>
+          <button type="button" class="ctrl-btn" data-action="toggle-theme" id="btn-theme">
+            <span id="theme-icon">🌙</span>
+            <span id="theme-label">Dark</span>
+          </button>
+          <button type="button" class="ctrl-btn" data-action="toggle-sound" id="btn-sound">
+            <span id="sound-icon">🔊</span>
+            <span id="sound-label">On</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 4 Main Navigation Tabs -->
+      <nav class="nav-tabs" aria-label="Learning Modules">
+        <button type="button" class="nav-tab active" data-action="switch-tab" data-tab="race">
+          <span>🏎️</span><span>F1 3D Race</span>
+        </button>
+        <button type="button" class="nav-tab" data-action="switch-tab" data-tab="cards">
+          <span>🧬</span><span>Flashcards</span>
+        </button>
+        <button type="button" class="nav-tab" data-action="switch-tab" data-tab="quiz">
+          <span>📖</span><span>Reading Quiz</span>
+        </button>
+        <button type="button" class="nav-tab" data-action="switch-tab" data-tab="write">
+          <span>✍️</span><span>Writing</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT AREA ==================== -->
+  <main class="main-content container">
+
+    <!-- ==================== TAB 1: F1 3D RACE ==================== -->
+    <section id="tab-panel-race">
+      <div class="panel-card">
+        <div class="race-top-bar">
+          <div class="mode-group">
+            <button type="button" class="pill-btn active" data-action="set-race-mode" data-mode="reading" id="mode-btn-reading">
+              🏁 Reading &amp; Context GP (10)
+            </button>
+            <button type="button" class="pill-btn" data-action="set-race-mode" data-mode="traps" id="mode-btn-traps">
+              ⚠️ Separable [S] &amp; Grammar Traps (8)
+            </button>
+          </div>
+
+          <div class="telemetry-group">
+            <div class="stat-chip">Lap: <span id="hud-lap" style="color:var(--accent-green);">1 / 10</span></div>
+            <div class="stat-chip">Speed: <span id="hud-speed" style="color:var(--accent-blue);">285</span> km/h</div>
+            <div class="stat-chip">Combo: <span id="hud-combo" style="color:var(--accent-amber);">x1</span></div>
+            <div class="stat-chip">Score: <span id="hud-score">0</span></div>
+          </div>
+        </div>
+
+        <div class="radio-prompt">
+          <div style="font-size:1.6rem; line-height:1;">🎧</div>
+          <div>
+            <span class="radio-badge" id="radio-tag">RACE ENGINEER RADIO • READING SYNONYM</span>
+            <p class="radio-clue" id="radio-clue">Clue: "To use a name for yourself which is not your real name"</p>
+            <p class="radio-sentence" id="radio-sentence">
+              My brother's name is Terence and he <span class="blank-highlight">[ ??? ]</span> Terry.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="viewport-box" id="race-viewport">
+        <div class="viewport-hud">
+          <div class="engine-pill" id="engine-badge">🟢 F1 CIRCUIT READY</div>
+          <div class="hud-btn-group">
+            <button type="button" class="hud-btn" data-action="toggle-pause" id="btn-pause">⏸️ Pause</button>
+            <button type="button" class="hud-btn danger" data-action="start-race">🔄 Restart GP</button>
+          </div>
+        </div>
+
+        <div id="race-banner" class="race-banner hidden"></div>
+
+        <div id="race-overlay" class="race-overlay">
+          <div class="overlay-card">
+            <div style="font-size:2.5rem;">🏎️</div>
+            <h2 id="overlay-title">F1 Phrasal Verb Grand Prix</h2>
+            <p id="overlay-desc">
+              Steer your F1 car into the matching <strong>DRS Gate</strong>! Use Left/Right Arrow keys, A/D, swipe on track, or tap the 3 lane buttons below.
+            </p>
+            <div id="overlay-review" class="hidden" style="text-align:left; background:#090d16; border:1px solid #334155; border-radius:12px; padding:12px; margin-bottom:14px; font-size:0.88rem;"></div>
+            <button type="button" class="cta-btn" data-action="start-race" id="overlay-cta">🚦 LIGHTS OUT &amp; AWAY WE GO!</button>
+          </div>
+        </div>
+
+        <div id="race-canvas-mount"></div>
+
+        <div class="lane-pad">
+          <button type="button" class="lane-btn" data-action="steer-lane" data-lane="0" id="lane-btn-0">
+            <span class="lane-dir">⬅️ Left Lane</span>
+            <span class="lane-word" id="lane-word-0">---</span>
+          </button>
+          <button type="button" class="lane-btn active-lane" data-action="steer-lane" data-lane="1" id="lane-btn-1">
+            <span class="lane-dir">⬆️ Center Lane</span>
+            <span class="lane-word" id="lane-word-1">---</span>
+          </button>
+          <button type="button" class="lane-btn" data-action="steer-lane" data-lane="2" id="lane-btn-2">
+            <span class="lane-dir">➡️ Right Lane</span>
+            <span class="lane-word" id="lane-word-2">---</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: FLASHCARDS ==================== -->
+    <section id="tab-panel-cards" class="hidden">
+      <div class="panel-card">
+        <h2 style="font-size:1.3rem; margin-bottom:4px;">Day 1 Phrasal Verb Flashcards (10 Core Items)</h2>
+        <p style="color:var(--text-secondary);">
+          Tap any card to flip between its <strong>Reading Meaning</strong> and <strong>Grammar Trap Decoder</strong>. Tap <strong>🇬🇧 UK</strong> or <strong>🇺🇸 US</strong> to hear British or American pronunciation.
+        </p>
+
+        <div class="filter-bar">
+          <button type="button" class="pill-btn active" data-action="filter-cards" data-filter="ALL">All (10)</button>
+          <button type="button" class="pill-btn" data-action="filter-cards" data-filter="T">[T] Transitive</button>
+          <button type="button" class="pill-btn" data-action="filter-cards" data-filter="I">[I] Intransitive</button>
+          <button type="button" class="pill-btn" data-action="filter-cards" data-filter="S">[S] Separable</button>
+        </div>
+      </div>
+
+      <div class="legend-row">
+        <div class="legend-item">
+          <span class="tag-badge tag-T">[T]</span>
+          <div><strong>Transitive:</strong> Needs an object after it (<em>look up to <u>someone</u></em>, <em>take after <u>her mum</u></em>).</div>
+        </div>
+        <div class="legend-item">
+          <span class="tag-badge tag-I">[I]</span>
+          <div><strong>Intransitive:</strong> Stands alone with no direct object (<em>grow up</em>, <em>pass away</em>, <em>get together</em>).</div>
+        </div>
+        <div class="legend-item">
+          <span class="tag-badge tag-S">[S]</span>
+          <div><strong>Separable:</strong> Pronoun objects (<em>him/them</em>) <strong>MUST</strong> go in the middle (<em>told <u>him</u> off</em>).</div>
+        </div>
+      </div>
+
+      <div id="flashcards-grid" class="cards-grid"></div>
+    </section>
+
+    <!-- ==================== TAB 3: READING QUIZ ==================== -->
+    <section id="tab-panel-quiz" class="hidden">
+      <div class="panel-card">
+        <h2 style="font-size:1.3rem; margin-bottom:4px;">📖 Band 1 Reading Comprehension Quiz</h2>
+        <p style="color:var(--text-secondary);">
+          Practice HK Band 1 S1 synonym replacement (Multiple Choice) and tense/pronoun accuracy (Fill in the Blank). Adjust the number of questions per phrasal verb below.
+        </p>
+
+        <div class="quiz-toolbar">
+          <div>
+            <label class="field-label" for="select-quota">Questions per Phrasal Verb</label>
+            <select id="select-quota" class="select-box" data-action="filter-quiz">
+              <option value="2">2 per verb (20 Qs)</option>
+              <option value="3" selected>3 per verb (30 Qs)</option>
+              <option value="4">4 per verb (40 Qs)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="field-label" for="select-verb">Filter by Phrasal Verb</label>
+            <select id="select-verb" class="select-box" data-action="filter-quiz">
+              <option value="ALL">All Phrasal Verbs (10)</option>
+              <option value="bring-up">1. bring up</option>
+              <option value="get-along">2. get along / get on</option>
+              <option value="get-together">3. get together</option>
+              <option value="go-by">4. go by</option>
+              <option value="grow-up">5. grow up</option>
+              <option value="look-up-to">6. look up to</option>
+              <option value="tell-off">7. tell off</option>
+              <option value="pass-away">8. pass away</option>
+              <option value="name-after">9. name after</option>
+              <option value="take-after">10. take after</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="field-label" for="select-format">Question Format</label>
+            <select id="select-format" class="select-box" data-action="filter-quiz">
+              <option value="ALL">All Formats (MC &amp; Fill-in-Blank)</option>
+              <option value="MC">Multiple Choice Only</option>
+              <option value="FITB">Fill in the Blank Only</option>
+            </select>
+          </div>
+
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="primary-btn" style="flex:1;" data-action="shuffle-quiz">🎲 Shuffle Set</button>
+            <button type="button" class="secondary-btn" data-action="reset-quiz">🔄 Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-summary-bar">
+        <div>
+          <strong>Active Set:</strong> <span id="quiz-active-label" style="color:var(--accent-blue); font-weight:800;">3 per verb (30 Qs)</span>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <span class="stat-chip">Answered: <span id="quiz-answered">0</span> / <span id="quiz-total">30</span></span>
+          <span class="stat-chip" style="color:var(--accent-green);">Correct: <span id="quiz-correct">0</span></span>
+        </div>
+      </div>
+
+      <div id="quiz-cards-container" class="quiz-list"></div>
+    </section>
+
+    <!-- ==================== TAB 4: WRITING STUDIO ==================== -->
+    <section id="tab-panel-write" class="hidden">
+      <div class="panel-card">
+        <h2 style="font-size:1.3rem; margin-bottom:4px;">Basic → Band 1 Sentence Upgrader</h2>
+        <p style="color:var(--text-secondary);">Tap <strong>Upgrade Sentence</strong> on any card to replace basic S1 vocabulary with natural Band 1 phrasal verbs:</p>
+        <div id="upgrader-grid" class="upgrade-grid"></div>
+      </div>
+
+      <div class="panel-card">
+        <h2 style="font-size:1.3rem; margin-bottom:4px;">Section E: "Write About You" Guided Paragraph Builder</h2>
+        <p style="color:var(--text-secondary);">
+          Write a short paragraph introducing yourself, your nickname, family resemblance, role model, and future ambition. Tap any chip below to insert a phrasal verb at your cursor!
+        </p>
+
+        <div class="helper-chips" id="verb-helper-chips"></div>
+
+        <div class="writing-grid">
+          <div>
+            <label class="field-label" for="writing-textarea">Your Band 1 Paragraph Draft</label>
+            <textarea id="writing-textarea" class="essay-textarea" placeholder="Hi! My real name is Nathan, and I usually go by Nate at school. I was named after my grandfather, and my parents brought me up to be curious..."></textarea>
+
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:12px;">
+              <button type="button" class="primary-btn" data-action="grade-writing">✅ Check &amp; Score Writing</button>
+              <button type="button" class="secondary-btn" data-action="insert-sample-essay">✨ Load Band 1 Model</button>
+              <button type="button" class="secondary-btn" data-action="copy-writing">📋 Copy Text</button>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <span class="field-label" style="margin:0;">Live Phrasal Verb Highlighter</span>
+              <span class="stat-chip" style="color:var(--accent-green);">Detected: <span id="writing-pv-count">0</span></span>
+            </div>
+
+            <div id="writing-live-preview" class="live-preview-box">
+              <span style="color:var(--text-muted); font-style:italic;">Start typing on the left or click a phrasal verb chip to see live highlighting...</span>
+            </div>
+
+            <div id="writing-feedback-box" class="grade-report">
+              <strong style="color:var(--accent-blue); display:block; margin-bottom:4px;">Band 1 Examiner Checklist:</strong>
+              <ul style="padding-left:18px; color:var(--text-secondary);">
+                <li>Include at least <strong>4 different Day 1 phrasal verbs</strong>.</li>
+                <li>Watch separable pronoun order: <em>brought me up</em> (not <em>brought up me</em>).</li>
+                <li>Check 3rd-person singular <strong>-s</strong> (<em>she takes after</em>, <em>he goes by</em>).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast-bar" class="toast-bar"></div>
+
+  <script>
+    /* =========================================================================
+       1. CURRICULUM DATA (10 CORE PHRASAL VERBS, TRAPS, 40 READING QUESTIONS, UPGRADERS)
+       ========================================================================= */
+    const PHRASAL_VERBS = [
+      {
+        id: 'bring-up',
+        base: 'bring up',
+        tags: ['S', 'T'],
+        meaning: 'To raise and care for a child until they become an adult',
+        synonym: 'raise / rear',
+        example: 'Ben was brought up by his grandmother. Mrs Lam brought four children up.',
+        trap: 'Separable [S]: Pronouns (him / them / me) MUST go in the middle: "brought them up" (NEVER "brought up them").',
+        quizSentence: 'Mrs Ma told us how she [ ??? ] six children 30 years ago.',
+        quizAnswer: 'brought up',
+        f1Options: ['brought up', 'grew up', 'named after']
+      },
+      {
+        id: 'get-along',
+        base: 'get along / get on',
+        tags: ['I'],
+        meaning: 'To have a friendly, harmonious relationship with another person',
+        synonym: 'have a good relationship',
+        example: 'Catherine, Jamie and Alex get along. Catherine gets on with Jamie and Alex.',
+        trap: 'Intransitive [I]: Use "get along WITH someone" or "get on WITH someone" when naming the person.',
+        quizSentence: 'People who are able to [ ??? ] with others lead a happier life.',
+        quizAnswer: 'get along',
+        f1Options: ['get along', 'take after', 'get together']
+      },
+      {
+        id: 'get-together',
+        base: 'get together',
+        tags: ['I'],
+        meaning: 'To meet each other socially (Noun form: a get-together)',
+        synonym: 'meet each other / gather',
+        example: "Catherine's family usually gets together at Mid-Autumn Festival.",
+        trap: 'Intransitive [I]: Stands alone without a direct object. Hyphenated noun form: "a family get-together".',
+        quizSentence: 'We usually [ ??? ] for board games on Sunday afternoons.',
+        quizAnswer: 'get together',
+        f1Options: ['get together', 'go by', 'bring up']
+      },
+      {
+        id: 'go-by',
+        base: 'go by',
+        tags: ['T'],
+        meaning: 'To use a nickname or name for yourself which is not your real name',
+        synonym: 'be called / be known as',
+        example: "My brother's name is Terence and he goes by Terry.",
+        trap: 'Transitive [T]: Followed directly by the nickname ("goes by Joe"). Never used in passive voice.',
+        quizSentence: 'Her name is Judith and she [ ??? ] Judy among her friends.',
+        quizAnswer: 'goes by',
+        f1Options: ['goes by', 'names after', 'tells off']
+      },
+      {
+        id: 'grow-up',
+        base: 'grow up',
+        tags: ['I'],
+        meaning: 'To gradually become an older child or an adult',
+        synonym: 'become an adult / mature',
+        example: 'James wants to be an astronaut when he grows up.',
+        trap: 'Intransitive [I]: Children "grow up", whereas parents "bring up" children! Do not mix them up.',
+        quizSentence: 'Jason plans to travel around the world when he [ ??? ].',
+        quizAnswer: 'grows up',
+        f1Options: ['grows up', 'brings up', 'passes away']
+      },
+      {
+        id: 'look-up-to',
+        base: 'look up to',
+        tags: ['T'],
+        meaning: 'To admire and respect someone as a role model',
+        synonym: 'admire / respect',
+        example: 'Mr Chan is fair to us and we all look up to him.',
+        trap: '3-word Transitive [T] verb: Inseparable ("look up to him", NEVER "look him up to").',
+        quizSentence: 'Mr Chan is fair to us, so all S1 students [ ??? ] him.',
+        quizAnswer: 'look up to',
+        f1Options: ['look up to', 'take after', 'tell off']
+      },
+      {
+        id: 'tell-off',
+        base: 'tell off',
+        tags: ['S', 'T'],
+        meaning: 'To speak angrily to someone because they did something wrong',
+        synonym: 'scold / reprimand',
+        example: "Ben's mum told him off for breaking the vase.",
+        trap: 'Separable [S]: Pronoun objects MUST go in the middle: "told him off" (NEVER "told off him").',
+        quizSentence: "Ben's mum [ ??? ] for accidentally breaking the vase.",
+        quizAnswer: 'told him off',
+        f1Options: ['told him off', 'told off him', 'passed him away']
+      },
+      {
+        id: 'pass-away',
+        base: 'pass away',
+        tags: ['I'],
+        meaning: 'To die (polite and respectful euphemism)',
+        synonym: 'die / decease',
+        example: 'My dog passed away last night. Grandpa passed away last year.',
+        trap: 'Intransitive [I]: NEVER use passive voice ("was passed away" is a classic Band 1 exam error!).',
+        quizSentence: 'The famous actor sadly [ ??? ] at a very young age.',
+        quizAnswer: 'passed away',
+        f1Options: ['passed away', 'was passed away', 'went by']
+      },
+      {
+        id: 'name-after',
+        base: 'name after',
+        tags: ['T'],
+        meaning: 'To give someone the same name as another person or famous place',
+        synonym: 'have the same name as',
+        example: "Actually, I'm named after my grandpa.",
+        trap: 'Usually passive when describing a person: "is named after" or "was named after".',
+        quizSentence: 'Jon has the same name as his dad; he [ ??? ] his father.',
+        quizAnswer: 'is named after',
+        f1Options: ['is named after', 'names after', 'takes him after']
+      },
+      {
+        id: 'take-after',
+        base: 'take after',
+        tags: ['T'],
+        meaning: 'To look or behave like an older member of your family',
+        synonym: 'resemble / look like',
+        example: 'Sammy takes after her mother with her fair skin.',
+        trap: 'Inseparable Transitive [T]: Never passive ("is taken after" is wrong) and never split ("takes her after" is wrong).',
+        quizSentence: 'Sammy has her mother’s fair skin; she really [ ??? ] her mother.',
+        quizAnswer: 'takes after',
+        f1Options: ['takes after', 'is taken after', 'takes her after']
+      }
+    ];
+
+    const TRAP_GP_QUESTIONS = [
+      {
+        tag: 'SEPARABLE [S] PRONOUN TRAP',
+        clue: 'Pronoun "him" MUST go between "told" and "off"',
+        quizSentence: "Ben's mum [ ??? ] for breaking the antique vase.",
+        quizAnswer: 'told him off',
+        f1Options: ['told him off', 'told off him', 'tell off him'],
+        trap: 'Separable [S]: Pronouns MUST go in the middle ("told him off").'
+      },
+      {
+        tag: 'SEPARABLE [S] PRONOUN TRAP',
+        clue: 'Pronoun "them" MUST go between "brought" and "up"',
+        quizSentence: 'Their grandmother worked hard and [ ??? ] with love.',
+        quizAnswer: 'brought them up',
+        f1Options: ['brought them up', 'brought up them', 'grew them up'],
+        trap: 'Separable [S]: Put pronoun "them" in the middle ("brought them up").'
+      },
+      {
+        tag: 'INTRANSITIVE [I] PASSIVE TRAP',
+        clue: '"Pass away" CANNOT be used in passive voice',
+        quizSentence: 'Hermes’s grandfather sadly [ ??? ] last year.',
+        quizAnswer: 'passed away',
+        f1Options: ['passed away', 'was passed away', 'passed him away'],
+        trap: 'Intransitive [I]: Never write "was passed away"!'
+      },
+      {
+        tag: 'PASSIVE NAMING STRUCTURE',
+        clue: 'Sharing the exact same name as an older relative',
+        quizSentence: 'Jon has the same name as his father; he [ ??? ] his dad.',
+        quizAnswer: 'is named after',
+        f1Options: ['is named after', 'names after', 'is taken after'],
+        trap: 'Use passive "is/was named after" for the person receiving the name.'
+      },
+      {
+        tag: 'INSEPARABLE [T] TRAP',
+        clue: '"Take after" cannot be separated or passive',
+        quizSentence: 'My elder brother is muscular; he really [ ??? ] Grandpa.',
+        quizAnswer: 'takes after',
+        f1Options: ['takes after', 'takes him after', 'is taken after'],
+        trap: '"Take after" [T] is inseparable and never passive.'
+      },
+      {
+        tag: '3-WORD VERB [T] TRAP',
+        clue: '"Look up to" keeps all 3 words together before the pronoun',
+        quizSentence: 'Mr Chan is fair to everyone, and we all [ ??? ].',
+        quizAnswer: 'look up to him',
+        f1Options: ['look up to him', 'look him up to', 'look up him to'],
+        trap: '3-word phrasal verbs cannot be split ("look up to him").'
+      },
+      {
+        tag: 'PREPOSITION COLLOCATION [I]',
+        clue: 'Naming the person you have a friendly relationship with',
+        quizSentence: 'Catherine [ ??? ] Jamie and Alex at school.',
+        quizAnswer: 'gets on with',
+        f1Options: ['gets on with', 'gets along to', 'gets together with him'],
+        trap: 'Use "get along WITH" or "get on WITH" + person.'
+      },
+      {
+        tag: 'GROW UP vs BRING UP',
+        clue: 'Children become adults on their own (intransitive)',
+        quizSentence: 'James wants to be an astronaut when he [ ??? ].',
+        quizAnswer: 'grows up',
+        f1Options: ['grows up', 'brings up', 'is grown up'],
+        trap: 'Children "grow up" [I]; parents "bring up" [T] children.'
+      }
+    ];
+
+    /* 40 HK Band 1 S1 Reading Questions (4 per Phrasal Verb: 2 MC + 2 FITB) */
+    const READING_QUIZ_BANK = [
+      // 1. bring up
+      {
+        id: 'q-bu-1', verbId: 'bring-up', verbLabel: 'bring up', type: 'MC',
+        passage: 'Reading Extract: "After her parents moved overseas for work, ten-year-old Chloe was raised by her maternal aunt in Kowloon Tong."',
+        question: 'Which phrasal verb best replaces the underlined phrase "was raised" in the passage?',
+        options: ['A. was brought up', 'B. was grown up', 'C. was taken after', 'D. was gone by'],
+        correctIndex: 0,
+        explanation: '"Bring up" [S, T] means to raise a child. Passive past simple "was brought up" fits Chloe.'
+      },
+      {
+        id: 'q-bu-2', verbId: 'bring-up', verbLabel: 'bring up', type: 'FITB',
+        passage: 'Reading Extract: "Raising three energetic boys in a tiny flat was never easy, yet Grandma Lily never complained."',
+        question: 'Complete with the past simple of "bring up" + pronoun "them": Grandma Lily ________ with patience and love.',
+        acceptedAnswers: ['brought them up'],
+        displayAnswer: 'brought them up',
+        explanation: '"Bring up" is separable [S]. Pronoun "them" MUST go in the middle: "brought them up".'
+      },
+      {
+        id: 'q-bu-3', verbId: 'bring-up', verbLabel: 'bring up', type: 'MC',
+        passage: 'Reading Extract: "During the interview, the Olympic swimmer thanked his parents for nurturing him since childhood."',
+        question: 'According to the extract, his parents ________ him to value hard work and perseverance.',
+        options: ['A. grew up', 'B. brought up', 'C. got together', 'D. passed away'],
+        correctIndex: 1,
+        explanation: 'Parents "bring up" children [T], whereas children "grow up" [I].'
+      },
+      {
+        id: 'q-bu-4', verbId: 'bring-up', verbLabel: 'bring up', type: 'FITB',
+        passage: 'Reading Extract: "Born in Aberdeen, Daniel spent his childhood with his grandparents who taught him honesty."',
+        question: 'Fill in the blank (passive past simple): Daniel ________ by his grandparents in Aberdeen.',
+        acceptedAnswers: ['was brought up'],
+        displayAnswer: 'was brought up',
+        explanation: 'Passive past simple for singular subject "Daniel": "was brought up".'
+      },
+
+      // 2. get along / get on
+      {
+        id: 'q-ga-1', verbId: 'get-along', verbLabel: 'get along / get on', type: 'MC',
+        passage: 'Reading Extract: "Although twins Ryan and Leo have completely different hobbies, they enjoy a warm and friendly relationship."',
+        question: 'Which statement is TRUE based on the reading extract?',
+        options: ['A. Ryan and Leo rarely get together.', 'B. Ryan and Leo get along very well.', 'C. Ryan often tells Leo off.', 'D. Ryan goes by Leo at school.'],
+        correctIndex: 1,
+        explanation: '"Get along" (or "get on") means to have a friendly, harmonious relationship.'
+      },
+      {
+        id: 'q-ga-2', verbId: 'get-along', verbLabel: 'get along / get on', type: 'FITB',
+        passage: 'Reading Extract: "Catherine is cheerful and empathetic, so she makes friends effortlessly in her new Secondary 1 class."',
+        question: 'Fill in the blank (present simple): Catherine ________ well with all her new classmates.',
+        acceptedAnswers: ['gets along', 'gets on'],
+        displayAnswer: 'gets along / gets on',
+        explanation: 'Third-person singular ("Catherine") takes "-s": "gets along" or "gets on".'
+      },
+      {
+        id: 'q-ga-3', verbId: 'get-along', verbLabel: 'get along / get on', type: 'MC',
+        passage: 'Reading Extract: "At first, Sam worried about sharing a study desk with his sister, but soon they cooperated smoothly."',
+        question: 'Which preposition completes: "Sam gets on ________ his younger sister now."?',
+        options: ['A. to', 'B. after', 'C. with', 'D. by'],
+        correctIndex: 2,
+        explanation: 'Use "get along WITH" or "get on WITH" when naming the other person.'
+      },
+      {
+        id: 'q-ga-4', verbId: 'get-along', verbLabel: 'get along / get on', type: 'FITB',
+        passage: 'Reading Extract: "The Band 1 student said: My classmates are super supportive and we never argue."',
+        question: 'Fill in the blank (present simple): My classmates and I ________ really well.',
+        acceptedAnswers: ['get along', 'get on'],
+        displayAnswer: 'get along / get on',
+        explanation: 'Plural subject "My classmates and I" uses base form "get along" or "get on".'
+      },
+
+      // 3. get together
+      {
+        id: 'q-gt-1', verbId: 'get-together', verbLabel: 'get together', type: 'MC',
+        passage: 'Reading Extract: "Every Mid-Autumn Festival, relatives from all over Hong Kong gather at Grandpa’s house for dinner."',
+        question: 'Find a phrasal verb that means "gather / meet each other socially" in the extract:',
+        options: ['A. grow up', 'B. get together', 'C. name after', 'D. look up to'],
+        correctIndex: 1,
+        explanation: '"Get together" [I] means to meet each other socially.'
+      },
+      {
+        id: 'q-gt-2', verbId: 'get-together', verbLabel: 'get together', type: 'FITB',
+        passage: 'Reading Extract: "Last Sunday afternoon, Joseph and Hermes met at a board-game café in Mong Kok."',
+        question: 'Fill in the blank (past simple): Joseph and Hermes ________ at a board-game café last Sunday.',
+        acceptedAnswers: ['got together'],
+        displayAnswer: 'got together',
+        explanation: '"Last Sunday" indicates past simple: "got together".'
+      },
+      {
+        id: 'q-gt-3', verbId: 'get-together', verbLabel: 'get together', type: 'MC',
+        passage: 'Reading Extract: "Our class committee is organizing a casual social gathering after the final exams."',
+        question: 'How is the noun form of "get together" correctly written in HK Band 1 writing?',
+        options: ['A. a get-together', 'B. a getting together', 'C. a got-together', 'D. a get togethered'],
+        correctIndex: 0,
+        explanation: 'The noun form is hyphenated: "a get-together".'
+      },
+      {
+        id: 'q-gt-4', verbId: 'get-together', verbLabel: 'get together', type: 'FITB',
+        passage: 'Reading Extract: "Despite their busy schedules, the primary school friends still meet once a month for dim sum."',
+        question: 'Fill in the blank (present simple): The old friends still ________ once a month for dim sum.',
+        acceptedAnswers: ['get together'],
+        displayAnswer: 'get together',
+        explanation: 'Habitual action with plural subject takes "get together".'
+      },
+
+      // 4. go by
+      {
+        id: 'q-gb-1', verbId: 'go-by', verbLabel: 'go by', type: 'MC',
+        passage: 'Reading Extract: "My cousin’s official name on his HKID card is Bartholomew, but everyone at school calls him Bart."',
+        question: 'Which phrasal verb best replaces "is called" in: "Bartholomew ________ Bart at school."?',
+        options: ['A. names after', 'B. goes by', 'C. takes after', 'D. brings up'],
+        correctIndex: 1,
+        explanation: '"Go by [a name]" [T] means to use a nickname instead of your real name.'
+      },
+      {
+        id: 'q-gb-2', verbId: 'go-by', verbLabel: 'go by', type: 'FITB',
+        passage: 'Reading Extract: "Hi! My full name is Elizabeth, though my close friends simply call me Liz."',
+        question: 'Fill in the blank: Hi! My full name is Elizabeth, and I usually ________ Liz.',
+        acceptedAnswers: ['go by'],
+        displayAnswer: 'go by',
+        explanation: 'First-person singular "I" uses base form "go by".'
+      },
+      {
+        id: 'q-gb-3', verbId: 'go-by', verbLabel: 'go by', type: 'MC',
+        passage: 'Reading Extract: "Before becoming famous, Charles Dodgson published stories under the pen name Lewis Carroll."',
+        question: '"Published under the pen name Lewis Carroll" means Charles Dodgson ________ Lewis Carroll.',
+        options: ['A. went by', 'B. grew up', 'C. passed away', 'D. told off'],
+        correctIndex: 0,
+        explanation: 'Past simple "went by" means he used that alias/pen name.'
+      },
+      {
+        id: 'q-gb-4', verbId: 'go-by', verbLabel: 'go by', type: 'FITB',
+        passage: 'Reading Extract: "My brother Terence thinks his full name sounds too formal, so he prefers people to call him Terry."',
+        question: 'Fill in the blank (present simple): My brother’s name is Terence and he ________ Terry.',
+        acceptedAnswers: ['goes by'],
+        displayAnswer: 'goes by',
+        explanation: 'Third-person singular ("he") takes "-es": "goes by".'
+      },
+
+      // 5. grow up
+      {
+        id: 'q-gu-1', verbId: 'grow-up', verbLabel: 'grow up', type: 'MC',
+        passage: 'Reading Extract: "Having spent her childhood on Lamma Island, Maya developed a deep love for marine biology."',
+        question: 'Where did Maya ________?',
+        options: ['A. bring up', 'B. grow up', 'C. name after', 'D. look up to'],
+        correctIndex: 1,
+        explanation: '"Grow up" [I] means to spend one’s childhood and become an adult.'
+      },
+      {
+        id: 'q-gu-2', verbId: 'grow-up', verbLabel: 'grow up', type: 'FITB',
+        passage: 'Reading Extract: "Little James loves reading astronomy books and dreams of exploring Mars as an adult."',
+        question: 'Fill in the blank (present simple): James wants to be an astronaut when he ________.',
+        acceptedAnswers: ['grows up'],
+        displayAnswer: 'grows up',
+        explanation: 'In "when" time clauses, use present simple: "when he grows up".'
+      },
+      {
+        id: 'q-gu-3', verbId: 'grow-up', verbLabel: 'grow up', type: 'MC',
+        passage: 'Reading Extract: "Children mature quickly once they enter secondary school and take on new responsibilities."',
+        question: 'Which phrasal verb is closest in meaning to "mature / become older" in the sentence above?',
+        options: ['A. pass away', 'B. tell off', 'C. grow up', 'D. go by'],
+        correctIndex: 2,
+        explanation: '"Grow up" means to gradually become an older child or adult.'
+      },
+      {
+        id: 'q-gu-4', verbId: 'grow-up', verbLabel: 'grow up', type: 'FITB',
+        passage: 'Reading Extract: "Although Grandpa spent his childhood in a small fishing village in Sai Kung, he later moved to Central."',
+        question: 'Fill in the blank (past simple): Grandpa ________ in a small fishing village in Sai Kung.',
+        acceptedAnswers: ['grew up'],
+        displayAnswer: 'grew up',
+        explanation: 'Irregular past simple of "grow up" is "grew up".'
+      },
+
+      // 6. look up to
+      {
+        id: 'q-lu-1', verbId: 'look-up-to', verbLabel: 'look up to', type: 'MC',
+        passage: 'Reading Extract: "Dr. Chan volunteers at free clinics every weekend, earning the deep admiration of his students."',
+        question: 'Which phrasal verb means "admire and respect" in this context?',
+        options: ['A. look up to', 'B. tell off', 'C. pass away', 'D. get together'],
+        correctIndex: 0,
+        explanation: '"Look up to" [T] means to admire and respect someone as a role model.'
+      },
+      {
+        id: 'q-lu-2', verbId: 'look-up-to', verbLabel: 'look up to', type: 'FITB',
+        passage: 'Reading Extract: "My elder sister won a scholarship to university, and I admire her discipline enormously."',
+        question: 'Fill in the blank using "look up to" + pronoun "her": She is my role model, and I really ________.',
+        acceptedAnswers: ['look up to her'],
+        displayAnswer: 'look up to her',
+        explanation: '3-word phrasal verbs are inseparable—pronoun "her" goes at the end: "look up to her".'
+      },
+      {
+        id: 'q-lu-3', verbId: 'look-up-to', verbLabel: 'look up to', type: 'MC',
+        passage: 'Reading Extract: "Asked who his greatest hero was, Marcus immediately named his grandfather."',
+        question: 'Which question was Marcus answering?',
+        options: ['A. "Who do you take after?"', 'B. "Who do you look up to?"', 'C. "Who brought you up?"', 'D. "Who do you go by?"'],
+        correctIndex: 1,
+        explanation: '"Who do you look up to?" asks who you admire/respect most.'
+      },
+      {
+        id: 'q-lu-4', verbId: 'look-up-to', verbLabel: 'look up to', type: 'FITB',
+        passage: 'Reading Extract: "Because Mr Chan treats every student fairly, the entire S1 form respects him deeply."',
+        question: 'Fill in the blank (present simple): The entire S1 form ________ Mr Chan because he is fair.',
+        acceptedAnswers: ['looks up to'],
+        displayAnswer: 'looks up to',
+        explanation: 'Singular collective subject "The entire S1 form" takes "looks up to".'
+      },
+
+      // 7. tell off
+      {
+        id: 'q-to-1', verbId: 'tell-off', verbLabel: 'tell off', type: 'MC',
+        passage: 'Reading Extract: "When Ben accidentally shattered his mother’s porcelain vase, she scolded him sternly."',
+        question: 'Which phrase can replace "scolded him" with accurate Band 1 grammar?',
+        options: ['A. told off him', 'B. told him off', 'C. took him after', 'D. passed him away'],
+        correctIndex: 1,
+        explanation: '"Tell off" [S, T] is separable—pronoun "him" MUST go in the middle: "told him off".'
+      },
+      {
+        id: 'q-to-2', verbId: 'tell-off', verbLabel: 'tell off', type: 'FITB',
+        passage: 'Reading Extract: "The librarian spoke angrily to the noisy boys for disturbing everyone in the reading room."',
+        question: 'Fill in the blank (past simple) using "tell off" + pronoun "them": The librarian ________ for making noise.',
+        acceptedAnswers: ['told them off'],
+        displayAnswer: 'told them off',
+        explanation: 'Past simple "told" + pronoun "them" in the middle + "off": "told them off".'
+      },
+      {
+        id: 'q-to-3', verbId: 'tell-off', verbLabel: 'tell off', type: 'MC',
+        passage: 'Reading Extract: "Watch out! If Mr Lee catches you running in the corridor, you will be reprimanded!"',
+        question: 'Which passive form completes: "You will ________ for running in the corridor!"?',
+        options: ['A. get told off', 'B. get taken after', 'C. get gone by', 'D. get grown up'],
+        correctIndex: 0,
+        explanation: '"Get told off for doing something" means to be scolded.'
+      },
+      {
+        id: 'q-to-4', verbId: 'tell-off', verbLabel: 'tell off', type: 'FITB',
+        passage: 'Reading Extract: "Whenever Kevin forgets to hand in his English composition, Miss Ho scolds him after class."',
+        question: 'Fill in the blank (present simple) using "tell off" + pronoun "him": Miss Ho always ________ when he forgets his homework.',
+        acceptedAnswers: ['tells him off'],
+        displayAnswer: 'tells him off',
+        explanation: 'Third-person singular ("Miss Ho") + pronoun "him" in the middle: "tells him off".'
+      },
+
+      // 8. pass away
+      {
+        id: 'q-pa-1', verbId: 'pass-away', verbLabel: 'pass away', type: 'MC',
+        passage: 'Reading Extract: "The entire city mourned when the beloved philanthropist died peacefully at the age of ninety-four."',
+        question: 'Which polite phrasal verb replaces "died" in the sentence above?',
+        options: ['A. passed away', 'B. was passed away', 'C. went by', 'D. grew up'],
+        correctIndex: 0,
+        explanation: '"Pass away" [I] is intransitive—never use passive voice ("was passed away").'
+      },
+      {
+        id: 'q-pa-2', verbId: 'pass-away', verbLabel: 'pass away', type: 'FITB',
+        passage: 'Reading Extract: "Hermes’s grandfather used to visit the gym every morning until his death last year."',
+        question: 'Fill in the blank (past simple): They went to the gym every day before Grandpa ________ last year.',
+        acceptedAnswers: ['passed away'],
+        displayAnswer: 'passed away',
+        explanation: '"Last year" signals past simple active: "passed away".'
+      },
+      {
+        id: 'q-pa-3', verbId: 'pass-away', verbLabel: 'pass away', type: 'MC',
+        passage: 'Reading Extract: "Sarah looked heartbroken this morning because her pet terrier died last night."',
+        question: 'Which response is most appropriate when a friend says, "My dog passed away last night"?',
+        options: ['A. "Where did it go to?"', 'B. "I’m sorry to hear about your loss."', 'C. "It is very cute."', 'D. "You should tell it off."'],
+        correctIndex: 1,
+        explanation: '"Pass away" means to die, so expressing sympathy is the appropriate response.'
+      },
+      {
+        id: 'q-pa-4', verbId: 'pass-away', verbLabel: 'pass away', type: 'FITB',
+        passage: 'Reading Extract: "Although the famous author died over fifty years ago, his adventure novels remain popular among S1 students."',
+        question: 'Fill in the blank (past simple): Although the author ________ over fifty years ago, his books are still widely read.',
+        acceptedAnswers: ['passed away'],
+        displayAnswer: 'passed away',
+        explanation: 'Past simple active "passed away" (never "was passed away").'
+      },
+
+      // 9. name after
+      {
+        id: 'q-na-1', verbId: 'name-after', verbLabel: 'name after', type: 'MC',
+        passage: 'Reading Extract: "Hermes shares the exact same first name as his maternal grandfather, who was a classical scholar."',
+        question: 'According to the extract, Hermes ________ his maternal grandfather.',
+        options: ['A. is named after', 'B. names after', 'C. takes him after', 'D. gets along'],
+        correctIndex: 0,
+        explanation: 'Use passive voice ("is named after" / "was named after") for the person given the name.'
+      },
+      {
+        id: 'q-na-2', verbId: 'name-after', verbLabel: 'name after', type: 'FITB',
+        passage: 'Reading Extract: "Victoria Harbour in Hong Kong received its name in honour of Queen Victoria."',
+        question: 'Fill in the blank (passive past simple): Victoria Harbour ________ Queen Victoria.',
+        acceptedAnswers: ['was named after', 'is named after'],
+        displayAnswer: 'was named after',
+        explanation: 'Passive "was named after" shows the harbour received Queen Victoria’s name.'
+      },
+      {
+        id: 'q-na-3', verbId: 'name-after', verbLabel: 'name after', type: 'MC',
+        passage: 'Reading Extract: "Mr and Mrs Chan decided to give their newborn daughter the same name as her grandmother, Clara."',
+        question: 'Which active sentence means the same thing?',
+        options: ['A. They named their daughter after her grandmother.', 'B. They went by their daughter Clara.', 'C. They grew up their daughter Clara.', 'D. They took after their daughter Clara.'],
+        correctIndex: 0,
+        explanation: 'Active form: "named their daughter after her grandmother".'
+      },
+      {
+        id: 'q-na-4', verbId: 'name-after', verbLabel: 'name after', type: 'FITB',
+        passage: 'Reading Extract: "Jon has the exact same English name as his father, Jonathan."',
+        question: 'Fill in the blank (passive present simple): Jon ________ his father.',
+        acceptedAnswers: ['is named after', 'was named after'],
+        displayAnswer: 'is named after',
+        explanation: 'Passive form "is named after" expresses sharing a family name.'
+      },
+
+      // 10. take after
+      {
+        id: 'q-ta-1', verbId: 'take-after', verbLabel: 'take after', type: 'MC',
+        passage: 'Reading Extract: "Everyone at the family reunion remarked that Sammy has her mother’s fair complexion and bright eyes."',
+        question: 'Which phrasal verb best summarizes the relationship between Sammy and her mother?',
+        options: ['A. Sammy takes after her mother.', 'B. Sammy brings up her mother.', 'C. Sammy names after her mother.', 'D. Sammy gets together her mother.'],
+        correctIndex: 0,
+        explanation: '"Take after" [T] means to resemble an older family member.'
+      },
+      {
+        id: 'q-ta-2', verbId: 'take-after', verbLabel: 'take after', type: 'FITB',
+        passage: 'Reading Extract: "My elder brother and my grandfather are both tall, strong, and passionate about weightlifting."',
+        question: 'Fill in the blank (present simple): My elder brother ________ my grandfather in build and strength.',
+        acceptedAnswers: ['takes after'],
+        displayAnswer: 'takes after',
+        explanation: 'Third-person singular ("My elder brother") takes "-s": "takes after".'
+      },
+      {
+        id: 'q-ta-3', verbId: 'take-after', verbLabel: 'take after', type: 'MC',
+        passage: 'Reading Extract: "Unlike his quiet father, Leo is outgoing and talkative just like his aunt."',
+        question: 'Which sentence is grammatically CORRECT in Band 1 English?',
+        options: ['A. Leo is taken after his aunt.', 'B. Leo takes his aunt after.', 'C. Leo takes after his aunt.', 'D. Leo takes after to his aunt.'],
+        correctIndex: 2,
+        explanation: '"Take after" [T] is inseparable and cannot be used in the passive voice.'
+      },
+      {
+        id: 'q-ta-4', verbId: 'take-after', verbLabel: 'take after', type: 'FITB',
+        passage: 'Reading Extract: "Both my father and I love solving logic puzzles and playing chess on rainy afternoons."',
+        question: 'Fill in the blank (present simple): People say I ________ my father because we both love logic puzzles.',
+        acceptedAnswers: ['take after'],
+        displayAnswer: 'take after',
+        explanation: 'First-person singular "I" uses the base form "take after".'
+      }
+    ];
+
+    const UPGRADE_SENTENCES = [
+      {
+        basic: 'My real name is Alexander, and my friends call me Alex.',
+        highlight: 'call me',
+        upgraded: 'My real name is Alexander, and I <span class="pv-hl">go by</span> Alex among my friends.',
+        tip: 'Using "go by" sounds far more natural in personal introductions.'
+      },
+      {
+        basic: 'I look like my father because we both have curly hair and love chess.',
+        highlight: 'look like',
+        upgraded: 'I <span class="pv-hl">take after</span> my father in both appearance and our passion for chess.',
+        tip: '"Take after" covers both physical appearance and personality traits.'
+      },
+      {
+        basic: 'I really respect my elder sister because she studies hard and helps me.',
+        highlight: 'respect',
+        upgraded: 'I deeply <span class="pv-hl">look up to</span> my elder sister for her discipline and kindness.',
+        tip: '"Look up to" elevates simple verbs like "respect" or "like" in Band 1 essays.'
+      },
+      {
+        basic: 'When I become an adult, I want to design eco-friendly buildings.',
+        highlight: 'become an adult',
+        upgraded: 'When I <span class="pv-hl">grow up</span>, I aspire to design sustainable architecture.',
+        tip: 'Remember: children "grow up" [I], while parents "bring up" [T] children.'
+      }
+    ];
+
+    /* =========================================================================
+       2. GLOBAL STATE & CENTRAL EVENT DELEGATION (ZERO INLINE ONCLICK BUGS)
+       ========================================================================= */
+    const state = {
+      xp: 0,
+      theme: 'light',
+      fontXL: false,
+      soundOn: true,
+      activeTab: 'race',
+      cardFilter: 'ALL',
+      raceMode: 'reading',
+      isRacing: false,
+      isPaused: false,
+      qIndex: 0,
+      score: 0,
+      combo: 1,
+      correctCount: 0,
+      missedItems: [],
+      currentLane: 1,
+      boostTimer: 0,
+      penaltyTimer: 0,
+      use3D: false
+    };
+
+    const quizState = {
+      activeQuestions: [],
+      results: {} // { [qId]: { isCorrect, selectedIndex?, userText? } }
+    };
+
+    const upgradedCards = {};
+
+    function showToast(msg) {
+      const el = document.getElementById('toast-bar');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+
+    function addXP(pts) {
+      state.xp += pts;
+      document.getElementById('xp-value').textContent = state.xp;
+    }
+
+    let audioCtx = null;
+    function playSFX(type) {
+      if (!state.soundOn) return;
+      try {
+        if (!audioCtx) {
+          const Ctx = window.AudioContext || window.webkitAudioContext;
+          if (Ctx) audioCtx = new Ctx();
+        }
+        if (!audioCtx) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'boost') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(210, now);
+          osc.frequency.exponentialRampToValueAtTime(600, now + 0.22);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+          osc.start(now);
+          osc.stop(now + 0.24);
+        } else if (type === 'error') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(150, now);
+          osc.frequency.linearRampToValueAtTime(80, now + 0.22);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+          osc.start(now);
+          osc.stop(now + 0.24);
+        } else {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(480, now);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+          osc.start(now);
+          osc.stop(now + 0.06);
+        }
+      } catch (e) {
+        // Safe ignore
+      }
+    }
+
+    /* =========================================================================
+       3. BRITISH (UK) & AMERICAN (US) SPEECH SYNTHESIS
+       ========================================================================= */
+    let voicesCache = [];
+    function refreshVoices() {
+      if ('speechSynthesis' in window) {
+        voicesCache = window.speechSynthesis.getVoices() || [];
+      }
+    }
+    if ('speechSynthesis' in window) {
+      refreshVoices();
+      window.speechSynthesis.onvoiceschanged = refreshVoices;
+    }
+
+    function speakText(text, accent, buttonEl) {
+      playSFX('click');
+      if (!('speechSynthesis' in window)) {
+        showToast(`${accent === 'UK' ? '🇬🇧 UK' : '🇺🇸 US'}: "${text}"`);
+        return;
+      }
+
+      try {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        const langCode = accent === 'UK' ? 'en-GB' : 'en-US';
+        utter.lang = langCode;
+        utter.rate = 0.94;
+
+        if (voicesCache.length === 0) refreshVoices();
+        const matchedVoice =
+          voicesCache.find(v => v.lang && v.lang.toLowerCase().replace('_', '-') === langCode.toLowerCase()) ||
+          voicesCache.find(v =>
+            accent === 'UK'
+              ? /uk|british|england|daniel|serena|kate|arthur/i.test(v.name)
+              : /us|american|samantha|alex|david|zira|aria/i.test(v.name)
+          );
+        if (matchedVoice) utter.voice = matchedVoice;
+
+        document.querySelectorAll('.speak-btn.speaking').forEach(b => b.classList.remove('speaking'));
+        if (buttonEl) {
+          buttonEl.classList.add('speaking');
+          utter.onend = () => buttonEl.classList.remove('speaking');
+          utter.onerror = () => buttonEl.classList.remove('speaking');
+        }
+
+        window.speechSynthesis.speak(utter);
+        showToast(`${accent === 'UK' ? '🇬🇧 UK' : '🇺🇸 US'} Pronunciation: "${text}"`);
+      } catch (e) {
+        showToast(`${accent === 'UK' ? '🇬🇧 UK' : '🇺🇸 US'}: "${text}"`);
+      }
+    }
+
+    /* =========================================================================
+       4. RENDERERS: FLASHCARDS, READING QUIZ, WRITING STUDIO
+       ========================================================================= */
+    function renderFlashcards() {
+      const grid = document.getElementById('flashcards-grid');
+      const filtered = state.cardFilter === 'ALL'
+        ? PHRASAL_VERBS
+        : PHRASAL_VERBS.filter(pv => pv.tags.includes(state.cardFilter));
+
+      grid.innerHTML = filtered.map(pv => {
+        const badges = pv.tags.map(t => `<span class="tag-badge tag-${t}">[${t}]</span>`).join(' ');
+        return `
+          <article class="flashcard" data-action="flip-card" data-id="${pv.id}">
+            <div class="card-front">
+              <div class="card-top-row">
+                <div>${badges}</div>
+                <span class="flip-label">Tap card to flip ↻</span>
+              </div>
+              <div class="word-audio-row">
+                <h3 class="pv-title">${pv.base}</h3>
+                <div class="audio-btns">
+                  <button type="button" class="speak-btn" data-action="speak" data-accent="UK" data-kind="word" data-id="${pv.id}">
+                    <span>🇬🇧</span><span>UK</span>
+                  </button>
+                  <button type="button" class="speak-btn" data-action="speak" data-accent="US" data-kind="word" data-id="${pv.id}">
+                    <span>🇺🇸</span><span>US</span>
+                  </button>
+                </div>
+              </div>
+              <p class="pv-def">${pv.meaning}</p>
+              <div class="syn-box">
+                <strong style="color:var(--accent-blue);">Reading Synonym:</strong> ${pv.synonym}
+              </div>
+            </div>
+
+            <div class="card-back hidden">
+              <div class="card-top-row">
+                <strong style="color:var(--accent-blue); font-size:1.1rem;">${pv.base}</strong>
+                <span class="flip-label">Tap to flip back ↺</span>
+              </div>
+              <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap;">
+                  <span style="font-size:0.78rem; font-weight:800; color:var(--accent-green); text-transform:uppercase;">Textbook Example:</span>
+                  <div class="audio-btns">
+                    <button type="button" class="speak-btn" data-action="speak" data-accent="UK" data-kind="example" data-id="${pv.id}">
+                      <span>🇬🇧</span><span>UK</span>
+                    </button>
+                    <button type="button" class="speak-btn" data-action="speak" data-accent="US" data-kind="example" data-id="${pv.id}">
+                      <span>🇺🇸</span><span>US</span>
+                    </button>
+                  </div>
+                </div>
+                <p style="font-size:0.95rem;"><em>"${pv.example}"</em></p>
+              </div>
+              <div class="trap-box">
+                <strong style="display:block; font-size:0.78rem; text-transform:uppercase; margin-bottom:4px;">⚠️ Band 1 Exam Trap:</strong>
+                ${pv.trap}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function applyQuizControls(shuffle = false) {
+      const quota = parseInt(document.getElementById('select-quota').value, 10) || 3;
+      const verbFilter = document.getElementById('select-verb').value;
+      const formatFilter = document.getElementById('select-format').value;
+
+      const targetVerbs = verbFilter === 'ALL'
+        ? PHRASAL_VERBS
+        : PHRASAL_VERBS.filter(pv => pv.id === verbFilter);
+
+      let list = [];
+      targetVerbs.forEach(pv => {
+        let pool = READING_QUIZ_BANK.filter(q => q.verbId === pv.id);
+        if (formatFilter !== 'ALL') {
+          pool = pool.filter(q => q.type === formatFilter);
+        }
+        if (shuffle) {
+          pool = [...pool].sort(() => Math.random() - 0.5);
+        }
+        list = list.concat(pool.slice(0, quota));
+      });
+
+      if (shuffle) {
+        list.sort(() => Math.random() - 0.5);
+      }
+
+      quizState.activeQuestions = list;
+      const labelPrefix = verbFilter === 'ALL'
+        ? `${quota} per verb`
+        : document.getElementById('select-verb').selectedOptions[0].text;
+      document.getElementById('quiz-active-label').textContent = `${labelPrefix} (${list.length} Qs)`;
+
+      renderQuizList();
+    }
+
+    function renderQuizList() {
+      const container = document.getElementById('quiz-cards-container');
+      const total = quizState.activeQuestions.length;
+      let answered = 0;
+      let correct = 0;
+
+      quizState.activeQuestions.forEach(q => {
+        if (quizState.results[q.id]) {
+          answered++;
+          if (quizState.results[q.id].isCorrect) correct++;
+        }
+      });
+
+      document.getElementById('quiz-total').textContent = total;
+      document.getElementById('quiz-answered').textContent = answered;
+      document.getElementById('quiz-correct').textContent = correct;
+
+      if (total === 0) {
+        container.innerHTML = `<div class="panel-card"><p>No questions match this filter combination. Try selecting "All Formats".</p></div>`;
+        return;
+      }
+
+      container.innerHTML = quizState.activeQuestions.map((q, index) => {
+        const res = quizState.results[q.id];
+        const statusCls = res ? (res.isCorrect ? 'q-correct' : 'q-wrong') : '';
+        const fmtBadge = q.type === 'MC'
+          ? '<span class="fmt-badge fmt-mc">Multiple Choice</span>'
+          : '<span class="fmt-badge fmt-fitb">Fill in the Blank</span>';
+
+        let controlHTML = '';
+        if (q.type === 'MC') {
+          controlHTML = `<div class="mc-grid">` + q.options.map((opt, optIdx) => {
+            let cls = 'mc-btn';
+            if (res) {
+              if (optIdx === q.correctIndex) cls += ' opt-right';
+              else if (optIdx === res.selectedIndex && !res.isCorrect) cls += ' opt-wrong';
+            }
+            return `<button type="button" class="${cls}" data-action="answer-mc" data-id="${q.id}" data-opt="${optIdx}" ${res ? 'disabled' : ''}>${opt}</button>`;
+          }).join('') + `</div>`;
+        } else {
+          const val = res ? res.userText.replace(/"/g, '&quot;') : '';
+          controlHTML = `
+            <div class="fitb-row">
+              <input type="text" class="text-input fitb-input" id="input-${q.id}" data-id="${q.id}" value="${val}" placeholder="Type the exact phrasal verb..." ${res ? 'disabled' : ''} />
+              <button type="button" class="primary-btn" data-action="check-fitb" data-id="${q.id}" ${res ? 'disabled' : ''}>Check Answer</button>
+            </div>
+          `;
+        }
+
+        const fbHTML = res ? `
+          <div class="q-feedback ${res.isCorrect ? 'ok' : 'err'}">
+            <strong>${res.isCorrect ? '✅ Correct! (+30 XP)' : `❌ Correct Answer: "${q.type === 'MC' ? q.options[q.correctIndex] : q.displayAnswer}"`}</strong>
+            <p style="margin-top:4px; color:var(--text-secondary);">${q.explanation}</p>
+          </div>
+        ` : '';
+
+        return `
+          <article class="quiz-card ${statusCls}" id="card-${q.id}">
+            <div class="q-header">
+              <span style="font-weight:800; color:var(--text-muted);">Q${index + 1}.</span>
+              ${fmtBadge}
+              <span class="tag-badge tag-T">${q.verbLabel}</span>
+            </div>
+            <div class="passage-box">${q.passage}</div>
+            <p class="q-prompt">${q.question}</p>
+            ${controlHTML}
+            ${fbHTML}
+          </article>
+        `;
+      }).join('');
+    }
+
+    function handleFITBSubmit(qId) {
+      if (quizState.results[qId]) return;
+      const q = READING_QUIZ_BANK.find(item => item.id === qId);
+      const input = document.getElementById(`input-${qId}`);
+      if (!q || !input) return;
+
+      const raw = input.value.trim();
+      if (!raw) {
+        showToast('✍️ Type your answer in the blank first!');
+        input.focus();
+        return;
+      }
+
+      const norm = raw.toLowerCase().replace(/[.!?]+$/g, '').replace(/\s+/g, ' ');
+      const isCorrect = q.acceptedAnswers.some(ans => ans.toLowerCase() === norm);
+      quizState.results[qId] = { isCorrect, userText: raw };
+
+      if (isCorrect) {
+        playSFX('boost');
+        addXP(30);
+      } else {
+        playSFX('error');
+      }
+      renderQuizList();
+    }
+
+    function renderUpgraders() {
+      const grid = document.getElementById('upgrader-grid');
+      grid.innerHTML = UPGRADE_SENTENCES.map((item, idx) => {
+        const isUp = !!upgradedCards[idx];
+        return `
+          <div class="upgrade-card ${isUp ? 'is-upgraded' : ''}">
+            <div>
+              <div style="font-size:0.76rem; font-weight:800; text-transform:uppercase; color:${isUp ? 'var(--accent-green)' : 'var(--text-muted)'}; margin-bottom:6px;">
+                ${isUp ? '✨ Band 1 Upgraded Sentence' : 'Basic S1 Sentence'}
+              </div>
+              <p>${isUp ? item.upgraded : item.basic.replace(item.highlight, `<span class="basic-mark">${item.highlight}</span>`)}</p>
+              ${isUp ? `<p style="margin-top:8px; font-size:0.86rem; color:var(--accent-green); font-weight:700;">💡 ${item.tip}</p>` : ''}
+            </div>
+            <button type="button" class="${isUp ? 'secondary-btn' : 'primary-btn'}" style="min-height:40px; font-size:0.85rem;" data-action="upgrade-sentence" data-idx="${idx}">
+              ${isUp ? '↺ Show Basic Version' : '⚡ Upgrade Sentence'}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderWritingHelperChips() {
+      const container = document.getElementById('verb-helper-chips');
+      const snippets = ['go by', 'was named after', 'brought me up', 'take after', 'look up to', 'get along with', 'get together', 'grow up'];
+      container.innerHTML = snippets.map(text =>
+        `<button type="button" class="verb-chip" data-action="insert-verb" data-text="${text}">+ ${text}</button>`
+      ).join('');
+    }
+
+    function updateWritingLivePreview() {
+      const ta = document.getElementById('writing-textarea');
+      const preview = document.getElementById('writing-live-preview');
+      const countEl = document.getElementById('writing-pv-count');
+      const text = ta.value.trim();
+
+      if (!text) {
+        preview.innerHTML = '<span style="color:var(--text-muted); font-style:italic;">Start typing on the left or click a phrasal verb chip to see live highlighting...</span>';
+        countEl.textContent = '0';
+        return;
+      }
+
+      const safeHTML = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+      const pvRegex = /\b(bring(?:s|ing)?\s+(?:\w+\s+)?up|brought\s+(?:\w+\s+)?up|get(?:s|ting)?\s+along|got\s+along|get(?:s|ting)?\s+on|got\s+on|get(?:s|ting)?\s+together|got\s+together|go(?:es|ing)?\s+by|went\s+by|grow(?:s|ing)?\s+up|grew\s+up|look(?:s|ing|ed)?\s+up\s+to|tell(?:s|ing)?\s+(?:\w+\s+)?off|told\s+(?:\w+\s+)?off|pass(?:es|ing|ed)?\s+away|nam(?:e|es|ing|ed)\s+after|tak(?:e|es|ing)\s+after|took\s+after)\b/gi;
+
+      const matches = text.match(pvRegex) || [];
+      preview.innerHTML = safeHTML.replace(pvRegex, m => `<span class="pv-hl">${m}</span>`);
+      countEl.textContent = matches.length;
+    }
+
+    function gradeWritingDraft() {
+      const text = document.getElementById('writing-textarea').value.trim();
+      const reportBox = document.getElementById('writing-feedback-box');
+      if (!text) {
+        showToast('✍️ Write a few sentences first!');
+        return;
+      }
+
+      const pvRegex = /\b(bring(?:s|ing)?\s+(?:\w+\s+)?up|brought\s+(?:\w+\s+)?up|get(?:s|ting)?\s+along|got\s+along|get(?:s|ting)?\s+on|got\s+on|get(?:s|ting)?\s+together|got\s+together|go(?:es|ing)?\s+by|went\s+by|grow(?:s|ing)?\s+up|grew\s+up|look(?:s|ing|ed)?\s+up\s+to|tell(?:s|ing)?\s+(?:\w+\s+)?off|told\s+(?:\w+\s+)?off|pass(?:es|ing|ed)?\s+away|nam(?:e|es|ing|ed)\s+after|tak(?:e|es|ing)\s+after|took\s+after)\b/gi;
+      const matches = text.match(pvRegex) || [];
+      const uniqueCount = new Set(matches.map(m => m.toLowerCase())).size;
+      const hasTrapError = /\b(brought up (him|her|them|me)|told off (him|her|them|me)|was passed away|is taken after)\b/i.test(text);
+
+      const bullets = [];
+      if (uniqueCount >= 4) {
+        bullets.push(`<li style="color:var(--accent-green); font-weight:700;">🌟 Band 1 Distinction! You used ${uniqueCount} distinct Day 1 phrasal verbs.</li>`);
+        addXP(50);
+        playSFX('boost');
+      } else {
+        bullets.push(`<li style="color:var(--accent-amber); font-weight:700;">⚡ Good start (${uniqueCount}/4 target phrasal verbs). Try adding ${4 - uniqueCount} more from the chips above!</li>`);
+        playSFX('click');
+      }
+
+      if (hasTrapError) {
+        bullets.push(`<li style="color:var(--accent-red); font-weight:700;">⚠️ Grammar Trap Detected: Check separable pronoun placement ("brought me up") or avoid passive "was passed away".</li>`);
+      } else {
+        bullets.push(`<li style="color:var(--accent-blue); font-weight:700;">✅ Zero Band 1 phrasal verb grammar traps detected!</li>`);
+      }
+
+      reportBox.innerHTML = `
+        <strong style="color:var(--accent-blue); display:block; margin-bottom:6px;">Band 1 Examiner Evaluation:</strong>
+        <ul style="padding-left:18px;">${bullets.join('')}</ul>
+      `;
+    }
+
+    /* =========================================================================
+       5. FORMULA 1 3D / 2D CANVAS RACING ENGINE
+       ========================================================================= */
+    const LANE_X = [-2.9, 0, 2.9];
+    let scene, camera, renderer, roadMat, groundMat, starPoints;
+    let f1Car, f1Wheels = [], exhaustCone, drsFlap;
+    let roadDashes = [], kerbs = [], pylons = [], gateRow3D = null;
+    let fallbackCanvas = null, fallbackCtx = null, fallbackGateZ = 0, fallbackGates = [], fallbackResolved = false;
+
+    function getActiveRacePool() {
+      return state.raceMode === 'reading' ? PHRASAL_VERBS : TRAP_GP_QUESTIONS;
+    }
+
+    function initRaceGraphics() {
+      const mount = document.getElementById('race-canvas-mount');
+      const badge = document.getElementById('engine-badge');
+
+      try {
+        if (typeof THREE === 'undefined') throw new Error('Three.js loading');
+
+        const w = mount.clientWidth || 800;
+        const h = mount.clientHeight || 480;
+
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(58, w / h, 0.1, 180);
+        camera.position.set(0, 3.6, 7.6);
+        camera.lookAt(0, 1.0, -12);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(w, h);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        mount.innerHTML = '';
+        mount.appendChild(renderer.domElement);
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.9));
+        const dir = new THREE.DirectionalLight(0xffffff, 1.2);
+        dir.position.set(10, 18, 12);
+        scene.add(dir);
+
+        const starGeo = new THREE.BufferGeometry();
+        const starPos = new Float32Array(220 * 3);
+        for (let i = 0; i < 220; i++) {
+          starPos[i * 3] = (Math.random() - 0.5) * 90;
+          starPos[i * 3 + 1] = Math.random() * 32 + 5;
+          starPos[i * 3 + 2] = -Math.random() * 140;
+        }
+        starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+        starPoints = new THREE.Points(starGeo, new THREE.PointsMaterial({ color: 0x93c5fd, size: 0.2 }));
+        scene.add(starPoints);
+
+        groundMat = new THREE.MeshStandardMaterial({ color: 0x86efac, roughness: 0.9 });
+        const ground = new THREE.Mesh(new THREE.PlaneGeometry(140, 220), groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.set(0, -0.05, -80);
+        scene.add(ground);
+
+        roadMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.65 });
+        const road = new THREE.Mesh(new THREE.PlaneGeometry(10.0, 220), roadMat);
+        road.rotation.x = -Math.PI / 2;
+        road.position.set(0, 0, -80);
+        scene.add(road);
+
+        const dashGeo = new THREE.PlaneGeometry(0.15, 2.5);
+        const dashMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc });
+        const kerbGeo = new THREE.BoxGeometry(0.55, 0.08, 3.0);
+        const redMat = new THREE.MeshStandardMaterial({ color: 0xef4444 });
+        const whiteMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc });
+        const poleGeo = new THREE.BoxGeometry(0.22, 5.0, 0.22);
+        const poleMat = new THREE.MeshStandardMaterial({ color: 0x475569 });
+        const lampGeo = new THREE.BoxGeometry(1.1, 0.16, 0.25);
+        const lampMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+
+        roadDashes = [];
+        kerbs = [];
+        pylons = [];
+
+        for (let i = 0; i < 24; i++) {
+          const z = 12 - i * 6;
+          [-1.45, 1.45].forEach(lx => {
+            const d = new THREE.Mesh(dashGeo, dashMat);
+            d.rotation.x = -Math.PI / 2;
+            d.position.set(lx, 0.02, z);
+            scene.add(d);
+            roadDashes.push(d);
+          });
+
+          const kMat = i % 2 === 0 ? redMat : whiteMat;
+          [-5.15, 5.15].forEach(kx => {
+            const k = new THREE.Mesh(kerbGeo, kMat);
+            k.position.set(kx, 0.03, z);
+            scene.add(k);
+            kerbs.push(k);
+          });
+
+          if (i % 3 === 0) {
+            [-6.3, 6.3].forEach(px => {
+              const g = new THREE.Group();
+              const pole = new THREE.Mesh(poleGeo, poleMat);
+              pole.position.y = 2.5;
+              g.add(pole);
+              const lamp = new THREE.Mesh(lampGeo, lampMat);
+              lamp.position.set(px < 0 ? 0.45 : -0.45, 4.9, 0);
+              g.add(lamp);
+              g.position.set(px, 0, z);
+              scene.add(g);
+              pylons.push(g);
+            });
+          }
+        }
+
+        build3DCar();
+        state.use3D = true;
+        badge.textContent = '🟢 3D WEBGL GRAND PRIX CIRCUIT';
+        syncRaceTheme();
+      } catch (e) {
+        state.use3D = false;
+        badge.textContent = '🟢 F1 TURBO CIRCUIT READY';
+        mount.innerHTML = '<canvas id="fallback-2d-canvas"></canvas>';
+        fallbackCanvas = document.getElementById('fallback-2d-canvas');
+        fallbackCtx = fallbackCanvas.getContext('2d');
+        resizeRaceViewport();
+      }
+    }
+
+    function build3DCar() {
+      f1Car = new THREE.Group();
+      const redMat = new THREE.MeshStandardMaterial({ color: 0xdc2626, roughness: 0.3, metalness: 0.55 });
+      const darkMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.5 });
+      const goldMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.3, metalness: 0.7 });
+
+      const body = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.36, 2.7), redMat);
+      body.position.set(0, 0.36, 0);
+      f1Car.add(body);
+
+      const nose = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.22, 1.15), redMat);
+      nose.position.set(0, 0.28, -1.75);
+      f1Car.add(nose);
+
+      const frontWing = new THREE.Mesh(new THREE.BoxGeometry(1.75, 0.08, 0.45), darkMat);
+      frontWing.position.set(0, 0.18, -2.15);
+      f1Car.add(frontWing);
+
+      [-0.62, 0.62].forEach(sx => {
+        const pod = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.3, 1.3), redMat);
+        pod.position.set(sx, 0.33, 0.15);
+        f1Car.add(pod);
+      });
+
+      const helmet = new THREE.Mesh(new THREE.SphereGeometry(0.2, 14, 14), new THREE.MeshStandardMaterial({ color: 0x38bdf8 }));
+      helmet.position.set(0, 0.64, -0.05);
+      f1Car.add(helmet);
+
+      [-0.55, 0.55].forEach(rx => {
+        const strut = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.55, 0.42), darkMat);
+        strut.position.set(rx, 0.68, 1.25);
+        f1Car.add(strut);
+      });
+
+      const mainWing = new THREE.Mesh(new THREE.BoxGeometry(1.18, 0.08, 0.36), redMat);
+      mainWing.position.set(0, 0.88, 1.25);
+      f1Car.add(mainWing);
+
+      drsFlap = new THREE.Mesh(new THREE.BoxGeometry(1.16, 0.06, 0.22), goldMat);
+      drsFlap.position.set(0, 0.98, 1.28);
+      f1Car.add(drsFlap);
+
+      const wheelGeo = new THREE.CylinderGeometry(0.32, 0.32, 0.34, 18);
+      wheelGeo.rotateZ(Math.PI / 2);
+      const tyreMat = new THREE.MeshStandardMaterial({ color: 0x111827 });
+
+      f1Wheels = [];
+      [[-0.82, 0.32, -1.35], [0.82, 0.32, -1.35], [-0.86, 0.34, 0.95], [0.86, 0.34, 0.95]].forEach(([wx, wy, wz]) => {
+        const w = new THREE.Mesh(wheelGeo, tyreMat);
+        w.position.set(wx, wy, wz);
+        f1Car.add(w);
+        f1Wheels.push(w);
+      });
+
+      const flameGeo = new THREE.ConeGeometry(0.14, 0.75, 10);
+      flameGeo.rotateX(Math.PI / 2);
+      exhaustCone = new THREE.Mesh(flameGeo, new THREE.MeshBasicMaterial({ color: 0x38bdf8 }));
+      exhaustCone.position.set(0, 0.36, 1.72);
+      f1Car.add(exhaustCone);
+
+      f1Car.position.set(LANE_X[1], 0, 2.2);
+      scene.add(f1Car);
+    }
+
+    function syncRaceTheme() {
+      if (!state.use3D || !scene) return;
+      if (state.theme === 'dark') {
+        scene.background = new THREE.Color(0x090d16);
+        scene.fog = new THREE.FogExp2(0x090d16, 0.017);
+        if (roadMat) roadMat.color.setHex(0x1e293b);
+        if (groundMat) groundMat.color.setHex(0x090d16);
+        if (starPoints) starPoints.visible = true;
+      } else {
+        scene.background = new THREE.Color(0xbae6fd);
+        scene.fog = new THREE.FogExp2(0xbae6fd, 0.013);
+        if (roadMat) roadMat.color.setHex(0x334155);
+        if (groundMat) groundMat.color.setHex(0x86efac);
+        if (starPoints) starPoints.visible = false;
+      }
+    }
+
+    function makeSignTexture(text, laneIdx) {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 192;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(6, 6, 500, 180);
+
+      const colors = ['#38bdf8', '#c084fc', '#f59e0b'];
+      ctx.lineWidth = 12;
+      ctx.strokeStyle = colors[laneIdx % 3];
+      ctx.strokeRect(6, 6, 500, 180);
+
+      ctx.fillStyle = colors[laneIdx % 3];
+      ctx.font = 'bold 26px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(['LEFT DRS', 'CENTER DRS', 'RIGHT DRS'][laneIdx], 256, 46);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 54px sans-serif';
+      ctx.fillText(text, 256, 128);
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.needsUpdate = true;
+      return tex;
+    }
+
+    function spawnGate(qItem) {
+      const shuffled = [...qItem.f1Options].sort(() => Math.random() - 0.5);
+      shuffled.forEach((opt, idx) => {
+        document.getElementById(`lane-word-${idx}`).textContent = opt;
+      });
+
+      const tagText = qItem.tag
+        ? qItem.tag
+        : `${qItem.tags.map(t => `[${t}]`).join(' ')} • SYNONYM: ${qItem.synonym.toUpperCase()}`;
+      const clueText = qItem.clue ? qItem.clue : `Meaning: "${qItem.meaning}"`;
+
+      document.getElementById('radio-tag').textContent = tagText;
+      document.getElementById('radio-clue').textContent = clueText;
+      document.getElementById('radio-sentence').innerHTML = qItem.quizSentence.replace(
+        '[ ??? ]',
+        '<span class="blank-highlight">[ ??? ]</span>'
+      );
+
+      if (state.use3D && scene) {
+        if (gateRow3D) scene.remove(gateRow3D.group);
+        const group = new THREE.Group();
+        const gates = [];
+        const pillarMat = new THREE.MeshStandardMaterial({ color: 0x475569 });
+
+        shuffled.forEach((opt, laneIdx) => {
+          const xCenter = LANE_X[laneIdx];
+          [-1.15, 1.15].forEach(dx => {
+            const p = new THREE.Mesh(new THREE.BoxGeometry(0.14, 2.7, 0.14), pillarMat);
+            p.position.set(xCenter + dx, 1.35, 0);
+            group.add(p);
+          });
+
+          const curtain = new THREE.Mesh(
+            new THREE.PlaneGeometry(2.2, 2.4),
+            new THREE.MeshBasicMaterial({ color: 0x38bdf8, transparent: true, opacity: 0.18, side: THREE.DoubleSide })
+          );
+          curtain.position.set(xCenter, 1.2, 0);
+          group.add(curtain);
+
+          const sign = new THREE.Mesh(
+            new THREE.PlaneGeometry(2.55, 0.96),
+            new THREE.MeshBasicMaterial({ map: makeSignTexture(opt, laneIdx) })
+          );
+          sign.position.set(xCenter, 2.75, 0.05);
+          group.add(sign);
+
+          gates.push({ lane: laneIdx, text: opt, isCorrect: opt === qItem.quizAnswer, curtain });
+        });
+
+        group.position.set(0, 0, -64);
+        scene.add(group);
+        gateRow3D = { group, zPos: -64, gates, resolved: false };
+      } else {
+        fallbackGateZ = 0;
+        fallbackResolved = false;
+        fallbackGates = shuffled.map((opt, idx) => ({
+          lane: idx,
+          text: opt,
+          isCorrect: opt === qItem.quizAnswer
+        }));
+      }
+    }
+
+    function steerLane(laneIdx) {
+      if (laneIdx < 0 || laneIdx > 2) return;
+      state.currentLane = laneIdx;
+      [0, 1, 2].forEach(i => {
+        document.getElementById(`lane-btn-${i}`).classList.toggle('active-lane', i === laneIdx);
+      });
+      playSFX('click');
+    }
+
+    function startRace() {
+      playSFX('boost');
+      state.isRacing = true;
+      state.isPaused = false;
+      state.qIndex = 0;
+      state.score = 0;
+      state.combo = 1;
+      state.correctCount = 0;
+      state.missedItems = [];
+      state.boostTimer = 0;
+      state.penaltyTimer = 0;
+      steerLane(1);
+
+      document.getElementById('race-overlay').classList.add('hidden');
+      document.getElementById('race-banner').classList.add('hidden');
+      document.getElementById('btn-pause').textContent = '⏸️ Pause';
+
+      const pool = getActiveRacePool();
+      updateRaceHUD();
+      spawnGate(pool[0]);
+    }
+
+    function updateRaceHUD() {
+      const pool = getActiveRacePool();
+      document.getElementById('hud-lap').textContent = `${Math.min(state.qIndex + 1, pool.length)} / ${pool.length}`;
+      document.getElementById('hud-combo').textContent = `x${state.combo}`;
+      document.getElementById('hud-score').textContent = state.score;
+    }
+
+    function handleGateCollision(chosenGate) {
+      const pool = getActiveRacePool();
+      const qItem = pool[state.qIndex];
+      const banner = document.getElementById('race-banner');
+
+      if (chosenGate && chosenGate.isCorrect) {
+        playSFX('boost');
+        const pts = 100 * state.combo;
+        state.score += pts;
+        state.combo = Math.min(5, state.combo + 1);
+        state.correctCount++;
+        state.boostTimer = 1.2;
+        addXP(pts);
+
+        if (chosenGate.curtain) {
+          chosenGate.curtain.material.color.setHex(0x10b981);
+          chosenGate.curtain.material.opacity = 0.55;
+        }
+        banner.className = 'race-banner success';
+        banner.innerHTML = `🚀 DRS BOOST! (+${pts} pts) — "${qItem.quizSentence.replace('[ ??? ]', qItem.quizAnswer)}"`;
+      } else {
+        playSFX('error');
+        state.combo = 1;
+        state.penaltyTimer = 1.0;
+        state.missedItems.push({ answer: qItem.quizAnswer, trap: qItem.trap });
+
+        if (chosenGate && chosenGate.curtain) {
+          chosenGate.curtain.material.color.setHex(0xef4444);
+          chosenGate.curtain.material.opacity = 0.55;
+        }
+        banner.className = 'race-banner error';
+        banner.innerHTML = `⚠️ PIT PENALTY! Correct: <u style="color:#fde68a;">${qItem.quizAnswer}</u> — ${qItem.trap}`;
+      }
+
+      banner.classList.remove('hidden');
+      state.qIndex++;
+      updateRaceHUD();
+
+      setTimeout(() => {
+        if (!state.isRacing) return;
+        if (state.qIndex >= pool.length) {
+          finishRace();
+        } else {
+          spawnGate(pool[state.qIndex]);
+        }
+      }, 950);
+    }
+
+    function finishRace() {
+      state.isRacing = false;
+      playSFX('boost');
+      const pool = getActiveRacePool();
+      const pct = Math.round((state.correctCount / pool.length) * 100);
+
+      document.getElementById('overlay-title').textContent = pct >= 80 ? '🏆 P1 PODIUM VICTORY!' : '🏁 CHECKERED FLAG!';
+      document.getElementById('overlay-desc').textContent = `You cleared ${state.correctCount}/${pool.length} DRS gates (${pct}% accuracy) and scored ${state.score} points!`;
+
+      const rev = document.getElementById('overlay-review');
+      if (state.missedItems.length > 0) {
+        rev.innerHTML = `<strong style="color:#fbbf24; display:block; margin-bottom:6px;">🔧 Pit Wall Grammar Review:</strong>` +
+          state.missedItems.map(m => `<div style="margin-bottom:4px;">• <strong>${m.answer}</strong>: ${m.trap}</div>`).join('');
+      } else {
+        rev.innerHTML = `<span style="color:#34d399; font-weight:700;">🌟 Flawless Drive! Zero Band 1 grammar traps hit!</span>`;
+      }
+      rev.classList.remove('hidden');
+      document.getElementById('overlay-cta').textContent = '🔁 RACE AGAIN';
+      document.getElementById('race-overlay').classList.remove('hidden');
+    }
+
+    function resizeRaceViewport() {
+      const mount = document.getElementById('race-canvas-mount');
+      if (!mount) return;
+      const w = mount.clientWidth || 800;
+      const h = mount.clientHeight || 480;
+      if (state.use3D && renderer && camera) {
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+      } else if (fallbackCanvas) {
+        fallbackCanvas.width = w;
+        fallbackCanvas.height = h;
+      }
+    }
+
+    let lastFrameTime = performance.now();
+    function raceLoop(now) {
+      requestAnimationFrame(raceLoop);
+      const dt = Math.min((now - lastFrameTime) / 1000, 0.05);
+      lastFrameTime = now;
+
+      let speed = 22 + state.qIndex * 1.1;
+      if (state.boostTimer > 0) {
+        state.boostTimer -= dt;
+        speed *= 1.5;
+      } else if (state.penaltyTimer > 0) {
+        state.penaltyTimer -= dt;
+        speed *= 0.55;
+      }
+
+      if (state.isRacing && !state.isPaused) {
+        document.getElementById('hud-speed').textContent = Math.round(speed * 11.5);
+      }
+
+      if (state.use3D && renderer && scene && camera) {
+        if (f1Car) {
+          const tx = LANE_X[state.currentLane];
+          const dx = tx - f1Car.position.x;
+          f1Car.position.x += dx * Math.min(1, dt * 14);
+          f1Car.rotation.z = -dx * 0.14;
+          f1Wheels.forEach(w => { w.rotation.x -= dt * speed * 0.6; });
+          if (exhaustCone) exhaustCone.scale.set(1, 1, (state.boostTimer > 0 ? 1.8 : 0.9) + Math.random() * 0.25);
+          if (drsFlap) drsFlap.rotation.x = state.boostTimer > 0 ? -0.45 : 0;
+        }
+
+        if (state.isRacing && !state.isPaused) {
+          const moveZ = speed * dt;
+          roadDashes.forEach(d => { d.position.z += moveZ; if (d.position.z > 14) d.position.z -= 144; });
+          kerbs.forEach(k => { k.position.z += moveZ; if (k.position.z > 14) k.position.z -= 144; });
+          pylons.forEach(p => { p.position.z += moveZ; if (p.position.z > 14) p.position.z -= 144; });
+
+          if (gateRow3D) {
+            gateRow3D.zPos += moveZ * 0.85;
+            gateRow3D.group.position.z = gateRow3D.zPos;
+            if (!gateRow3D.resolved && gateRow3D.zPos >= 1.2) {
+              gateRow3D.resolved = true;
+              const chosen = gateRow3D.gates.find(g => g.lane === state.currentLane);
+              handleGateCollision(chosen);
+            }
+          }
+        }
+        renderer.render(scene, camera);
+      } else if (fallbackCtx && fallbackCanvas) {
+        draw2DFallback(dt, speed);
+      }
+    }
+
+    function draw2DFallback(dt, speed) {
+      const ctx = fallbackCtx;
+      const w = fallbackCanvas.width;
+      const h = fallbackCanvas.height;
+      const horizonY = h * 0.32;
+
+      ctx.fillStyle = state.theme === 'dark' ? '#090d16' : '#bae6fd';
+      ctx.fillRect(0, 0, w, horizonY);
+      ctx.fillStyle = state.theme === 'dark' ? '#0f172a' : '#86efac';
+      ctx.fillRect(0, horizonY, w, h - horizonY);
+
+      const topW = w * 0.22;
+      const botW = w * 0.88;
+      ctx.fillStyle = state.theme === 'dark' ? '#1e293b' : '#334155';
+      ctx.beginPath();
+      ctx.moveTo(w / 2 - topW / 2, horizonY);
+      ctx.lineTo(w / 2 + topW / 2, horizonY);
+      ctx.lineTo(w / 2 + botW / 2, h);
+      ctx.lineTo(w / 2 - botW / 2, h);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.strokeStyle = 'rgba(248, 250, 252, 0.55)';
+      ctx.lineWidth = 3;
+      [-1 / 6, 1 / 6].forEach(frac => {
+        ctx.beginPath();
+        ctx.moveTo(w / 2 + topW * frac, horizonY);
+        ctx.lineTo(w / 2 + botW * frac, h);
+        ctx.stroke();
+      });
+
+      if (state.isRacing && !state.isPaused) {
+        fallbackGateZ += (speed * dt) / 62;
+        if (!fallbackResolved && fallbackGateZ >= 0.82) {
+          fallbackResolved = true;
+          const chosen = fallbackGates.find(g => g.lane === state.currentLane);
+          handleGateCollision(chosen);
+        }
+      }
+
+      if (fallbackGates.length === 3 && fallbackGateZ <= 1.1) {
+        const t = Math.min(1, fallbackGateZ);
+        const y = horizonY + (h - horizonY) * (t * t);
+        const curRoadW = topW + (botW - topW) * (t * t);
+        const boxW = (curRoadW / 3) * 0.92;
+        const boxH = 34 + 34 * t;
+
+        fallbackGates.forEach((g, idx) => {
+          const cx = w / 2 + curRoadW * ((idx - 1) / 3);
+          ctx.fillStyle = '#0f172a';
+          ctx.fillRect(cx - boxW / 2, y - boxH, boxW, boxH);
+          ctx.strokeStyle = ['#38bdf8', '#c084fc', '#f59e0b'][idx];
+          ctx.lineWidth = 3;
+          ctx.strokeRect(cx - boxW / 2, y - boxH, boxW, boxH);
+
+          ctx.fillStyle = '#ffffff';
+          ctx.font = `bold ${Math.max(12, Math.round(14 + 12 * t))}px sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(g.text, cx, y - boxH / 2);
+        });
+      }
+
+      const carX = w / 2 + botW * ((state.currentLane - 1) / 3);
+      const carY = h - 108;
+      ctx.fillStyle = '#dc2626';
+      ctx.fillRect(carX - 18, carY - 36, 36, 56);
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(carX - 28, carY - 42, 56, 10);
+      ctx.fillRect(carX - 24, carY + 16, 48, 10);
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath();
+      ctx.arc(carX, carY - 8, 7, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    /* =========================================================================
+       6. CENTRAL DELEGATED EVENT LISTENERS (HANDLES ALL CLICKS, CHANGES, KEYS)
+       ========================================================================= */
+    document.addEventListener('click', e => {
+      const target = e.target.closest('[data-action]');
+      if (!target) return;
+
+      const action = target.dataset.action;
+
+      if (action === 'toggle-font') {
+        state.fontXL = !state.fontXL;
+        document.documentElement.classList.toggle('font-xl', state.fontXL);
+        document.getElementById('font-label').textContent = state.fontXL ? 'A' : 'A+';
+        showToast(state.fontXL ? '🔍 Extra Large Text Enabled' : '🔤 Standard Large Text');
+        playSFX('click');
+      } else if (action === 'toggle-theme') {
+        state.theme = state.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', state.theme);
+        document.getElementById('theme-icon').textContent = state.theme === 'dark' ? '☀️' : '🌙';
+        document.getElementById('theme-label').textContent = state.theme === 'dark' ? 'Light' : 'Dark';
+        syncRaceTheme();
+        showToast(state.theme === 'dark' ? '🌙 Night Floodlit Mode' : '☀️ Daylight Mode');
+        playSFX('click');
+      } else if (action === 'toggle-sound') {
+        state.soundOn = !state.soundOn;
+        document.getElementById('sound-icon').textContent = state.soundOn ? '🔊' : '🔇';
+        document.getElementById('sound-label').textContent = state.soundOn ? 'On' : 'Off';
+        showToast(state.soundOn ? '🔊 Audio Enabled' : '🔇 Audio Muted');
+      } else if (action === 'switch-tab') {
+        const tab = target.dataset.tab;
+        state.activeTab = tab;
+        playSFX('click');
+
+        document.querySelectorAll('.nav-tab').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.tab === tab);
+        });
+        ['race', 'cards', 'quiz', 'write'].forEach(t => {
+          document.getElementById(`tab-panel-${t}`).classList.toggle('hidden', t !== tab);
+        });
+
+        if (tab === 'race') {
+          resizeRaceViewport();
+        } else if (state.isRacing && !state.isPaused) {
+          state.isPaused = true;
+          document.getElementById('btn-pause').textContent = '▶️ Resume';
+        }
+      } else if (action === 'set-race-mode') {
+        state.raceMode = target.dataset.mode;
+        document.getElementById('mode-btn-reading').classList.toggle('active', state.raceMode === 'reading');
+        document.getElementById('mode-btn-traps').classList.toggle('active', state.raceMode === 'traps');
+        startRace();
+      } else if (action === 'start-race') {
+        startRace();
+      } else if (action === 'toggle-pause') {
+        if (!state.isRacing) return;
+        state.isPaused = !state.isPaused;
+        target.textContent = state.isPaused ? '▶️ Resume' : '⏸️ Pause';
+      } else if (action === 'steer-lane') {
+        steerLane(parseInt(target.dataset.lane, 10));
+      } else if (action === 'filter-cards') {
+        state.cardFilter = target.dataset.filter;
+        document.querySelectorAll('[data-action="filter-cards"]').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.filter === state.cardFilter);
+        });
+        playSFX('click');
+        renderFlashcards();
+      } else if (action === 'speak') {
+        e.stopPropagation();
+        const pv = PHRASAL_VERBS.find(item => item.id === target.dataset.id);
+        if (!pv) return;
+        const text = target.dataset.kind === 'example'
+          ? pv.example
+          : pv.base.replace(/\s*\/\s*/g, ', or ');
+        speakText(text, target.dataset.accent, target);
+      } else if (action === 'flip-card') {
+        playSFX('click');
+        target.classList.toggle('is-flipped');
+        target.querySelector('.card-front').classList.toggle('hidden');
+        target.querySelector('.card-back').classList.toggle('hidden');
+      } else if (action === 'shuffle-quiz') {
+        playSFX('boost');
+        applyQuizControls(true);
+        showToast('🎲 Shuffled question set!');
+      } else if (action === 'reset-quiz') {
+        playSFX('click');
+        quizState.results = {};
+        renderQuizList();
+        showToast('🔄 Quiz answers cleared!');
+      } else if (action === 'answer-mc') {
+        const qId = target.dataset.id;
+        if (quizState.results[qId]) return;
+        const optIdx = parseInt(target.dataset.opt, 10);
+        const q = READING_QUIZ_BANK.find(item => item.id === qId);
+        if (!q) return;
+
+        const isCorrect = optIdx === q.correctIndex;
+        quizState.results[qId] = { isCorrect, selectedIndex: optIdx };
+        if (isCorrect) {
+          playSFX('boost');
+          addXP(30);
+        } else {
+          playSFX('error');
+        }
+        renderQuizList();
+      } else if (action === 'check-fitb') {
+        handleFITBSubmit(target.dataset.id);
+      } else if (action === 'upgrade-sentence') {
+        const idx = parseInt(target.dataset.idx, 10);
+        upgradedCards[idx] = !upgradedCards[idx];
+        if (upgradedCards[idx]) {
+          playSFX('boost');
+          addXP(25);
+        } else {
+          playSFX('click');
+        }
+        renderUpgraders();
+      } else if (action === 'insert-verb') {
+        const ta = document.getElementById('writing-textarea');
+        const phrase = target.dataset.text;
+        const start = ta.selectionStart || ta.value.length;
+        const end = ta.selectionEnd || ta.value.length;
+        const before = ta.value.slice(0, start);
+        const after = ta.value.slice(end);
+        const padLeft = before.length > 0 && !/\s$/.test(before) ? ' ' : '';
+        const padRight = after.length > 0 && !/^\s/.test(after) ? ' ' : '';
+        ta.value = before + padLeft + phrase + padRight + after;
+        ta.focus();
+        const cursor = (before + padLeft + phrase).length;
+        ta.setSelectionRange(cursor, cursor);
+        playSFX('click');
+        updateWritingLivePreview();
+      } else if (action === 'grade-writing') {
+        gradeWritingDraft();
+      } else if (action === 'insert-sample-essay') {
+        const ta = document.getElementById('writing-textarea');
+        ta.value = 'Hi! My real name is Nathan, and I usually go by Nate at school. I was named after my grandfather, and my parents brought me up to be curious and disciplined. People say I take after my dad because we both love chess and coding. In my family, I really look up to my elder sister, who always gets along well with everyone. When I grow up, I aspire to become a robotics engineer!';
+        playSFX('boost');
+        updateWritingLivePreview();
+      } else if (action === 'copy-writing') {
+        const text = document.getElementById('writing-textarea').value.trim();
+        if (!text) {
+          showToast('✍️ Write something first!');
+          return;
+        }
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand('copy');
+        document.body.removeChild(temp);
+        playSFX('boost');
+        showToast('📋 Paragraph copied to clipboard!');
+      }
+    });
+
+    document.addEventListener('change', e => {
+      if (e.target && e.target.dataset.action === 'filter-quiz') {
+        playSFX('click');
+        applyQuizControls(false);
+      }
+    });
+
+    document.addEventListener('input', e => {
+      if (e.target && e.target.id === 'writing-textarea') {
+        updateWritingLivePreview();
+      }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.target && e.target.classList.contains('fitb-input') && e.key === 'Enter') {
+        e.preventDefault();
+        handleFITBSubmit(e.target.dataset.id);
+        return;
+      }
+
+      if (state.activeTab === 'race' && state.isRacing && !state.isPaused) {
+        if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+          e.preventDefault();
+          steerLane(Math.max(0, state.currentLane - 1));
+        } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+          e.preventDefault();
+          steerLane(Math.min(2, state.currentLane + 1));
+        }
+      }
+    });
+
+    window.addEventListener('resize', resizeRaceViewport);
+
+    /* =========================================================================
+       7. INITIALIZATION
+       ========================================================================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      renderFlashcards();
+      applyQuizControls(false);
+      renderUpgraders();
+      renderWritingHelperChips();
+
+      // Touch swipe support for F1 viewport
+      const vp = document.getElementById('race-viewport');
+      let startX = 0;
+      vp.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+      vp.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (Math.abs(dx) > 28) {
+          steerLane(dx < 0 ? Math.max(0, state.currentLane - 1) : Math.min(2, state.currentLane + 1));
+        }
+      }, { passive: true });
+
+      // Start fallback canvas immediately, then upgrade to Three.js asynchronously
+      initRaceGraphics();
+      requestAnimationFrame(raceLoop);
+
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+      script.async = true;
+      script.onload = () => {
+        if (!state.use3D) {
+          initRaceGraphics();
+          if (state.isRacing) {
+            const pool = getActiveRacePool();
+            if (pool[state.qIndex]) spawnGate(pool[state.qIndex]);
+          }
+        }
+      };
+      document.head.appendChild(script);
+    });
+  </script>
+</body>
+</html>
