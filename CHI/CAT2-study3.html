@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>中一成語小樂園｜40個成語動畫學習</title>
+  <title>中一成語CAT2｜40個成語動畫學習</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -11,8 +11,8 @@
   <style>
     body {
       font-family: 'Inter', 'Noto Sans TC', sans-serif;
-      background-color: #FFF9D6;
-      background-image: radial-gradient(#F2E39E 2px, transparent 2px);
+      background-color: #EFF6FF;
+      background-image: radial-gradient(#BFDBFE 2.5px, transparent 2.5px);
       background-size: 22px 22px;
       color: #1E293B;
     }
@@ -55,7 +55,7 @@
       transition: all 0.25s ease;
     }
     .wavy-idiom {
-      text-decoration: underline wavy #F2545B 2px;
+      text-decoration: underline wavy #2563EB 2px;
       text-underline-offset: 4px;
       font-weight: 800;
       color: #B91C1C;
@@ -76,16 +76,31 @@
 <body class="min-h-screen flex flex-col">
 
   <!-- Top Navigation Header (Auto-minimizes on scroll down) -->
-  <header id="top-header" class="sticky top-0 z-30 bg-[#FFF9D6]/95 backdrop-blur-sm border-b-2 border-[#1E293B] transition-all duration-200">
+  <header id="top-header" class="sticky top-0 z-30 bg-[#EFF6FF]/95 backdrop-blur-sm border-b-2 border-[#1E293B] transition-all duration-200">
     <div id="header-inner" class="max-w-6xl mx-auto px-3 sm:px-5 py-2.5 space-y-2">
       <div class="flex items-center justify-between gap-2 flex-wrap">
         <!-- Brand Logo -->
         <div class="flex items-center gap-2.5">
-          <div id="header-logo" class="w-10 h-10 rounded-xl bg-[#F2545B] text-white font-serif-tc font-black text-xl flex items-center justify-center border-2 border-[#1E293B] shadow-[2.5px_2.5px_0px_#1E293B] -rotate-3 transition-all">
-            成
+          <div id="header-logo" class="w-11 h-11 rounded-2xl bg-[#DBEAFE] flex items-center justify-center border-2 border-[#1E293B] shadow-[2.5px_2.5px_0px_#1E293B] -rotate-3 transition-all shrink-0">
+            <svg viewBox="0 0 64 64" class="w-9 h-9" aria-hidden="true">
+              <polygon points="11,26 15,7 28,19" fill="#F97316" stroke="#1E293B" stroke-width="3" stroke-linejoin="round"/>
+              <polygon points="53,26 49,7 36,19" fill="#F97316" stroke="#1E293B" stroke-width="3" stroke-linejoin="round"/>
+              <ellipse cx="32" cy="37" rx="22" ry="18" fill="#FDBA74" stroke="#1E293B" stroke-width="3"/>
+              <rect x="11" y="22" width="42" height="7" rx="3" fill="#2563EB" stroke="#1E293B" stroke-width="2.5"/>
+              <path d="M18,33 L26,35" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M46,33 L38,35" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="23" cy="38" r="3" fill="#1E293B"/>
+              <circle cx="41" cy="38" r="3" fill="#1E293B"/>
+              <polygon points="30,40 34,40 32,43" fill="#1E293B"/>
+              <path d="M26,46 Q32,50 39,45" fill="none" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="8" y1="38" x2="17" y2="39" stroke="#1E293B" stroke-width="2" stroke-linecap="round"/>
+              <line x1="8" y1="43" x2="17" y2="43" stroke="#1E293B" stroke-width="2" stroke-linecap="round"/>
+              <line x1="47" y1="39" x2="56" y2="38" stroke="#1E293B" stroke-width="2" stroke-linecap="round"/>
+              <line x1="47" y1="43" x2="56" y2="43" stroke="#1E293B" stroke-width="2" stroke-linecap="round"/>
+            </svg>
           </div>
           <div>
-            <h1 class="font-serif-tc text-lg sm:text-xl font-black text-[#1E293B] leading-tight">中一成語小樂園</h1>
+            <h1 class="font-serif-tc text-lg sm:text-xl font-black text-[#1E293B] leading-tight">中一成語CAT2</h1>
             <p id="header-subtitle" class="text-[11px] font-medium text-slate-600">40 個核心成語 · 紅圈正字 · 廣東話朗讀 · 複句造句</p>
           </div>
         </div>
@@ -105,7 +120,7 @@
       <!-- Collapsible Group Tags Row -->
       <div id="header-collapsible" class="flex flex-wrap items-center justify-between gap-2 pt-1">
         <div class="flex flex-wrap gap-2" id="group-tabs">
-          <button type="button" data-grp="all" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#F2545B] text-white">全部 (40)</button>
+          <button type="button" data-grp="all" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#2563EB] text-white">全部 (40)</button>
           <button type="button" data-grp="p14_15" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50">P14-15</button>
           <button type="button" data-grp="p16_17" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50">P16-17</button>
           <button type="button" data-grp="p18_19" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50">P18-19</button>
@@ -131,14 +146,14 @@
         <div class="flex flex-wrap items-center gap-2">
           <label class="inline-flex items-center gap-1 text-xs font-bold bg-amber-50 border-2 border-[#1E293B] px-2.5 py-1 rounded-full">
             <span>讀完停頓：</span>
-            <select id="ss-delay-select" aria-label="每個成語讀完停頓時間" class="bg-transparent font-black text-[#F2545B] focus:outline-none">
+            <select id="ss-delay-select" aria-label="每個成語讀完停頓時間" class="bg-transparent font-black text-[#2563EB] focus:outline-none">
               <option value="1000">1 秒</option>
               <option value="3000" selected>3 秒</option>
               <option value="5000">5 秒</option>
             </select>
           </label>
           <label class="inline-flex items-center gap-1 text-xs font-bold bg-amber-50 border-2 border-[#1E293B] px-2.5 py-1 rounded-full cursor-pointer">
-            <input id="ss-loop-cb" type="checkbox" class="accent-[#F2545B]" />
+            <input id="ss-loop-cb" type="checkbox" class="accent-[#2563EB]" />
             <span>播完循環</span>
           </label>
           <span id="ss-status" class="text-xs font-bold text-slate-600">準備就緒｜點擊播放逐個朗讀</span>
@@ -151,7 +166,7 @@
 
       <div class="flex flex-wrap items-center justify-center gap-2.5 pt-3 border-t-2 border-slate-200">
         <button id="ss-prev-btn" type="button" class="comic-pill px-4 py-2 rounded-full bg-white hover:bg-slate-100 text-sm font-bold">← 上一個</button>
-        <button id="ss-play-btn" type="button" class="comic-pill px-6 py-2 rounded-full bg-[#F2545B] hover:bg-[#e1434a] text-white text-sm sm:text-base font-bold">▶ 全部自動播</button>
+        <button id="ss-play-btn" type="button" class="comic-pill px-6 py-2 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-sm sm:text-base font-bold">▶ 全部自動播</button>
         <button id="ss-pause-btn" type="button" class="comic-pill px-5 py-2 rounded-full bg-[#FCD34D] hover:bg-amber-300 text-[#1E293B] text-sm sm:text-base font-bold">⏸ Pause 暫停</button>
         <button id="ss-stop-btn" type="button" class="comic-pill px-5 py-2 rounded-full bg-[#1E293B] hover:bg-slate-700 text-white text-sm sm:text-base font-bold">⏹ Stop 停止</button>
         <button id="ss-next-btn" type="button" class="comic-pill px-4 py-2 rounded-full bg-white hover:bg-slate-100 text-sm font-bold">下一個 →</button>
@@ -163,7 +178,21 @@
       <!-- Game Hub -->
       <div id="game-hub" class="comic-card rounded-3xl p-5 sm:p-8 space-y-5 text-center">
         <div class="space-y-1">
-          <h2 class="font-serif-tc text-2xl font-black text-[#1E293B]">🎮 成語遊戲區</h2>
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#DBEAFE] border-2 border-[#1E293B] shadow-[3px_3px_0px_#1E293B] mx-auto mb-1">
+            <svg viewBox="0 0 64 64" class="w-12 h-12" aria-hidden="true">
+              <polygon points="11,26 15,7 28,19" fill="#F97316" stroke="#1E293B" stroke-width="3" stroke-linejoin="round"/>
+              <polygon points="53,26 49,7 36,19" fill="#F97316" stroke="#1E293B" stroke-width="3" stroke-linejoin="round"/>
+              <ellipse cx="32" cy="37" rx="22" ry="18" fill="#FDBA74" stroke="#1E293B" stroke-width="3"/>
+              <rect x="13" y="29" width="16" height="10" rx="3" fill="#1E293B"/>
+              <rect x="35" y="29" width="16" height="10" rx="3" fill="#1E293B"/>
+              <line x1="29" y1="33" x2="35" y2="33" stroke="#1E293B" stroke-width="3"/>
+              <line x1="16" y1="32" x2="21" y2="32" stroke="#60A5FA" stroke-width="2" stroke-linecap="round"/>
+              <line x1="38" y1="32" x2="43" y2="32" stroke="#60A5FA" stroke-width="2" stroke-linecap="round"/>
+              <polygon points="30,42 34,42 32,45" fill="#1E293B"/>
+              <path d="M26,47 Q32,51 39,46" fill="none" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h2 class="font-serif-tc text-2xl font-black text-[#1E293B]">🐾 貓咪成語遊戲區</h2>
           <p class="text-sm font-bold text-slate-600">玩遊戲，溫成語！答得好就有星星 ⭐。最佳成績會記錄在這部裝置上。</p>
         </div>
 
@@ -220,17 +249,17 @@
       <!-- LEFT SIDEBAR: 成語目錄 -->
       <aside class="lg:col-span-3 comic-card rounded-3xl p-4 space-y-3 lg:sticky lg:top-28">
         <div class="text-center">
-          <span class="inline-block px-5 py-1 rounded-full bg-[#F2545B] text-white font-bold text-sm border-2 border-[#1E293B]">成語目錄</span>
+          <span class="inline-block px-5 py-1 rounded-full bg-[#2563EB] text-white font-bold text-sm border-2 border-[#1E293B]">🐱 成語目錄</span>
         </div>
 
         <!-- Progress Bar -->
         <div class="space-y-1">
           <div class="flex items-center justify-between text-xs font-bold text-slate-600">
             <span id="completed-label">已完成 0 / 40</span>
-            <span id="current-pos-label" class="text-[#F2545B]">1 / 40</span>
+            <span id="current-pos-label" class="text-[#2563EB]">1 / 40</span>
           </div>
           <div class="w-full h-2.5 bg-slate-100 rounded-full border border-[#1E293B] overflow-hidden">
-            <div id="completed-bar" class="h-full bg-[#F2545B] transition-all duration-300" style="width: 0%"></div>
+            <div id="completed-bar" class="h-full bg-[#2563EB] transition-all duration-300" style="width: 0%"></div>
           </div>
         </div>
 
@@ -283,7 +312,7 @@
               <div class="space-y-3">
                 <!-- Audio Controls Bar (Matches IMG_5123.jpeg) -->
                 <div class="flex flex-wrap items-center gap-2">
-                  <button id="speak-btn" type="button" class="comic-pill px-3.5 py-1.5 rounded-full bg-[#F2545B] hover:bg-[#e1434a] text-white text-xs sm:text-sm font-bold flex items-center gap-1">
+                  <button id="speak-btn" type="button" class="comic-pill px-3.5 py-1.5 rounded-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs sm:text-sm font-bold flex items-center gap-1">
                     🔊 廣東話讀全部
                   </button>
                   <button id="pause-speak-btn" type="button" class="hidden comic-pill px-3 py-1.5 rounded-full bg-[#FCD34D] text-[#1E293B] text-xs font-bold">
@@ -320,12 +349,12 @@
 
               <div class="flex items-center justify-between pt-1">
                 <p class="text-[11px] text-slate-500 font-medium">朗讀時會以藍框圈起對應部分</p>
-                <button id="replay-anim-btn" type="button" class="text-xs font-bold text-[#F2545B] hover:underline">↺ 重播紅圈動畫</button>
+                <button id="replay-anim-btn" type="button" class="text-xs font-bold text-[#2563EB] hover:underline">↺ 重播紅圈動畫</button>
               </div>
             </div>
 
             <!-- Right Half: Full Illustration -->
-            <div id="image-box" class="md:col-span-6 bg-[#F2545B]/15 border-t-2 md:border-t-0 md:border-l-2 border-[#1E293B] p-3 flex items-center justify-center min-h-[240px]">
+            <div id="image-box" class="md:col-span-6 bg-[#2563EB]/15 border-t-2 md:border-t-0 md:border-l-2 border-[#1E293B] p-3 flex items-center justify-center min-h-[240px]">
               <img id="idiom-img" src="" alt="成語情境圖片" class="w-full h-60 object-cover rounded-2xl border-2 border-[#1E293B] bg-white" />
             </div>
           </div>
@@ -1009,7 +1038,7 @@
         return `
           <button type="button" data-id="${it.id}"
             class="side-item w-full px-3.5 py-2 rounded-full border-2 border-[#1E293B] flex items-center justify-between text-sm font-bold transition ${
-              isActive ? 'bg-[#F2545B] text-white shadow-[2px_2px_0px_#1E293B]' : 'bg-white text-[#1E293B] hover:bg-amber-50'
+              isActive ? 'bg-[#2563EB] text-white shadow-[2px_2px_0px_#1E293B]' : 'bg-white text-[#1E293B] hover:bg-amber-50'
             }">
             <span>${it.id}. ${it.word}</span>
             <span class="${isDone ? 'text-[#FCD34D]' : (isActive ? 'text-white/70' : 'text-slate-300')}">${isDone ? '★★' : '☆☆'}</span>
@@ -1043,7 +1072,7 @@
         const pronText = item.pron[idx];
         return `
           <div class="flex flex-col items-center">
-            <div style="--tilt:${tilts[idx]}" class="relative w-full aspect-square max-w-[82px] rounded-2xl border-2 border-[#1E293B] shadow-[3px_3px_0px_#1E293B] ${hasTypo ? 'bg-white text-[#DC2626]' : 'bg-[#F2545B] text-white'} flex items-center justify-center char-pop">
+            <div style="--tilt:${tilts[idx]}" class="relative w-full aspect-square max-w-[82px] rounded-2xl border-2 border-[#1E293B] shadow-[3px_3px_0px_#1E293B] ${hasTypo ? 'bg-white text-[#DC2626]' : 'bg-[#2563EB] text-white'} flex items-center justify-center char-pop">
               <span class="font-serif-tc font-black text-3xl sm:text-4xl leading-none select-none">${ch}</span>
               ${hasTypo ? `
                 <svg viewBox="0 0 120 120" class="absolute inset-0 w-full h-full pointer-events-none">
@@ -1157,7 +1186,7 @@
         return `
           <div class="relative flex flex-col items-center w-full">
             ${pronText ? `<span class="mb-2 text-xs sm:text-sm font-bold px-2.5 py-0.5 rounded-full bg-[#FCD34D] border border-[#1E293B]">讀：${pronText}</span>` : `<span class="mb-2 h-6 sm:h-7"></span>`}
-            <div class="relative w-full aspect-square max-w-[190px] rounded-3xl border-[3px] border-[#1E293B] shadow-[4px_4px_0px_#1E293B] ${hasTypo ? 'bg-white text-[#DC2626]' : 'bg-[#F2545B] text-white'} flex items-center justify-center char-pop" style="animation-delay:${idx * 70}ms">
+            <div class="relative w-full aspect-square max-w-[190px] rounded-3xl border-[3px] border-[#1E293B] shadow-[4px_4px_0px_#1E293B] ${hasTypo ? 'bg-white text-[#DC2626]' : 'bg-[#2563EB] text-white'} flex items-center justify-center char-pop" style="animation-delay:${idx * 70}ms">
               <span class="font-serif-tc font-black text-[clamp(3.2rem,13vw,7.2rem)] leading-none select-none">${ch}</span>
               ${hasTypo ? `
                 <svg viewBox="0 0 120 120" class="absolute inset-0 w-full h-full pointer-events-none">
@@ -1280,7 +1309,7 @@
       document.querySelectorAll('.grp-btn').forEach(b => {
         b.className = 'grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50';
       });
-      document.getElementById('slideshow-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#F2545B] text-white';
+      document.getElementById('slideshow-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#2563EB] text-white';
       renderSlideshowCard();
       updateSlideshowButtons();
     });
@@ -1317,7 +1346,7 @@
 
         document.querySelectorAll('.grp-btn').forEach(b => {
           b.className = b === btn
-            ? 'grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#F2545B] text-white'
+            ? 'grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#2563EB] text-white'
             : 'grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50';
         });
         renderIdiom();
@@ -1340,16 +1369,16 @@
         collapsible.classList.add('hidden');
         sub.classList.add('hidden');
         inner.classList.replace('py-2.5', 'py-1.5');
-        logo.classList.replace('w-10', 'w-7');
-        logo.classList.replace('h-10', 'h-7');
+        logo.classList.replace('w-11', 'w-8');
+        logo.classList.replace('h-11', 'h-8');
         logo.classList.replace('text-xl', 'text-sm');
         toggleBtn.textContent = '▼ 展開選單';
       } else {
         collapsible.classList.remove('hidden');
         sub.classList.remove('hidden');
         inner.classList.replace('py-1.5', 'py-2.5');
-        logo.classList.replace('w-7', 'w-10');
-        logo.classList.replace('h-7', 'h-10');
+        logo.classList.replace('w-8', 'w-11');
+        logo.classList.replace('h-8', 'h-11');
         logo.classList.replace('text-sm', 'text-xl');
         toggleBtn.textContent = '▲ 收合選單';
       }
@@ -1434,70 +1463,166 @@
         b.className = 'grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50';
       });
       document.getElementById('slideshow-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#FCD34D] text-[#1E293B] hover:bg-amber-300';
-      document.getElementById('games-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#F2545B] text-white';
+      document.getElementById('games-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#2563EB] text-white';
       openGameHub();
     });
 
     document.getElementById('back-to-hub-btn').addEventListener('click', openGameHub);
 
-    function showGameFinish(key, score, label, onRetry) {
+    function showGameFinish(key, score, label, summaryRows, onRetry) {
       stopActiveGame();
       saveGameBest(key, score);
-      document.getElementById('game-content').innerHTML = `
-        <div class="text-center py-6 space-y-4">
-          <div class="text-5xl">⭐</div>
-          <h3 class="font-serif-tc text-2xl font-black text-[#1E293B]">挑戰完成！</h3>
-          <p class="text-lg font-bold text-[#F2545B]">${label}</p>
-          <div class="flex justify-center gap-3 pt-2">
-            <button id="g-retry-btn" type="button" class="comic-pill px-5 py-2.5 rounded-full bg-[#F2545B] text-white font-bold text-sm">再玩一次</button>
-            <button id="g-hub-btn" type="button" class="comic-pill px-5 py-2.5 rounded-full bg-white text-[#1E293B] font-bold text-sm">返回遊戲區</button>
+      const rows = summaryRows || [];
+      const rightCnt = rows.filter(r => r.ok).length;
+      const wrongCnt = rows.length - rightCnt;
+
+      function renderSummaryList(filterWrong) {
+        const list = filterWrong ? rows.filter(r => !r.ok) : rows;
+        const container = document.getElementById('g-sum-list');
+        if (!list.length) {
+          container.innerHTML = '<div class="p-4 rounded-2xl bg-emerald-50 border-2 border-emerald-300 text-emerald-900 font-bold text-center text-sm">🎉 全部答對，沒有錯題！</div>';
+          return;
+        }
+        container.innerHTML = list.map(r => `
+          <div class="p-3.5 rounded-2xl border-2 text-left text-xs sm:text-sm space-y-1 ${r.ok ? 'bg-emerald-50/60 border-emerald-300' : 'bg-red-50/60 border-red-300'}">
+            <div class="flex items-center justify-between gap-2">
+              <span class="font-black text-[#1E293B]">${r.title}</span>
+              <span class="font-bold ${r.ok ? 'text-emerald-700' : 'text-red-700'}">${r.ok ? '✓ 答對' : '✕ 答錯／未答'}</span>
+            </div>
+            <div class="text-slate-700 font-medium">${r.prompt}</div>
+            <div>
+              <span class="${r.ok ? 'text-emerald-700 font-bold' : 'text-red-700 font-bold'}">你的答案：${r.userAns}</span>
+              ${!r.ok ? `<span class="mx-2 text-slate-300">|</span><span class="text-emerald-800 font-bold">正確答案：${r.rightAns}</span>` : ''}
+            </div>
+            <div class="text-xs text-slate-600 bg-white/80 px-2.5 py-1.5 rounded-xl border border-slate-200">${r.note}</div>
           </div>
+        `).join('');
+      }
+
+      document.getElementById('game-content').innerHTML = `
+        <div class="space-y-4">
+          <div class="text-center space-y-2">
+            <div class="text-4xl">🐱⭐</div>
+            <h3 class="font-serif-tc text-2xl font-black text-[#1E293B]">挑戰完成！成績總結</h3>
+            <p class="text-base font-bold text-[#2563EB]">${label}</p>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2.5 text-center">
+            <div class="p-3 rounded-2xl bg-emerald-50 border-2 border-emerald-300">
+              <div class="text-xs font-bold text-emerald-700">答對</div>
+              <div class="text-2xl font-black text-emerald-900">${rightCnt}</div>
+            </div>
+            <div class="p-3 rounded-2xl bg-red-50 border-2 border-red-300">
+              <div class="text-xs font-bold text-red-700">答錯／未答</div>
+              <div class="text-2xl font-black text-red-800">${wrongCnt}</div>
+            </div>
+            <div class="p-3 rounded-2xl bg-amber-50 border-2 border-amber-300">
+              <div class="text-xs font-bold text-amber-800">總題數</div>
+              <div class="text-2xl font-black text-amber-900">${rows.length}</div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+            <div class="flex gap-2">
+              <button id="g-filter-all" type="button" class="px-3 py-1 rounded-full text-xs font-bold bg-[#1E293B] text-white">顯示全部</button>
+              <button id="g-filter-wrong" type="button" class="px-3 py-1 rounded-full text-xs font-bold bg-white border border-[#1E293B] text-[#1E293B]">只看錯題</button>
+            </div>
+            <div class="flex gap-2">
+              <button id="g-retry-btn" type="button" class="comic-pill px-4 py-1.5 rounded-full bg-[#2563EB] text-white font-bold text-xs sm:text-sm">再玩一次</button>
+              <button id="g-hub-btn" type="button" class="comic-pill px-4 py-1.5 rounded-full bg-white text-[#1E293B] font-bold text-xs sm:text-sm">返回遊戲區</button>
+            </div>
+          </div>
+
+          <div id="g-sum-list" class="space-y-2.5 max-h-[380px] overflow-y-auto pr-1"></div>
         </div>
       `;
+
+      renderSummaryList(false);
+      document.getElementById('g-filter-all').addEventListener('click', () => {
+        document.getElementById('g-filter-all').className = 'px-3 py-1 rounded-full text-xs font-bold bg-[#1E293B] text-white';
+        document.getElementById('g-filter-wrong').className = 'px-3 py-1 rounded-full text-xs font-bold bg-white border border-[#1E293B] text-[#1E293B]';
+        renderSummaryList(false);
+      });
+      document.getElementById('g-filter-wrong').addEventListener('click', () => {
+        document.getElementById('g-filter-wrong').className = 'px-3 py-1 rounded-full text-xs font-bold bg-[#1E293B] text-white';
+        document.getElementById('g-filter-all').className = 'px-3 py-1 rounded-full text-xs font-bold bg-white border border-[#1E293B] text-[#1E293B]';
+        renderSummaryList(true);
+      });
       document.getElementById('g-retry-btn').addEventListener('click', onRetry);
       document.getElementById('g-hub-btn').addEventListener('click', openGameHub);
     }
 
-    // 1. 🧩 成語配對 (3 rounds x 5 idioms)
+    // 1. 🧩 成語配對 (3 rounds x 5 idioms, with Prev/Next Round & Summary)
     function startMatchGame() {
       document.getElementById('game-title').textContent = '🧩 成語配對';
       let round = 1;
-      let score = 0;
       const pool = shuffleArr(IDIOMS).slice(0, 15);
+      const roundState = [1, 2, 3].map(r => {
+        const chunk = pool.slice((r - 1) * 5, r * 5);
+        return {
+          chunk,
+          rights: shuffleArr(chunk),
+          matched: new Set(),
+          hadMistake: new Set()
+        };
+      });
+
+      function finishMatch() {
+        const rows = [];
+        let score = 0;
+        roundState.forEach((rs, rIdx) => {
+          rs.chunk.forEach((it, i) => {
+            const ok = rs.matched.has(it.id) && !rs.hadMistake.has(it.id);
+            if (ok) score++;
+            rows.push({
+              title: `第${rIdx + 1}輪 (${i + 1})｜${it.word}`,
+              prompt: `配對意思：${it.meaning}`,
+              userAns: rs.matched.has(it.id) ? (rs.hadMistake.has(it.id) ? '曾配錯後完成' : it.word) : '未完成',
+              rightAns: it.word,
+              ok,
+              note: `例句：${it.example}`
+            });
+          });
+        });
+        showGameFinish('match', score, `完成配對！一次答對 ${score} / 15 組`, rows, startMatchGame);
+      }
 
       function renderRound() {
-        const chunk = pool.slice((round - 1) * 5, round * 5);
-        const rights = shuffleArr(chunk);
+        const rs = roundState[round - 1];
         let selLeft = null;
-        const matched = new Set();
+        const totalMatched = roundState.reduce((acc, r) => acc + r.matched.size, 0);
 
         function draw() {
           document.getElementById('game-content').innerHTML = `
-            <div class="flex items-center justify-between">
-              <span class="px-3 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B] text-xs font-bold">第 ${round}/3 輪 ｜ ✓ ${score}</span>
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <span class="px-3 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B] text-xs font-bold">第 ${round}/3 輪 ｜ 已配對 ${totalMatched + (rs.matched.size - rs.matched.size)} / 15</span>
               <span class="text-xs font-bold text-slate-500">先按一個成語，再按它的解釋 👇</span>
             </div>
             <div class="grid grid-cols-12 gap-3">
               <div class="col-span-5 space-y-2" id="gm-left">
-                ${chunk.map(it => {
-                  const done = matched.has(it.id);
+                ${rs.chunk.map(it => {
+                  const done = rs.matched.has(it.id);
                   const active = selLeft === it.id;
                   return `<button type="button" data-lid="${it.id}" ${done ? 'disabled' : ''} class="w-full py-3 px-2 rounded-2xl border-2 text-sm sm:text-base font-black transition ${
                     done ? 'bg-emerald-100 border-emerald-500 text-emerald-800 opacity-60' :
-                    active ? 'bg-[#F2545B] border-[#1E293B] text-white shadow-[2px_2px_0px_#1E293B]' :
+                    active ? 'bg-[#2563EB] border-[#1E293B] text-white shadow-[2px_2px_0px_#1E293B]' :
                     'bg-white border-purple-200 hover:border-[#1E293B] text-[#1E293B]'
                   }">${it.word}</button>`;
                 }).join('')}
               </div>
               <div class="col-span-7 space-y-2" id="gm-right">
-                ${rights.map(it => {
-                  const done = matched.has(it.id);
+                ${rs.rights.map(it => {
+                  const done = rs.matched.has(it.id);
                   return `<button type="button" data-rid="${it.id}" ${done ? 'disabled' : ''} class="w-full text-left py-2.5 px-3 rounded-2xl border-2 text-xs sm:text-sm font-semibold transition ${
                     done ? 'bg-emerald-100 border-emerald-500 text-emerald-800 opacity-60' :
                     'bg-white border-purple-200 hover:border-[#1E293B] text-[#1E293B]'
                   }">${it.meaning}</button>`;
                 }).join('')}
               </div>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-slate-200">
+              <button id="gm-prev" type="button" ${round === 1 ? 'disabled' : ''} class="px-4 py-1.5 rounded-full bg-white border-2 border-[#1E293B] text-xs font-bold ${round === 1 ? 'opacity-40' : 'hover:bg-slate-100'}">← 上一輪</button>
+              <button id="gm-next" type="button" class="px-4 py-1.5 rounded-full bg-[#1E293B] text-white text-xs font-bold hover:bg-slate-700">${round === 3 ? '查看總結 →' : '下一輪 →'}</button>
             </div>
           `;
           document.querySelectorAll('#gm-left button').forEach(b => {
@@ -1509,105 +1634,113 @@
               const rid = parseInt(b.dataset.rid, 10);
               if (selLeft === rid) {
                 playTone(true);
-                matched.add(rid);
-                score++;
+                rs.matched.add(rid);
                 selLeft = null;
-                if (matched.size === 5) {
-                  if (round < 3) { round++; setTimeout(renderRound, 350); }
-                  else { setTimeout(() => showGameFinish('match', score, `完成 3 輪配對！答對 ${score} / 15 組`, startMatchGame), 350); }
+                if (rs.matched.size === 5) {
+                  if (round < 3) { round++; setTimeout(renderRound, 320); }
+                  else { setTimeout(finishMatch, 320); }
                 } else draw();
               } else {
                 playTone(false);
+                rs.hadMistake.add(selLeft);
                 b.classList.add('bg-red-100', 'border-red-500');
-                setTimeout(() => { selLeft = null; draw(); }, 350);
+                setTimeout(() => { selLeft = null; draw(); }, 320);
               }
             });
           });
+          document.getElementById('gm-prev').addEventListener('click', () => { if (round > 1) { round--; renderRound(); } });
+          document.getElementById('gm-next').addEventListener('click', () => { if (round < 3) { round++; renderRound(); } else finishMatch(); });
         }
         draw();
       }
       renderRound();
     }
 
-    // 2. 🖼️ 看圖猜成語 (10 questions)
+    // 2. 🖼️ 看圖猜成語 (10 questions, Prev/Next + Summary)
     function startPicGame() {
       document.getElementById('game-title').textContent = '🖼️ 看圖猜成語';
-      const qs = shuffleArr(IDIOMS).slice(0, 10);
-      let idx = 0, score = 0;
+      const qs = shuffleArr(IDIOMS).slice(0, 10).map(target => {
+        const distractors = shuffleArr(IDIOMS.filter(x => x.id !== target.id)).slice(0, 3);
+        return { target, opts: shuffleArr([target, ...distractors]), chosenId: null };
+      });
+      let idx = 0;
+
+      function finishPic() {
+        let score = 0;
+        const rows = qs.map((q, i) => {
+          const ok = q.chosenId === q.target.id;
+          if (ok) score++;
+          const chosenObj = IDIOMS.find(x => x.id === q.chosenId);
+          return {
+            title: `第 ${i + 1} 題`,
+            prompt: `圖片對應成語：${q.target.meaning}`,
+            userAns: chosenObj ? chosenObj.word : '（未作答）',
+            rightAns: q.target.word,
+            ok,
+            note: `例句：${q.target.example}`
+          };
+        });
+        showGameFinish('pic', score, `看圖猜成語得分：${score} / 10 題`, rows, startPicGame);
+      }
 
       function renderQ() {
-        const target = qs[idx];
-        const distractors = shuffleArr(IDIOMS.filter(x => x.id !== target.id)).slice(0, 3);
-        const opts = shuffleArr([target, ...distractors]);
-        let locked = false;
+        const q = qs[idx];
+        const target = q.target;
+        const answered = q.chosenId !== null;
+        const score = qs.filter(x => x.chosenId === x.target.id).length;
 
         document.getElementById('game-content').innerHTML = `
           <div class="flex items-center justify-between">
             <span class="px-3 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B] text-xs font-bold">第 ${idx + 1}/10 題 ｜ ✓ ${score}</span>
+            <button id="gp-end" type="button" class="text-xs font-bold text-[#2563EB] underline">結束並看總結</button>
           </div>
           <p class="text-center font-bold text-base sm:text-lg">這幅圖畫的是哪個成語？</p>
           <div class="max-w-sm mx-auto rounded-2xl overflow-hidden border-2 border-[#1E293B] bg-white shadow-[3px_3px_0px_#1E293B]">
             <img src="${target.img}" alt="猜成語圖片" class="w-full h-52 object-cover" />
           </div>
           <div class="grid grid-cols-2 gap-3 pt-1">
-            ${opts.map(o => `<button type="button" data-oid="${o.id}" class="gp-opt py-3.5 px-3 rounded-2xl border-2 border-purple-200 hover:border-[#1E293B] bg-white font-black text-base sm:text-lg transition">${o.word}</button>`).join('')}
+            ${q.opts.map(o => {
+              let cls = 'bg-white border-purple-200 hover:border-[#1E293B]';
+              if (answered) {
+                if (o.id === target.id) cls = 'bg-emerald-100 border-emerald-600 text-emerald-900';
+                else if (o.id === q.chosenId) cls = 'bg-red-100 border-red-500 text-red-900';
+              }
+              return `<button type="button" data-oid="${o.id}" ${answered ? 'disabled' : ''} class="gp-opt py-3.5 px-3 rounded-2xl border-2 font-black text-base sm:text-lg transition ${cls}">${o.word}</button>`;
+            }).join('')}
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-200">
+            <button id="gp-prev" type="button" ${idx === 0 ? 'disabled' : ''} class="px-4 py-1.5 rounded-full bg-white border-2 border-[#1E293B] text-xs font-bold ${idx === 0 ? 'opacity-40' : 'hover:bg-slate-100'}">← 上一題</button>
+            <button id="gp-next" type="button" class="px-4 py-1.5 rounded-full bg-[#1E293B] text-white text-xs font-bold hover:bg-slate-700">${idx === 9 ? '查看總結 →' : '下一題 →'}</button>
           </div>
         `;
-        document.querySelectorAll('.gp-opt').forEach(btn => {
-          btn.addEventListener('click', () => {
-            if (locked) return;
-            locked = true;
-            const chosen = parseInt(btn.dataset.oid, 10);
-            const ok = chosen === target.id;
-            playTone(ok);
-            if (ok) score++;
-            document.querySelectorAll('.gp-opt').forEach(b => {
-              const bid = parseInt(b.dataset.oid, 10);
-              if (bid === target.id) b.classList.add('bg-emerald-100', 'border-emerald-600', 'text-emerald-900');
-              else if (bid === chosen && !ok) b.classList.add('bg-red-100', 'border-red-500', 'text-red-900');
+        if (!answered) {
+          document.querySelectorAll('.gp-opt').forEach(btn => {
+            btn.addEventListener('click', () => {
+              q.chosenId = parseInt(btn.dataset.oid, 10);
+              playTone(q.chosenId === target.id);
+              renderQ();
             });
-            setTimeout(() => {
-              if (idx < 9) { idx++; renderQ(); }
-              else showGameFinish('pic', score, `看圖猜成語得分：${score} / 10 題`, startPicGame);
-            }, 800);
           });
-        });
+        }
+        document.getElementById('gp-prev').addEventListener('click', () => { if (idx > 0) { idx--; renderQ(); } });
+        document.getElementById('gp-next').addEventListener('click', () => { if (idx < 9) { idx++; renderQ(); } else finishPic(); });
+        document.getElementById('gp-end').addEventListener('click', finishPic);
       }
       renderQ();
     }
 
-    // 3. ✏️ 填字挑戰（正字）(All 正字 items with textbook wrong chars guaranteed in options)
+    // 3. ✏️ 填字挑戰（正字）(All 正字 items, Prev/Next + Summary)
     const TEXTBOOK_WRONGS = {
-      '沸': ['佛', '弗', '費'],
-      '敷': ['數', '傅', '夫'],
-      '玲': ['鈴', '零', '令'],
-      '瓏': ['龍', '籠', '攏'],
-      '鑽': ['讚', '贊', '專'],
-      '竭': ['歇', '渴', '喝'],
-      '嘶': ['斯', '撕', '西'],
-      '均': ['勻', '軍', '君'],
-      '赦': ['敖', '赤', '卸'],
-      '令': ['今', '冷', '零'],
-      '申': ['伸', '神', '甲'],
-      '效': ['郊', '校', '交'],
-      '亡': ['忘', '芒', '忙'],
-      '迢': ['紹', '招', '條'],
-      '恩': ['思', '忠', '忘'],
-      '鈞': ['均', '軍', '勻'],
-      '髮': ['發', '拔', '撥'],
-      '載': ['栽', '裁', '再'],
-      '煉': ['練', '揀', '東'],
-      '碑': ['啤', '牌', '悲'],
-      '蜜': ['密', '秘', '甜'],
-      '腹': ['複', '覆', '復'],
-      '鼎': ['目', '日', '貝'],
-      '擂': ['雷', '蕾', '類'],
-      '慚': ['斬', '暫', '漸'],
-      '逕': ['脛', '經', '輕'],
-      '撈': ['勞', '澇', '牢'],
-      '霆': ['延', '挺', '停'],
-      '已': ['己', '巳', '以'],
-      '器': ['大', '哭', '臭']
+      '沸': ['佛', '弗', '費'], '敷': ['數', '傅', '夫'], '玲': ['鈴', '零', '令'],
+      '瓏': ['龍', '籠', '攏'], '鑽': ['讚', '贊', '專'], '竭': ['歇', '渴', '喝'],
+      '嘶': ['斯', '撕', '西'], '均': ['勻', '軍', '君'], '赦': ['敖', '赤', '卸'],
+      '令': ['今', '冷', '零'], '申': ['伸', '神', '甲'], '效': ['郊', '校', '交'],
+      '亡': ['忘', '芒', '忙'], '迢': ['紹', '招', '條'], '恩': ['思', '忠', '忘'],
+      '鈞': ['均', '軍', '勻'], '髮': ['發', '拔', '撥'], '載': ['栽', '裁', '再'],
+      '煉': ['練', '揀', '東'], '碑': ['啤', '牌', '悲'], '蜜': ['密', '秘', '甜'],
+      '腹': ['複', '覆', '復'], '鼎': ['目', '日', '貝'], '擂': ['雷', '蕾', '類'],
+      '慚': ['斬', '暫', '漸'], '逕': ['脛', '經', '輕'], '撈': ['勞', '澇', '牢'],
+      '霆': ['延', '挺', '停'], '已': ['己', '巳', '以'], '器': ['大', '哭', '臭']
     };
 
     function buildAllFillQuestions() {
@@ -1617,9 +1750,10 @@
         const seenChar = new Set();
         item.typoIdx.forEach(pos => {
           const ch = item.word[pos];
-          if (seenChar.has(ch)) return; // avoid duplicate same-char question in 千里迢迢 / 大名鼎鼎
+          if (seenChar.has(ch)) return;
           seenChar.add(ch);
-          list.push({ item, pos, ch });
+          const wrongs = (TEXTBOOK_WRONGS[ch] || ['人', '大', '心']).filter(c => c !== ch).slice(0, 3);
+          list.push({ item, pos, ch, opts: shuffleArr([ch, ...wrongs]), chosenChar: null });
         });
       });
       return list;
@@ -1629,109 +1763,164 @@
       document.getElementById('game-title').textContent = '✏️ 填字挑戰（全部正字）';
       const qs = shuffleArr(buildAllFillQuestions());
       const total = qs.length;
-      let idx = 0, score = 0;
+      let idx = 0;
+
+      function finishFill() {
+        let score = 0;
+        const rows = qs.map((q, i) => {
+          const ok = q.chosenChar === q.ch;
+          if (ok) score++;
+          return {
+            title: `第 ${i + 1} 題｜${q.item.word}`,
+            prompt: `填入正字：${q.item.word.split('').map((c, ci) => ci === q.pos ? '（　）' : c).join('')}`,
+            userAns: q.chosenChar || '（未作答）',
+            rightAns: q.ch,
+            ok,
+            note: q.item.typoNote ? `正字提醒：${q.item.typoNote}` : q.item.meaning
+          };
+        });
+        showGameFinish('fill', score, `填字正字挑戰得分：${score} / ${total} 題`, rows, startFillGame);
+      }
 
       function renderQ() {
         const q = qs[idx];
         const target = q.item;
         const blankPos = q.pos;
         const correctChar = q.ch;
-        // Always include the textbook wrong character(s) first, then pad to 3 distractors
-        const wrongs = (TEXTBOOK_WRONGS[correctChar] || ['人', '大', '心']).filter(c => c !== correctChar).slice(0, 3);
-        const opts = shuffleArr([correctChar, ...wrongs]);
-        let locked = false;
+        const answered = q.chosenChar !== null;
+        const ok = q.chosenChar === correctChar;
+        const score = qs.filter(x => x.chosenChar === x.ch).length;
 
         document.getElementById('game-content').innerHTML = `
           <div class="flex items-center justify-between">
             <span class="px-3 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B] text-xs font-bold">第 ${idx + 1}/${total} 題 ｜ ✓ ${score}</span>
-            <span class="text-xs font-bold text-slate-500">${target.page}</span>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-bold text-slate-500">${target.page}</span>
+              <button id="gf-end" type="button" class="text-xs font-bold text-[#2563EB] underline">結束並看總結</button>
+            </div>
           </div>
           <p class="text-center font-bold text-base">選出正確的字，填進空格 ✏️</p>
           <div class="flex justify-center gap-2.5 py-2">
-            ${target.word.split('').map((ch, ci) => ci === blankPos
-              ? `<div id="gf-blank" class="w-16 h-16 rounded-2xl border-2 border-dashed border-amber-500 bg-amber-50 flex items-center justify-center font-serif-tc font-black text-3xl text-[#F2545B]">？</div>`
-              : `<div class="w-16 h-16 rounded-2xl border-2 border-purple-300 bg-white flex items-center justify-center font-serif-tc font-black text-3xl text-[#1E293B]">${ch}</div>`
-            ).join('')}
+            ${target.word.split('').map((ch, ci) => {
+              if (ci !== blankPos) {
+                return `<div class="w-16 h-16 rounded-2xl border-2 border-purple-300 bg-white flex items-center justify-center font-serif-tc font-black text-3xl text-[#1E293B]">${ch}</div>`;
+              }
+              if (!answered) {
+                return `<div class="w-16 h-16 rounded-2xl border-2 border-dashed border-amber-500 bg-amber-50 flex items-center justify-center font-serif-tc font-black text-3xl text-[#2563EB]">？</div>`;
+              }
+              return `<div class="w-16 h-16 rounded-2xl border-2 flex items-center justify-center font-serif-tc font-black text-3xl ${ok ? 'border-emerald-600 bg-emerald-100 text-emerald-900' : 'border-red-500 bg-red-100 text-red-900'}">${correctChar}</div>`;
+            }).join('')}
           </div>
           <p class="text-center text-xs sm:text-sm text-slate-600 font-medium">💡 ${target.meaning}</p>
-          <div id="gf-note" class="hidden text-center text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900"></div>
+          ${answered && target.typoNote ? `<div class="text-center text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900">⭕ 正字提醒：${target.typoNote}</div>` : ''}
           <div class="grid grid-cols-2 gap-3 pt-1">
-            ${opts.map(ch => `<button type="button" data-ch="${ch}" class="gf-opt py-3.5 rounded-2xl border-2 border-purple-200 hover:border-[#1E293B] bg-white font-serif-tc font-black text-2xl transition">${ch}</button>`).join('')}
+            ${q.opts.map(ch => {
+              let cls = 'bg-white border-purple-200 hover:border-[#1E293B]';
+              if (answered) {
+                if (ch === correctChar) cls = 'bg-emerald-100 border-emerald-600 text-emerald-900';
+                else if (ch === q.chosenChar) cls = 'bg-red-100 border-red-500 text-red-900';
+              }
+              return `<button type="button" data-ch="${ch}" ${answered ? 'disabled' : ''} class="gf-opt py-3.5 rounded-2xl border-2 font-serif-tc font-black text-2xl transition ${cls}">${ch}</button>`;
+            }).join('')}
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-200">
+            <button id="gf-prev" type="button" ${idx === 0 ? 'disabled' : ''} class="px-4 py-1.5 rounded-full bg-white border-2 border-[#1E293B] text-xs font-bold ${idx === 0 ? 'opacity-40' : 'hover:bg-slate-100'}">← 上一題</button>
+            <button id="gf-next" type="button" class="px-4 py-1.5 rounded-full bg-[#1E293B] text-white text-xs font-bold hover:bg-slate-700">${idx === total - 1 ? '查看總結 →' : '下一題 →'}</button>
           </div>
         `;
-        document.querySelectorAll('.gf-opt').forEach(btn => {
-          btn.addEventListener('click', () => {
-            if (locked) return;
-            locked = true;
-            const chosen = btn.dataset.ch;
-            const ok = chosen === correctChar;
-            playTone(ok);
-            if (ok) score++;
-            document.getElementById('gf-blank').textContent = correctChar;
-            document.getElementById('gf-blank').className = `w-16 h-16 rounded-2xl border-2 flex items-center justify-center font-serif-tc font-black text-3xl ${ok ? 'border-emerald-600 bg-emerald-100 text-emerald-900' : 'border-red-500 bg-red-100 text-red-900'}`;
-            const noteEl = document.getElementById('gf-note');
-            if (target.typoNote) {
-              noteEl.textContent = '⭕ 正字提醒：' + target.typoNote;
-              noteEl.classList.remove('hidden');
-            }
-            document.querySelectorAll('.gf-opt').forEach(b => {
-              if (b.dataset.ch === correctChar) b.classList.add('bg-emerald-100', 'border-emerald-600');
-              else if (b.dataset.ch === chosen && !ok) b.classList.add('bg-red-100', 'border-red-500');
+        if (!answered) {
+          document.querySelectorAll('.gf-opt').forEach(btn => {
+            btn.addEventListener('click', () => {
+              q.chosenChar = btn.dataset.ch;
+              playTone(q.chosenChar === correctChar);
+              renderQ();
             });
-            setTimeout(() => {
-              if (idx < total - 1) { idx++; renderQ(); }
-              else showGameFinish('fill', score, `填字正字挑戰得分：${score} / ${total} 題`, startFillGame);
-            }, 1100);
           });
-        });
+        }
+        document.getElementById('gf-prev').addEventListener('click', () => { if (idx > 0) { idx--; renderQ(); } });
+        document.getElementById('gf-next').addEventListener('click', () => { if (idx < total - 1) { idx++; renderQ(); } else finishFill(); });
+        document.getElementById('gf-end').addEventListener('click', finishFill);
       }
       renderQ();
     }
 
-    // 4. ⏱️ 限時挑戰 (60 seconds)
+    // 4. ⏱️ 限時挑戰 (60 seconds, Prev/Next + Summary)
     function startTimedGame() {
       document.getElementById('game-title').textContent = '⏱️ 限時挑戰';
       let timeLeft = 60;
-      let score = 0;
+      const pool = shuffleArr(IDIOMS);
+      const qs = pool.map(target => {
+        const distractors = shuffleArr(IDIOMS.filter(x => x.id !== target.id)).slice(0, 3);
+        return { target, opts: shuffleArr([target, ...distractors]), chosenId: null };
+      });
+      let idx = 0;
+
+      function finishTimed() {
+        const attempted = qs.filter((q, i) => q.chosenId !== null || i <= idx);
+        let rightCnt = 0;
+        const rows = attempted.map((q, i) => {
+          const ok = q.chosenId === q.target.id;
+          if (ok) rightCnt++;
+          const chosenObj = IDIOMS.find(x => x.id === q.chosenId);
+          return {
+            title: `第 ${i + 1} 題`,
+            prompt: `意思：${q.target.meaning}`,
+            userAns: chosenObj ? chosenObj.word : '（略過／未答）',
+            rightAns: q.target.word,
+            ok,
+            note: `例句：${q.target.example}`
+          };
+        });
+        const score = rightCnt * 10;
+        showGameFinish('timed', score, `60 秒限時搶答總分：${score} 分（答對 ${rightCnt} 題）`, rows, startTimedGame);
+      }
 
       function renderQ() {
-        const target = IDIOMS[Math.floor(Math.random() * IDIOMS.length)];
-        const distractors = shuffleArr(IDIOMS.filter(x => x.id !== target.id)).slice(0, 3);
-        const opts = shuffleArr([target, ...distractors]);
-        let locked = false;
+        const q = qs[idx];
+        const target = q.target;
+        const answered = q.chosenId !== null;
+        const score = qs.filter(x => x.chosenId === x.target.id).length * 10;
 
         document.getElementById('game-content').innerHTML = `
           <div class="flex items-center justify-between">
             <span id="gt-pill" class="px-3.5 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B] text-xs sm:text-sm font-bold">⏱️ ${timeLeft} 秒 ｜ 🏅 ${score} 分</span>
+            <button id="gt-end" type="button" class="text-xs font-bold text-[#2563EB] underline">提早結束看總結</button>
           </div>
           <div class="w-full h-3 bg-slate-100 rounded-full border border-[#1E293B] overflow-hidden">
             <div id="gt-bar" class="h-full bg-gradient-to-r from-emerald-400 via-amber-400 to-rose-500 transition-all duration-1000" style="width:${(timeLeft/60)*100}%"></div>
           </div>
           <div class="text-center space-y-2 py-2">
-            <p class="text-sm font-bold text-slate-600">哪個成語的意思是：</p>
+            <p class="text-sm font-bold text-slate-600">第 ${idx + 1} 題：哪個成語的意思是：</p>
             <p class="text-base sm:text-lg font-black text-purple-800">${target.meaning}</p>
           </div>
           <div class="grid grid-cols-2 gap-3">
-            ${opts.map(o => `<button type="button" data-oid="${o.id}" class="gt-opt py-3.5 px-3 rounded-2xl border-2 border-purple-200 hover:border-[#1E293B] bg-white font-black text-base sm:text-lg transition">${o.word}</button>`).join('')}
+            ${q.opts.map(o => {
+              let cls = 'bg-white border-purple-200 hover:border-[#1E293B]';
+              if (answered) {
+                if (o.id === target.id) cls = 'bg-emerald-100 border-emerald-600 text-emerald-900';
+                else if (o.id === q.chosenId) cls = 'bg-red-100 border-red-500 text-red-900';
+              }
+              return `<button type="button" data-oid="${o.id}" ${answered ? 'disabled' : ''} class="gt-opt py-3.5 px-3 rounded-2xl border-2 font-black text-base sm:text-lg transition ${cls}">${o.word}</button>`;
+            }).join('')}
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-200">
+            <button id="gt-prev" type="button" ${idx === 0 ? 'disabled' : ''} class="px-4 py-1.5 rounded-full bg-white border-2 border-[#1E293B] text-xs font-bold ${idx === 0 ? 'opacity-40' : 'hover:bg-slate-100'}">← 上一題</button>
+            <button id="gt-next" type="button" class="px-4 py-1.5 rounded-full bg-[#1E293B] text-white text-xs font-bold hover:bg-slate-700">${idx === qs.length - 1 ? '查看總結 →' : '下一題 →'}</button>
           </div>
         `;
 
-        document.querySelectorAll('.gt-opt').forEach(btn => {
-          btn.addEventListener('click', () => {
-            if (locked) return;
-            locked = true;
-            const chosen = parseInt(btn.dataset.oid, 10);
-            const ok = chosen === target.id;
-            playTone(ok);
-            if (ok) score += 10;
-            document.querySelectorAll('.gt-opt').forEach(b => {
-              const bid = parseInt(b.dataset.oid, 10);
-              if (bid === target.id) b.classList.add('bg-emerald-100', 'border-emerald-600');
-              else if (bid === chosen && !ok) b.classList.add('bg-red-100', 'border-red-500');
+        if (!answered) {
+          document.querySelectorAll('.gt-opt').forEach(btn => {
+            btn.addEventListener('click', () => {
+              q.chosenId = parseInt(btn.dataset.oid, 10);
+              playTone(q.chosenId === target.id);
+              renderQ();
             });
-            setTimeout(() => { if (timeLeft > 0) renderQ(); }, 420);
           });
-        });
+        }
+        document.getElementById('gt-prev').addEventListener('click', () => { if (idx > 0) { idx--; renderQ(); } });
+        document.getElementById('gt-next').addEventListener('click', () => { if (idx < qs.length - 1) { idx++; renderQ(); } else finishTimed(); });
+        document.getElementById('gt-end').addEventListener('click', finishTimed);
       }
 
       renderQ();
@@ -1739,11 +1928,10 @@
         timeLeft--;
         const pill = document.getElementById('gt-pill');
         const bar = document.getElementById('gt-bar');
+        const score = qs.filter(x => x.chosenId === x.target.id).length * 10;
         if (pill) pill.textContent = `⏱️ ${timeLeft} 秒 ｜ 🏅 ${score} 分`;
         if (bar) bar.style.width = `${Math.max(0, (timeLeft / 60) * 100)}%`;
-        if (timeLeft <= 0) {
-          showGameFinish('timed', score, `60 秒限時搶答總分：${score} 分`, startTimedGame);
-        }
+        if (timeLeft <= 0) finishTimed();
       }, 1000);
     }
 
