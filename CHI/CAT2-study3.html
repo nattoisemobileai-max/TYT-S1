@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中一成語小樂園｜40個成語動畫學習</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      background-color: #FFF9D6;
+      background-image: radial-gradient(#F2E39E 2px, transparent 2px);
+      background-size: 22px 22px;
+      color: #1E293B;
+    }
+    .font-serif-tc {
+      font-family: 'Noto Serif TC', serif;
+    }
+    .comic-card {
+      background: #FFFFFF;
+      border: 2.5px solid #1E293B;
+      box-shadow: 4px 4px 0px #1E293B;
+    }
+    .comic-pill {
+      border: 2px solid #1E293B;
+      box-shadow: 2.5px 2.5px 0px #1E293B;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .comic-pill:active {
+      transform: translate(1.5px, 1.5px);
+      box-shadow: 1px 1px 0px #1E293B;
+    }
+    @keyframes charPop {
+      0% { opacity: 0; transform: scale(0.6) rotate(-6deg); }
+      70% { opacity: 1; transform: scale(1.06) rotate(1deg); }
+      100% { opacity: 1; transform: scale(1) rotate(var(--tilt, 0deg)); }
+    }
+    .char-pop {
+      animation: charPop 0.42s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes drawCircle {
+      to { stroke-dashoffset: 0; }
+    }
+    .red-circle-stroke {
+      stroke-dasharray: 340;
+      stroke-dashoffset: 340;
+      animation: drawCircle 0.75s ease-out forwards;
+    }
+    .speaking-circle {
+      box-shadow: 0 0 0 4px #2563EB, 4px 4px 0px #1E293B !important;
+      border-color: #2563EB !important;
+      transition: all 0.25s ease;
+    }
+    .wavy-idiom {
+      text-decoration: underline wavy #F2545B 2px;
+      text-underline-offset: 4px;
+      font-weight: 800;
+      color: #B91C1C;
+    }
+    .marker-highlight {
+      background-image: linear-gradient(120deg, #FDE68A 0%, #FCD34D 100%);
+      background-repeat: no-repeat;
+      background-position: 0 85%;
+      background-size: 100% 42%;
+      padding: 0 3px;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #FEF3C7; }
+    ::-webkit-scrollbar-thumb { background: #94A3B8; border-radius: 9999px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Top Navigation Header (Auto-minimizes on scroll down) -->
+  <header id="top-header" class="sticky top-0 z-30 bg-[#FFF9D6]/95 backdrop-blur-sm border-b-2 border-[#1E293B] transition-all duration-200">
+    <div id="header-inner" class="max-w-6xl mx-auto px-3 sm:px-5 py-2.5 space-y-2">
+      <div class="flex items-center justify-between gap-2 flex-wrap">
+        <!-- Brand Logo -->
+        <div class="flex items-center gap-2.5">
+          <div id="header-logo" class="w-10 h-10 rounded-xl bg-[#F2545B] text-white font-serif-tc font-black text-xl flex items-center justify-center border-2 border-[#1E293B] shadow-[2.5px_2.5px_0px_#1E293B] -rotate-3 transition-all">
+            成
+          </div>
+          <div>
+            <h1 class="font-serif-tc text-lg sm:text-xl font-black text-[#1E293B] leading-tight">中一成語小樂園</h1>
+            <p id="header-subtitle" class="text-[11px] font-medium text-slate-600">40 個核心成語 · 紅圈正字 · 廣東話朗讀 · 複句造句</p>
+          </div>
+        </div>
+
+        <!-- Student Name + Collapse Toggle -->
+        <div class="flex items-center gap-2">
+          <div id="student-name-wrap" class="hidden sm:flex items-center gap-1.5 text-xs font-bold text-[#1E293B]">
+            <span>我的名字</span>
+            <input id="student-name" type="text" placeholder="例如：陳小晴" class="w-28 px-3 py-1 rounded-full bg-white border-2 border-[#1E293B] text-xs font-semibold focus:outline-none focus:bg-amber-50" />
+          </div>
+          <button id="toggle-menu-btn" type="button" class="px-3 py-1 rounded-full bg-white hover:bg-slate-100 border-2 border-[#1E293B] text-xs font-bold text-[#1E293B] transition">
+            ▲ 收合選單
+          </button>
+        </div>
+      </div>
+
+      <!-- Collapsible Group Tags Row -->
+      <div id="header-collapsible" class="flex flex-wrap items-center justify-between gap-2 pt-1">
+        <div class="flex flex-wrap gap-2" id="group-tabs">
+          <button type="button" data-grp="all" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#F2545B] text-white">全部 (40)</button>
+          <button type="button" data-grp="p14_15" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50">P14-15</button>
+          <button type="button" data-grp="p16_17" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50">P16-17</button>
+          <button type="button" data-grp="p18_19" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50">P18-19</button>
+          <button type="button" data-grp="p20_21" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50">P20-21</button>
+          <button type="button" data-grp="p22_23" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50">P22-23</button>
+          <button type="button" id="slideshow-tag-btn" class="comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#FCD34D] text-[#1E293B] hover:bg-amber-300">🎬 40成語大字連播</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-3 sm:px-5 py-5">
+
+    <!-- MODE B: 40成語大字連播 (Hidden by default) -->
+    <section id="slideshow-panel" class="hidden comic-card rounded-3xl p-5 sm:p-9 space-y-6 text-center">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-200 pb-3">
+        <div class="flex items-center gap-2">
+          <span id="ss-counter" class="text-xs sm:text-sm font-bold px-3.5 py-1 rounded-full bg-[#1E293B] text-white">第 1 / 40 個</span>
+          <span id="ss-page" class="text-xs sm:text-sm font-bold px-3 py-1 rounded-full bg-[#FCD34D] border-2 border-[#1E293B] text-[#1E293B]">P.14</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <label class="inline-flex items-center gap-1 text-xs font-bold bg-amber-50 border-2 border-[#1E293B] px-2.5 py-1 rounded-full">
+            <span>讀完停頓：</span>
+            <select id="ss-delay-select" aria-label="每個成語讀完停頓時間" class="bg-transparent font-black text-[#F2545B] focus:outline-none">
+              <option value="1000">1 秒</option>
+              <option value="3000" selected>3 秒</option>
+              <option value="5000">5 秒</option>
+            </select>
+          </label>
+          <label class="inline-flex items-center gap-1 text-xs font-bold bg-amber-50 border-2 border-[#1E293B] px-2.5 py-1 rounded-full cursor-pointer">
+            <input id="ss-loop-cb" type="checkbox" class="accent-[#F2545B]" />
+            <span>播完循環</span>
+          </label>
+          <span id="ss-status" class="text-xs font-bold text-slate-600">準備就緒｜點擊播放逐個朗讀</span>
+        </div>
+      </div>
+
+      <div id="ss-chars" class="grid grid-cols-4 gap-2.5 sm:gap-5 max-w-4xl mx-auto py-4 items-end"></div>
+      <div id="ss-typo-note" class="hidden max-w-xl mx-auto"></div>
+      <p id="ss-meaning" class="text-base sm:text-xl font-bold text-slate-700 max-w-2xl mx-auto leading-relaxed"></p>
+
+      <div class="flex flex-wrap items-center justify-center gap-2.5 pt-3 border-t-2 border-slate-200">
+        <button id="ss-prev-btn" type="button" class="comic-pill px-4 py-2 rounded-full bg-white hover:bg-slate-100 text-sm font-bold">← 上一個</button>
+        <button id="ss-play-btn" type="button" class="comic-pill px-6 py-2 rounded-full bg-[#F2545B] hover:bg-[#e1434a] text-white text-sm sm:text-base font-bold">▶ 全部自動播</button>
+        <button id="ss-pause-btn" type="button" class="comic-pill px-5 py-2 rounded-full bg-[#FCD34D] hover:bg-amber-300 text-[#1E293B] text-sm sm:text-base font-bold">⏸ Pause 暫停</button>
+        <button id="ss-stop-btn" type="button" class="comic-pill px-5 py-2 rounded-full bg-[#1E293B] hover:bg-slate-700 text-white text-sm sm:text-base font-bold">⏹ Stop 停止</button>
+        <button id="ss-next-btn" type="button" class="comic-pill px-4 py-2 rounded-full bg-white hover:bg-slate-100 text-sm font-bold">下一個 →</button>
+      </div>
+    </section>
+
+    <!-- MODE A: TWO-COLUMN COMIC TEMPLATE (Matches IMG_5123.jpeg) -->
+    <div id="detail-panel" class="grid lg:grid-cols-12 gap-5 items-start">
+
+      <!-- LEFT SIDEBAR: 成語目錄 -->
+      <aside class="lg:col-span-3 comic-card rounded-3xl p-4 space-y-3 lg:sticky lg:top-28">
+        <div class="text-center">
+          <span class="inline-block px-5 py-1 rounded-full bg-[#F2545B] text-white font-bold text-sm border-2 border-[#1E293B]">成語目錄</span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="space-y-1">
+          <div class="flex items-center justify-between text-xs font-bold text-slate-600">
+            <span id="completed-label">已完成 0 / 40</span>
+            <span id="current-pos-label" class="text-[#F2545B]">1 / 40</span>
+          </div>
+          <div class="w-full h-2.5 bg-slate-100 rounded-full border border-[#1E293B] overflow-hidden">
+            <div id="completed-bar" class="h-full bg-[#F2545B] transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- Search Input -->
+        <input id="search-idiom" type="text" placeholder="搜尋成語……"
+          class="w-full px-3.5 py-2 rounded-full bg-[#F1F5F9] border-2 border-[#1E293B] text-xs sm:text-sm font-medium focus:outline-none focus:bg-white" />
+
+        <!-- Scrollable Idiom List -->
+        <div id="sidebar-list" class="space-y-2 max-h-[360px] lg:max-h-[480px] overflow-y-auto pr-1"></div>
+      </aside>
+
+      <!-- RIGHT MAIN STAGE -->
+      <div class="lg:col-span-9 space-y-4">
+
+        <!-- CARD 1: TOP IDIOM TILES + MEANING -->
+        <section id="hero-card" class="comic-card rounded-3xl p-4 sm:p-6">
+          <div class="grid md:grid-cols-12 gap-4 items-center">
+            <!-- Left: 4 Coral-Red Tilted Tiles + Red Typo Circle -->
+            <div class="md:col-span-6 space-y-2">
+              <div id="chars-stage" class="grid grid-cols-4 gap-2 sm:gap-2.5 items-end"></div>
+              <div id="typo-banner" class="hidden text-center text-xs font-bold text-red-700 bg-red-50 border border-red-300 rounded-xl px-2.5 py-1.5"></div>
+            </div>
+
+            <!-- Right: Meaning & Usage -->
+            <div id="meaning-usage-wrap" class="md:col-span-6 md:border-l-2 md:border-slate-200 md:pl-5 space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs font-bold text-slate-500">意思</span>
+                <div class="flex items-center gap-1.5" id="usage-box"></div>
+              </div>
+              <p id="meaning-box" class="text-lg sm:text-xl font-bold text-[#1E293B] leading-relaxed p-1 rounded-xl transition-all"></p>
+              <div class="flex items-center justify-between pt-1">
+                <span id="page-tag" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-100 border border-[#1E293B]">P.14</span>
+                <div class="flex items-center gap-1.5">
+                  <button id="mark-done-btn" type="button" class="text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-[#1E293B] transition">
+                    ☆ 標記已學
+                  </button>
+                  <button id="prev-idiom-btn" type="button" class="text-xs font-bold px-2.5 py-1 rounded-full bg-white hover:bg-slate-100 border border-[#1E293B]">←</button>
+                  <button id="next-idiom-btn" type="button" class="text-xs font-bold px-2.5 py-1 rounded-full bg-white hover:bg-slate-100 border border-[#1E293B]">→</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CARD 2: MIDDLE SPLIT CARD (Audio Controls + Collocations | Illustration) -->
+        <section class="comic-card rounded-3xl overflow-hidden">
+          <div class="grid md:grid-cols-12">
+            <!-- Left Half: Play Audio, Speed, 辨義, 近義詞, 反義詞 -->
+            <div class="md:col-span-6 p-4 sm:p-5 space-y-3.5 flex flex-col justify-between">
+              <div class="space-y-3">
+                <!-- Audio Controls Bar (Matches IMG_5123.jpeg) -->
+                <div class="flex flex-wrap items-center gap-2">
+                  <button id="speak-btn" type="button" class="comic-pill px-3.5 py-1.5 rounded-full bg-[#F2545B] hover:bg-[#e1434a] text-white text-xs sm:text-sm font-bold flex items-center gap-1">
+                    🔊 廣東話讀全部
+                  </button>
+                  <button id="pause-speak-btn" type="button" class="hidden comic-pill px-3 py-1.5 rounded-full bg-[#FCD34D] text-[#1E293B] text-xs font-bold">
+                    ⏸ 暫停
+                  </button>
+                  <button id="stop-speak-btn" type="button" class="hidden comic-pill px-3 py-1.5 rounded-full bg-[#1E293B] text-white text-xs font-bold">
+                    ⏹ 停止
+                  </button>
+                  <div class="flex items-center gap-1 ml-auto text-xs font-bold">
+                    <span class="text-slate-500">語速</span>
+                    <button type="button" data-rate="0.75" class="rate-btn px-2 py-0.5 rounded-full border border-[#1E293B] bg-white">慢</button>
+                    <button type="button" data-rate="0.95" class="rate-btn px-2 py-0.5 rounded-full border border-[#1E293B] bg-[#1E293B] text-white">正常</button>
+                    <button type="button" data-rate="1.2" class="rate-btn px-2 py-0.5 rounded-full border border-[#1E293B] bg-white">快</button>
+                  </div>
+                </div>
+
+                <!-- 辨義 + 近義詞 + 反義詞 -->
+                <div id="colloc-morphemes" class="p-3 rounded-2xl bg-amber-50 border-2 border-amber-200 text-sm transition-all">
+                  <span class="font-bold text-amber-900">✨ 辨義：</span>
+                  <span id="morphemes-text" class="marker-highlight font-semibold"></span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                  <div id="colloc-syn" class="p-2.5 rounded-2xl bg-emerald-50 border-2 border-emerald-200 text-xs sm:text-sm transition-all">
+                    <div class="font-bold text-emerald-900 mb-1">🔗 近義詞</div>
+                    <div id="syn-list" class="flex flex-wrap gap-1"></div>
+                  </div>
+                  <div id="colloc-ant" class="p-2.5 rounded-2xl bg-indigo-50 border-2 border-indigo-200 text-xs sm:text-sm transition-all">
+                    <div class="font-bold text-indigo-900 mb-1">🔄 反義詞</div>
+                    <div id="ant-list" class="flex flex-wrap gap-1"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between pt-1">
+                <p class="text-[11px] text-slate-500 font-medium">朗讀時會以藍框圈起對應部分</p>
+                <button id="replay-anim-btn" type="button" class="text-xs font-bold text-[#F2545B] hover:underline">↺ 重播紅圈動畫</button>
+              </div>
+            </div>
+
+            <!-- Right Half: Full Illustration -->
+            <div id="image-box" class="md:col-span-6 bg-[#F2545B]/15 border-t-2 md:border-t-0 md:border-l-2 border-[#1E293B] p-3 flex items-center justify-center min-h-[240px]">
+              <img id="idiom-img" src="" alt="成語情境圖片" class="w-full h-60 object-cover rounded-2xl border-2 border-[#1E293B] bg-white" />
+            </div>
+          </div>
+        </section>
+
+        <!-- CARD 3: BOTTOM PILL CARD 1 - 課本例句 -->
+        <section id="example-box" class="comic-card rounded-3xl px-4 py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all">
+          <div class="flex items-start sm:items-center gap-3 flex-1">
+            <span class="shrink-0 px-3.5 py-1 rounded-full bg-[#FCD34D] border-2 border-[#1E293B] text-xs sm:text-sm font-black">例句</span>
+            <p id="example-text" class="text-sm sm:text-base font-bold text-[#1E293B] leading-relaxed"></p>
+          </div>
+          <button id="speak-example-btn" type="button" class="shrink-0 self-end sm:self-auto px-3.5 py-1 rounded-full bg-white hover:bg-amber-50 border-2 border-[#1E293B] text-xs font-bold transition">
+            🔊 聽例句
+          </button>
+        </section>
+
+        <!-- CARD 4: BOTTOM PILL CARD 2 - 全新複句造句 (Purple Connectives + Blue Idiom) -->
+        <section id="complex-sentence-box" class="comic-card rounded-3xl px-4 py-3.5 space-y-2 transition-all">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="px-3.5 py-1 rounded-full bg-blue-100 border-2 border-[#1E293B] text-xs sm:text-sm font-black text-blue-950">✍️ 複句造句</span>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-800 border border-purple-300">紫色：複句關聯詞</span>
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded bg-blue-100 text-blue-800 border border-blue-300">藍色：成語</span>
+            </div>
+            <button id="speak-complex-btn" type="button" class="px-3.5 py-1 rounded-full bg-white hover:bg-blue-50 border-2 border-[#1E293B] text-xs font-bold transition">
+              🔊 聽複句
+            </button>
+          </div>
+          <p id="complex-text" class="text-sm sm:text-base font-bold text-[#1E293B] leading-relaxed"></p>
+        </section>
+
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const IDIOMS = [
+      // P14-15
+      {
+        id: 1, grp: 'p14_15', page: 'P.14', word: '人窮志短',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '窮：窮困、困厄；志：志向；短：短小',
+        syn: ['因貧失志'], ant: ['壯志凌雲'],
+        meaning: '指人在困厄之時，會喪失遠大的志向。',
+        sentiment: '貶義', target: '用於人',
+        example: '所謂人窮志短，有些人連三餐都顧不上，哪敢說要創業呢？',
+        complexSentence: '雖然他家境清貧，但他從不人窮志短，反而比別人更努力讀書，立志將來創一番事業。',
+        img: 'images/01_人窮志短.jpg'
+      },
+      {
+        id: 2, grp: 'p14_15', page: 'P.14', word: '人聲鼎沸',
+        pron: { 3: '費' }, typoIdx: [3], typoNote: '「沸」不能寫成「佛」或「弗」（正音：費）',
+        morphemes: '鼎：古代煮食器具；沸：沸騰',
+        syn: [], ant: ['鴉雀無聲', '萬籟俱寂', '萬籟無聲'],
+        meaning: '形容人多勢眾，喧嘩熱烈，像水在鼎裏煮沸一般。',
+        sentiment: '中性詞', target: '用於環境',
+        example: '假日的郊野公園，到處是遊人，人聲鼎沸。',
+        complexSentence: '每逢週末，旺角行人專用區總是人聲鼎沸，即使站在旁邊說話也幾乎聽不見對方的聲音。',
+        img: 'images/02_人聲鼎沸.jpg'
+      },
+      {
+        id: 3, grp: 'p14_15', page: 'P.14', word: '入不敷出',
+        pron: { 2: '夫' }, typoIdx: [2], typoNote: '「敷」不能寫成「數」（正音：夫）',
+        morphemes: '敷：足夠',
+        syn: ['捉襟見肘'], ant: ['綽綽有餘'],
+        meaning: '指收入抵不上支出。',
+        sentiment: '貶義', target: '用於人',
+        example: '遇上金融海嘯，叔叔工廠的訂單急遽下降，入不敷出，最後只能申請破產。',
+        complexSentence: '因為這家老字號茶餐廳的租金不斷上漲，加上生意轉差，所以近月經常入不敷出，老闆只好考慮結業。',
+        img: 'images/03_入不敷出.jpg'
+      },
+      {
+        id: 4, grp: 'p14_15', page: 'P.14', word: '入鄉隨俗',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '隨：跟從；俗：風俗、習慣',
+        syn: ['入境問俗', '因地制宜'], ant: [],
+        meaning: '比喻能適應環境，隨遇而安。',
+        sentiment: '中性', target: '用於人',
+        example: '某快餐店懂得入鄉隨俗，配合不同地區的飲食習慣來推出食品，所以在各地均很受歡迎。',
+        complexSentence: '只要我們到外地旅遊時懂得入鄉隨俗，尊重當地的風俗習慣，就能更順利地融入當地生活。',
+        img: 'images/04_入鄉隨俗.jpg'
+      },
+      {
+        id: 5, grp: 'p14_15', page: 'P.15', word: '八面玲瓏',
+        pron: { 3: '龍' }, typoIdx: [2, 3], typoNote: '「玲」不能寫成「鈴」；「瓏」不能寫成「龍」',
+        morphemes: '玲瓏：靈活、精巧',
+        syn: ['面面俱圓', '左右逢源'], ant: ['處處碰壁'],
+        meaning: '形容人言行手段，十分巧妙，處世圓融。',
+        sentiment: '中性詞', target: '用於人',
+        example: '趙太太是八面玲瓏的人，她廣結善緣，誰也不得罪。',
+        complexSentence: '雖然新來的組長做事八面玲瓏，處處不得罪人，但有時過於圓滑反而令人覺得不夠坦誠。',
+        img: 'images/05_八面玲瓏.jpg'
+      },
+      {
+        id: 6, grp: 'p14_15', page: 'P.15', word: '刁鑽古怪',
+        pron: { 0: '丟' }, typoIdx: [1], typoNote: '「鑽」不能寫成「讚」（「刁」讀「丟」）',
+        morphemes: '刁鑽：狡猾、主意多',
+        syn: ['怪裡怪氣'], ant: ['平易近人'],
+        meaning: '形容人行為狡猾、性情奇怪。',
+        sentiment: '貶義', target: '用於人',
+        example: '他為人刁鑽古怪，總想出一些奇怪的主意，卻不能得到大家認同。',
+        complexSentence: '因為他為人刁鑽古怪，總愛想出一些歪理來捉弄同學，所以大家都不太願意與他組隊。',
+        img: 'images/06_刁鑽古怪.jpg'
+      },
+      {
+        id: 7, grp: 'p14_15', page: 'P.15', word: '力不從心',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '從：跟從',
+        syn: ['力不所及', '無能為力'], ant: ['得心應手', '力所能及'],
+        meaning: '指心裡想做某件事，可是力量不足夠。',
+        sentiment: '貶義', target: '用於人',
+        example: '這件事對我來說太難了，所以做起來力不從心，需要別人幫忙。',
+        complexSentence: '儘管我很想獨自完成這份科學專題報告，但由於實驗數據太繁複，做起來實在力不從心，只好請教老師。',
+        img: 'images/07_力不從心.jpg'
+      },
+      {
+        id: 8, grp: 'p14_15', page: 'P.15', word: '力竭聲嘶',
+        pron: { 1: '揭', 3: '西' }, typoIdx: [1, 3], typoNote: '「竭」不能寫作「歇」；「嘶」不能寫作「斯」或「撕」',
+        morphemes: '竭：耗盡；嘶：聲音沙啞',
+        syn: [], ant: [],
+        meaning: '形容人拼命喊叫，力氣用完，連聲音也變得沙啞。',
+        sentiment: '中性詞', target: '用於人',
+        example: '在運動場上，大家都力竭聲嘶地為健兒打氣，場面好不熱鬧！',
+        complexSentence: '雖然拉拉隊成員在場邊吶喊得力竭聲嘶，但他們依然沒有停下來，繼續為校隊全力打氣。',
+        img: 'images/08_力竭聲嘶.jpg'
+      },
+
+      // P16-17
+      {
+        id: 9, grp: 'p16_17', page: 'P.16', word: '力敵勢均',
+        pron: {}, typoIdx: [3], typoNote: '「均」不能寫成「勻」',
+        morphemes: '勢：情勢；均：均勻',
+        syn: ['旗鼓相當'], ant: [],
+        meaning: '形容雙方實力相當，難分高下。',
+        sentiment: '中性詞', target: '用於人',
+        example: '籃球場上兩隊力敵勢均，未到最後一刻，還不知鹿死誰手呢！',
+        complexSentence: '這場籃球決賽中，紅藍兩隊力敵勢均，直到最後十秒才分出勝負，令全場觀眾看得十分緊張。',
+        img: 'images/09_力敵勢均.jpg'
+      },
+      {
+        id: 10, grp: 'p16_17', page: 'P.16', word: '十惡不赦',
+        pron: { 3: '卸' }, typoIdx: [3], typoNote: '「赦」不能寫作「敖」（正音：卸）',
+        morphemes: '惡：罪惡、罪過；赦：饒恕',
+        syn: ['罪惡滔天'], ant: ['罰不當罪'],
+        meaning: '指罪大惡極，難以饒恕。',
+        sentiment: '貶義', target: '用於人',
+        example: '這個罪犯搶劫、擄掠、放火，真是十惡不赦，一定要將他繩之於法！',
+        complexSentence: '這個匪徒不但多次搶劫商鋪，還縱火傷及無辜，簡直十惡不赦，最終被判處重刑。',
+        img: 'images/10_十惡不赦.jpg'
+      },
+      {
+        id: 11, grp: 'p16_17', page: 'P.16', word: '十萬火急',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '形容事態十分緊急',
+        syn: ['急如星火'], ant: ['從容不迫'],
+        meaning: '形容事態十分緊急。',
+        sentiment: '中性詞', target: '用於事情',
+        example: '公司的電腦網絡一下子都癱瘓了，電腦技術員正十萬火急地修復系統。',
+        complexSentence: '因為颱風即將正面吹襲本港，天文台發出十萬火急的警報，提醒市民盡快做好防風措施。',
+        img: 'images/11_十萬火急.jpg'
+      },
+      {
+        id: 12, grp: 'p16_17', page: 'P.16', word: '三令五申',
+        pron: {}, typoIdx: [1, 3], typoNote: '「令」不能寫作「今」；「申」不能寫作「伸」',
+        morphemes: '令：命令；申：表達',
+        syn: ['耳提面命'], ant: ['不言之教'],
+        meaning: '指再三叮嚀。',
+        sentiment: '褒義', target: '用於人',
+        example: '由於事關重大，曾警司三令五申，所有隊員必須嚴守秘密。',
+        complexSentence: '儘管校方已三令五申禁止同學在走廊奔跑，但仍有少數同學置若罔聞，結果不慎撞倒他人。',
+        img: 'images/12_三令五申.jpg'
+      },
+      {
+        id: 13, grp: 'p16_17', page: 'P.17', word: '三思而行',
+        pron: { 0: 'saam3' }, typoIdx: [], typoNote: '',
+        morphemes: '三：再三，表示多次；思：考慮',
+        syn: [], ant: ['草率從事'],
+        meaning: '指反覆考慮後再行動。',
+        sentiment: '褒義', target: '用於人',
+        example: '凡事都要三思而行，假如魯莽行事，最終只會後悔莫及。',
+        complexSentence: '做重大決定前必須三思而行，如果只憑一時衝動行事，往往會鑄成大錯，追悔莫及。',
+        img: 'images/13_三思而行.jpg'
+      },
+      {
+        id: 14, grp: 'p16_17', page: 'P.17', word: '三頭六臂',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '臂：胳臂',
+        syn: ['神通廣大'], ant: ['黔驢技窮'],
+        meaning: '比喻人神通廣大，本領高強。',
+        sentiment: '褒義', target: '用於人',
+        example: '母親簡直是三頭六臂，白天要上班，晚上回家又要照顧我們兄弟姊妹。',
+        complexSentence: '即使你本領高強，像擁有三頭六臂一樣，也不可能在一晚之內同時完成五份不同科目的功課。',
+        img: 'images/14_三頭六臂.jpg'
+      },
+      {
+        id: 15, grp: 'p16_17', page: 'P.17', word: '上行下效',
+        pron: { 1: '衡' }, typoIdx: [3], typoNote: '「效」不能寫作「郊」（「行」讀「衡」）',
+        morphemes: '效：仿效，跟著做',
+        syn: ['言傳身教'], ant: [],
+        meaning: '指在上位的人怎麼做，下面的人也跟著怎麼做。',
+        sentiment: '褒義', target: '用於人',
+        example: '為人父母若談吐有禮，必有上行下效的效果，子女也會懂得以禮待人。',
+        complexSentence: '既然身為學生領袖，就更應該以身作則，因為只有自己守規矩，才能產生上行下效的正面影響。',
+        img: 'images/15_上行下效.jpg'
+      },
+      {
+        id: 16, grp: 'p16_17', page: 'P.17', word: '亡羊補牢',
+        pron: {}, typoIdx: [0], typoNote: '「亡」不能寫作「芒」或「忘」',
+        morphemes: '亡：丟失；牢：飼養牲畜的圈欄',
+        syn: ['知錯能改'], ant: ['時不我與', '知錯不改'],
+        meaning: '比喻犯錯後及時更正，尚能補救。',
+        sentiment: '褒義', target: '用於人',
+        example: '大錯已經鑄成，即使現在你想亡羊補牢也來不及了。',
+        complexSentence: '雖然你這次中文默書成績不理想，但只要現在開始亡羊補牢，每天溫習生字，下次定能大有進步。',
+        img: 'images/16_亡羊補牢.jpg'
+      },
+
+      // P18-19
+      {
+        id: 17, grp: 'p18_19', page: 'P.18', word: '千里迢迢',
+        pron: { 2: '條', 3: '條' }, typoIdx: [2, 3], typoNote: '「迢」不能寫作「紹」（正音：條）',
+        morphemes: '迢迢：遙遠',
+        syn: ['跋山涉水', '不遠千里'], ant: ['近在咫尺', '咫尺天涯'],
+        meaning: '形容路途十分遙遠。',
+        sentiment: '中性詞', target: '用於人',
+        example: '我們坐了整整三天的火車，千里迢迢來到這個美麗的地方，覺得再辛苦也是值得的。',
+        complexSentence: '雖然外公外婆年事已高，但他們依然千里迢迢從鄉間來到香港，只為參加孫兒的畢業典禮。',
+        img: 'images/17_千里迢迢.jpg'
+      },
+      {
+        id: 18, grp: 'p18_19', page: 'P.18', word: '千恩萬謝',
+        pron: {}, typoIdx: [1], typoNote: '「恩」不能寫作「思」',
+        morphemes: '恩：感恩；謝：道謝',
+        syn: [], ant: [],
+        meaning: '一再表示謝意。',
+        sentiment: '褒義', target: '用於人',
+        example: '救援人員在瓦礫堆中救出一個孩子，母親對救援人員千恩萬謝，幾乎要跪在地上了。',
+        complexSentence: '這位迷路的婆婆在熱心市民護送下安全回家，不但連聲道謝，還千恩萬謝地送上一袋水果以表心意。',
+        img: 'images/18_千恩萬謝.jpg'
+      },
+      {
+        id: 19, grp: 'p18_19', page: 'P.18', word: '千鈞一髮',
+        pron: { 1: '軍' }, typoIdx: [1, 3], typoNote: '「鈞」不能寫作「均」；「髮」不能寫作「發」',
+        morphemes: '鈞：古代重量單位；髮：頭髮',
+        syn: ['岌岌可危', '九死一生'], ant: ['安如磐石'],
+        meaning: '千鈞重物用一根頭髮繫着。比喻事情極為危急。',
+        sentiment: '貶義', target: '用於事',
+        example: '你怎麼可以在千鈞一髮、生死關頭時，棄他於不顧呢？',
+        complexSentence: '就在貨車即將撞向路邊行人這千鈞一髮的關頭，交警及時衝上前將小孩拉回安全地帶。',
+        img: 'images/19_千鈞一髮.jpg'
+      },
+      {
+        id: 20, grp: 'p18_19', page: 'P.18', word: '千載難逢',
+        pron: { 1: '宰' }, typoIdx: [1], typoNote: '「載」不能寫作「栽」或「裁」（正音：宰）',
+        morphemes: '載：一年；逢：遇到',
+        syn: ['千載一時', '百年不遇'], ant: ['屢見不鮮', '司空見慣'],
+        meaning: '形容機會十分難得。',
+        sentiment: '褒義', target: '用於事物',
+        example: '去美國的哈佛大學交流是個千載難逢的好機會，你一定要好好把握！',
+        complexSentence: '因為這次到北京故宮博物院實習的機會千載難逢，所以全校同學都踴躍報名爭取名額。',
+        img: 'images/20_千載難逢.jpg'
+      },
+      {
+        id: 21, grp: 'p18_19', page: 'P.19', word: '千錘百煉',
+        pron: { 1: '除' }, typoIdx: [3], typoNote: '「煉」亦可作「鍊」，但不能寫作「練」',
+        morphemes: '錘：用槌子打；煉：鍛煉',
+        syn: ['字斟句酌'], ant: ['粗製濫造'],
+        meaning: '比喻人生經歷了磨練；也比喻對文章或作品進行多次美化和修改。',
+        sentiment: '褒義', target: '用於人和事物',
+        example: '有容千錘百煉的作品終於得到評判的賞識，獲得青年文學比賽冠軍。',
+        complexSentence: '這篇散文經過作者反覆修改與千錘百煉，不但字句精準流暢，更深深打動了每位讀者的心。',
+        img: 'images/21_千錘百煉.jpg'
+      },
+      {
+        id: 22, grp: 'p18_19', page: 'P.19', word: '口碑載道',
+        pron: { 1: '悲', 2: '再' }, typoIdx: [1, 2], typoNote: '「碑」不能寫作「啤」；「載」不能寫作「栽」或「裁」',
+        morphemes: '碑：石碑；載：充滿',
+        syn: ['膾炙人口', '頌聲遍野', '眾口稱善'], ant: ['眾矢之的', '怨聲載道'],
+        meaning: '眾人稱頌的話語，就像鐫刻在記功碑上一樣，比喻廣受好評。',
+        sentiment: '褒義', target: '用於事物',
+        example: '李先生對公益和教育的熱心口碑載道，這次獲選為「好人好事」代表，實在是實至名歸啊！',
+        complexSentence: '因為這家社區診所的醫生不但醫術精湛，而且收費相宜，所以在街坊之間口碑載道。',
+        img: 'images/22_口碑載道.jpg'
+      },
+      {
+        id: 23, grp: 'p18_19', page: 'P.19', word: '口蜜腹劍',
+        pron: {}, typoIdx: [1, 2], typoNote: '「蜜」不能寫作「密」；「腹」不能寫作「複」或「覆」',
+        morphemes: '蜜：蜜糖；腹：肚子',
+        syn: ['佛口蛇心', '笑裏藏刀'], ant: ['表裡如一'],
+        meaning: '比喻一個人說話好聽，事實上卻內心險惡，處處想陷害別人。',
+        sentiment: '貶義', target: '用於人',
+        example: '這個人總是笑臉迎人，但都是口蜜腹劍，跟他相處時要小心一點。',
+        complexSentence: '儘管表面上他對你十分熱情，但實際上卻口蜜腹劍，所以與他合作時務必提高警覺。',
+        img: 'images/23_口蜜腹劍.jpg'
+      },
+      {
+        id: 24, grp: 'p18_19', page: 'P.19', word: '土崩瓦解',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '崩：倒塌；解：解體、離散',
+        syn: ['分崩離析', '支離破碎'], ant: ['固若金湯', '安如泰山'],
+        meaning: '比喻徹底潰敗，無法收拾。',
+        sentiment: '貶義', target: '用於事物',
+        example: '經過漫長的戰役，甲國的防守土崩瓦解，已經失去勝利的機會。',
+        complexSentence: '由於軍隊內部出現嚴重分歧，加上糧草斷絕，前線防線很快便土崩瓦解，全軍被迫撤退。',
+        img: 'images/24_土崩瓦解.jpg'
+      },
+
+      // P20-21
+      {
+        id: 25, grp: 'p20_21', page: 'P.20', word: '大名鼎鼎',
+        pron: { 2: '頂', 3: '頂' }, typoIdx: [2, 3], typoNote: '「鼎」字上面部份是「目」而非「日」',
+        morphemes: '鼎鼎：形容盛大的樣子',
+        syn: ['赫赫有名', '舉世聞名'], ant: ['默默無名'],
+        meaning: '形容名氣非常大。',
+        sentiment: '褒義', target: '用於人',
+        example: '他就是大名鼎鼎的陳教授，他是編寫你們英文課本的顧問呢！',
+        complexSentence: '雖然這位教授在科學界大名鼎鼎，但他對待中學生提問時依然謙遜有禮，毫無架子。',
+        img: 'images/25_大名鼎鼎.jpg'
+      },
+      {
+        id: 26, grp: 'p20_21', page: 'P.20', word: '大吹大擂',
+        pron: { 3: '雷' }, typoIdx: [3], typoNote: '「擂」不能寫作「雷」（正音：雷）',
+        morphemes: '吹：吹喇叭；擂：打鼓',
+        syn: ['自吹自擂', '誇誇其談', '紙上談兵'], ant: [],
+        meaning: '比喻言辭誇張、毫無根據。',
+        sentiment: '貶義', target: '用於人',
+        example: '他平日不做正事，終日大吹大擂，熟悉他的人都不相信他說的話。',
+        complexSentence: '他明明對電腦編程一竅不通，卻在同學面前大吹大擂，結果一上機操作便當場出醜。',
+        img: 'images/26_大吹大擂.jpg'
+      },
+      {
+        id: 27, grp: 'p20_21', page: 'P.20', word: '大言不慚',
+        pron: { 3: '蠶' }, typoIdx: [3], typoNote: '「慚」不能寫作「斬」（正音：蠶）',
+        morphemes: '大言：說大話；慚：羞愧',
+        syn: ['大張其詞', '誇誇其談'], ant: ['妄自菲薄'],
+        meaning: '不顧事實而妄言誇大，卻不知羞慚。',
+        sentiment: '貶義', target: '用於人',
+        example: '你平常連一顆雞蛋也畫不好，現在卻誇下海口說要在畫畫比賽中奪冠？請不要大言不慚了。',
+        complexSentence: '你連基本的泳式還未學會，居然大言不慚地說要參加渡海泳比賽，實在太不自量力了。',
+        img: 'images/27_大言不慚.jpg'
+      },
+      {
+        id: 28, grp: 'p20_21', page: 'P.20', word: '大相逕庭',
+        pron: { 2: '敬' }, typoIdx: [2], typoNote: '「逕」可寫作「徑」，但不能寫作「脛」',
+        morphemes: '逕：同「徑」；小路；庭：院子',
+        syn: ['天淵之別', '截然不同'], ant: ['並行不悖', '不相上下', '大同小異'],
+        meaning: '形容彼此相差很遠或差距很大。',
+        sentiment: '中性詞', target: '用於人和事物',
+        example: '他們的意見大相徑庭，無法達成共識。',
+        complexSentence: '雖然這對雙胞胎兄弟外貌十分相似，但他們的性格和興趣卻大相逕庭，一個好靜，一個好動。',
+        img: 'images/28_大相逕庭.jpg'
+      },
+      {
+        id: 29, grp: 'p20_21', page: 'P.21', word: '大庭廣眾',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '大庭：寬大的地方；廣眾：人群',
+        syn: ['眾目睽睽', '光天化日'], ant: [],
+        meaning: '指人多而公開的場所。',
+        sentiment: '中性詞', target: '用於事物',
+        example: '這個小孩因為媽媽不肯給他買玩具，在大庭廣眾下高聲哭鬧，引來不少途人側目。',
+        complexSentence: '即使你對朋友的決定有所不滿，也不應該在大庭廣眾之下高聲責罵他，否則會令雙方都十分尷尬。',
+        img: 'images/29_大庭廣眾.jpg'
+      },
+      {
+        id: 30, grp: 'p20_21', page: 'P.21', word: '大海撈針',
+        pron: {}, typoIdx: [2], typoNote: '「撈」不能寫作「勞」',
+        morphemes: '撈：撈取',
+        syn: ['海中撈月'], ant: ['唾手可得'],
+        meaning: '比喻東西極難找到。',
+        sentiment: '貶義', target: '用於人和事物',
+        example: '想在茫茫人海裡尋找失蹤二十年的兒子，有如大海撈針。',
+        complexSentence: '沒有任何線索就想在數百萬人的城市裡尋找一名陌生人，無異於大海撈針，幾乎不可能成功。',
+        img: 'images/30_大海撈針.jpg'
+      },
+      {
+        id: 31, grp: 'p20_21', page: 'P.21', word: '大喜過望',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '過：超越；望：期望',
+        syn: ['喜出望外'], ant: ['大失所望'],
+        meaning: '指結果比預期的要好，因而特別高興。',
+        sentiment: '褒義', target: '用於人',
+        example: '原本抱著學習的心態去比賽，沒想到還能獲得亞軍，真是大喜過望！',
+        complexSentence: '我原本以為這次歌唱比賽只能獲得安慰獎，沒想到竟奪得冠軍，真是令我大喜過望。',
+        img: 'images/31_大喜過望.jpg'
+      },
+      {
+        id: 32, grp: 'p20_21', page: 'P.21', word: '大殺風景',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '殺：損害（亦作「大煞風景」）',
+        syn: [], ant: [],
+        meaning: '指破壞美景，使人興致敗壞。',
+        sentiment: '貶義', target: '用於事物',
+        example: '西湖原本平靜淡雅，可近年來遊客漸多，真是大殺風景！',
+        complexSentence: '本來大家正興致勃勃地在山頂欣賞夜景，偏偏有人在旁大聲喧嘩並亂拋垃圾，真是大殺風景。',
+        img: 'images/32_大殺風景.jpg'
+      },
+
+      // P22
+      {
+        id: 33, grp: 'p22_23', page: 'P.22', word: '大智若愚',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '智：才智；若：好像',
+        syn: ['大巧若拙'], ant: ['鋒芒畢露'],
+        meaning: '指人才智出眾，不露鋒芒，所以表面看起來很平庸。',
+        sentiment: '褒義', target: '用於人',
+        example: '大智若愚的人懂得遠離世間無謂的紛爭，不露鋒芒，避免招來他人的嫉妒。',
+        complexSentence: '真正大智若愚的人從不炫耀自己的聰明才智，反而懂得在適當時候保持低調，避免招人妒忌。',
+        img: 'images/33_大智若愚.jpg'
+      },
+      {
+        id: 34, grp: 'p22_23', page: 'P.22', word: '大惑不解',
+        pron: { 1: '或' }, typoIdx: [], typoNote: '',
+        morphemes: '惑：迷惑；解：理解',
+        syn: ['百思不解'], ant: ['恍然大悟'],
+        meaning: '指感到疑惑、困惑，難以理解。',
+        sentiment: '貶義', target: '用於人',
+        example: '一向成績很好的班長考試居然不及格，真讓人大惑不解。',
+        complexSentence: '一向準時交功課的班長今天竟然無故缺席，令全班同學都大惑不解，紛紛擔心他的情況。',
+        img: 'images/34_大惑不解.jpg'
+      },
+      {
+        id: 35, grp: 'p22_23', page: 'P.22', word: '大發雷霆',
+        pron: { 3: '停' }, typoIdx: [3], typoNote: '「霆」下部分的「廷」不能寫成「延」（正音：停）',
+        morphemes: '霆：極大的雷聲',
+        syn: ['怒不可遏', '勃然大怒'], ant: ['心平氣和', '平心靜氣'],
+        meaning: '比喻發怒，大聲斥責。',
+        sentiment: '貶義', target: '用於人',
+        example: '爸爸得知小明打破了他喜愛的杯子，於是大發雷霆，把小明教訓了一頓。',
+        complexSentence: '雖然弟弟是不小心打翻了墨水弄髒哥哥的畫作，但哥哥還是忍不住大發雷霆，把弟弟嚇哭了。',
+        img: 'images/35_大發雷霆.jpg'
+      },
+      {
+        id: 36, grp: 'p22_23', page: 'P.22', word: '大義凜然',
+        pron: { 2: 'lam5' }, typoIdx: [], typoNote: '',
+        morphemes: '大義：正義；凜然：嚴肅的樣子',
+        syn: ['威武不屈'], ant: ['奴顏婢膝'],
+        meaning: '形容心存公理正義而神態莊嚴的樣子。',
+        sentiment: '褒義', target: '用於人',
+        example: '這名愛護動物協會的人士指責虐待動物者的言辭句句鏗鏘，大義凜然，令人拍手稱好。',
+        complexSentence: '面對不法分子的威嚇，這位證人依然大義凜然地出庭指證，其勇氣令人十分敬佩。',
+        img: 'images/36_大義凜然.jpg'
+      },
+
+      // P23
+      {
+        id: 37, grp: 'p22_23', page: 'P.23', word: '大勢已去',
+        pron: {}, typoIdx: [2], typoNote: '「已」不能寫作「己」',
+        morphemes: '勢：趨勢、形勢',
+        syn: ['日暮途窮', '強弩之末'], ant: ['方興未艾'],
+        meaning: '指喪失有利形勢，已經無法挽回的局面。',
+        sentiment: '貶義', target: '用於人',
+        example: '籃球賽到了後半場尾聲，我們隊伍還落後對方十分，看來是大勢已去。',
+        complexSentence: '看到對方在最後兩分鐘已領先二十分，我方球員都知道大勢已去，但仍堅持比賽至最後一秒。',
+        img: 'images/37_大勢已去.jpg'
+      },
+      {
+        id: 38, grp: 'p22_23', page: 'P.23', word: '大器晚成',
+        pron: {}, typoIdx: [1], typoNote: '「器」中間部分是「犬」而非「大」',
+        morphemes: '大器：大的器具，比喻大才',
+        syn: ['大才晚成'], ant: ['少年得志'],
+        meaning: '比喻卓越的人才往往較晚才取得成就。',
+        sentiment: '褒義', target: '用於人',
+        example: '只要有志於學，總不會嫌太遲，歷史上便有很多大器晚成的例子。',
+        complexSentence: '只要我們保持對學習的熱情並不斷累積經驗，即使暫時未見成果也不必灰心，因為不少傑出人物都是大器晚成的。',
+        img: 'images/38_大器晚成.jpg'
+      },
+      {
+        id: 39, grp: 'p22_23', page: 'P.23', word: '大聲疾呼',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '疾：快；呼：呼喊、喊叫',
+        syn: ['大喊大叫'], ant: ['喁喁細語'],
+        meaning: '指大聲呼叫，以引起大家的注意。',
+        sentiment: '中性詞', target: '用於人',
+        example: '他突然在路上暈倒，朋友手足無措，惟有大聲疾呼，希望有途人幫忙。',
+        complexSentence: '為了呼籲市民珍惜食水資源，環保團體代表在廣場上大聲疾呼，希望引起大眾的關注。',
+        img: 'images/39_大聲疾呼.jpg'
+      },
+      {
+        id: 40, grp: 'p22_23', page: 'P.23', word: '大顯身手',
+        pron: {}, typoIdx: [], typoNote: '',
+        morphemes: '顯：表現、展示；身手：本領',
+        syn: ['大顯神通'], ant: ['無能為力', '束手無策'],
+        meaning: '形容充分展示自己的才幹和本領。',
+        sentiment: '褒義', target: '用於人',
+        example: '比賽要開始了，小明捋起衣袖，準備大顯身手。',
+        complexSentence: '經過三個月的刻苦訓練，運動員們終於迎來校運會，個個都摩拳擦掌，準備在賽場上大顯身手。',
+        img: 'images/40_大顯身手.jpg'
+      }
+    ];
+
+
+    // ==================== STATE ====================
+    let filteredList = [...IDIOMS];
+    let currentIndex = 0;
+    let speechRate = 0.95;
+    let completedSet = new Set();
+    try {
+      completedSet = new Set(JSON.parse(localStorage.getItem('idiom_garden_done') || '[]'));
+    } catch (e) {}
+
+    function saveCompleted() {
+      try {
+        localStorage.setItem('idiom_garden_done', JSON.stringify([...completedSet]));
+      } catch (e) {}
+    }
+
+    // ==================== CANTONESE TTS ====================
+    let isSpeechPaused = false;
+    let speechQueue = [];
+    let speechQueueIdx = 0;
+    let speechSessionId = 0;
+    let cachedVoices = [];
+    window.__activeUtterance = null;
+
+    function loadVoices() {
+      if (!('speechSynthesis' in window)) return;
+      cachedVoices = window.speechSynthesis.getVoices() || [];
+    }
+    if ('speechSynthesis' in window) {
+      loadVoices();
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+    }
+
+    function pickBestChineseVoice() {
+      const voices = cachedVoices.length ? cachedVoices : (window.speechSynthesis.getVoices() || []);
+      return (
+        voices.find(v => /zh[-_]HK/i.test(v.lang) && /cantonese|粵|sinji|hiu|wan|ting/i.test(v.name)) ||
+        voices.find(v => /zh[-_]HK|yue/i.test(v.lang)) ||
+        voices.find(v => /cantonese|廣東話|粵語/i.test(v.name)) ||
+        voices.find(v => /zh[-_]TW|zh[-_]CN|^zh/i.test(v.lang)) ||
+        null
+      );
+    }
+
+    function clearSpeakingSection() {
+      document.querySelectorAll('.speaking-circle').forEach(el => el.classList.remove('speaking-circle'));
+    }
+
+    function highlightSpeakingSection(targetId) {
+      clearSpeakingSection();
+      if (!targetId) return;
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.classList.add('speaking-circle');
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    function resetSpeechControls() {
+      clearSpeakingSection();
+      isSpeechPaused = false;
+      speechQueue = [];
+      speechQueueIdx = 0;
+      window.__activeUtterance = null;
+      document.getElementById('pause-speak-btn').classList.add('hidden');
+      document.getElementById('stop-speak-btn').classList.add('hidden');
+      document.getElementById('pause-speak-btn').textContent = '⏸ 暫停';
+    }
+
+    function stopSpeech() {
+      speechSessionId++;
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      resetSpeechControls();
+    }
+
+    function speakNextChunk(sessionId) {
+      if (sessionId !== speechSessionId || isSpeechPaused) return;
+      if (speechQueueIdx >= speechQueue.length) {
+        resetSpeechControls();
+        return;
+      }
+      const chunk = speechQueue[speechQueueIdx];
+      highlightSpeakingSection(chunk.targetId);
+      const u = new SpeechSynthesisUtterance(chunk.text);
+      const best = pickBestChineseVoice();
+      if (best) { u.voice = best; u.lang = best.lang; }
+      else { u.lang = 'zh-HK'; }
+      u.rate = speechRate;
+      u.volume = 1.0;
+      window.__activeUtterance = u;
+
+      u.onend = () => {
+        if (sessionId !== speechSessionId || isSpeechPaused) return;
+        speechQueueIdx++;
+        speakNextChunk(sessionId);
+      };
+      u.onerror = () => {
+        if (sessionId !== speechSessionId) return;
+        resetSpeechControls();
+      };
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+      window.speechSynthesis.speak(u);
+    }
+
+    function playQueue(queue) {
+      if (!('speechSynthesis' in window)) return;
+      const wasActive = window.speechSynthesis.speaking || window.speechSynthesis.pending || window.speechSynthesis.paused;
+      speechSessionId++;
+      const mySession = speechSessionId;
+      window.speechSynthesis.cancel();
+      isSpeechPaused = false;
+      speechQueue = queue;
+      speechQueueIdx = 0;
+
+      const pauseBtn = document.getElementById('pause-speak-btn');
+      const stopBtn = document.getElementById('stop-speak-btn');
+      pauseBtn.textContent = '⏸ 暫停';
+      pauseBtn.classList.remove('hidden');
+      stopBtn.classList.remove('hidden');
+
+      setTimeout(() => speakNextChunk(mySession), wasActive ? 90 : 20);
+    }
+
+    document.getElementById('speak-btn').addEventListener('click', () => {
+      const item = filteredList[currentIndex];
+      const q = [
+        { text: item.word, targetId: 'chars-stage' },
+        { text: `意思：${item.meaning}`, targetId: 'meaning-box' },
+        { text: `辨義：${item.morphemes}`, targetId: 'colloc-morphemes' }
+      ];
+      if (item.syn && item.syn.length) q.push({ text: `近義詞：${item.syn.join('、')}`, targetId: 'colloc-syn' });
+      if (item.ant && item.ant.length) q.push({ text: `反義詞：${item.ant.join('、')}`, targetId: 'colloc-ant' });
+      q.push(
+        { text: `例句：${item.example}`, targetId: 'example-box' },
+        { text: `複句造句：${item.complexSentence}`, targetId: 'complex-sentence-box' }
+      );
+      completedSet.add(item.id);
+      saveCompleted();
+      renderSidebar();
+      playQueue(q);
+    });
+
+    document.getElementById('speak-example-btn').addEventListener('click', () => {
+      const item = filteredList[currentIndex];
+      playQueue([{ text: item.example, targetId: 'example-box' }]);
+    });
+
+    document.getElementById('speak-complex-btn').addEventListener('click', () => {
+      const item = filteredList[currentIndex];
+      playQueue([{ text: item.complexSentence, targetId: 'complex-sentence-box' }]);
+    });
+
+    document.getElementById('pause-speak-btn').addEventListener('click', () => {
+      if (!('speechSynthesis' in window)) return;
+      const pauseBtn = document.getElementById('pause-speak-btn');
+      if (!isSpeechPaused) {
+        isSpeechPaused = true;
+        window.speechSynthesis.pause();
+        pauseBtn.textContent = '▶ 繼續';
+      } else {
+        isSpeechPaused = false;
+        pauseBtn.textContent = '⏸ 暫停';
+        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+        else speakNextChunk(speechSessionId);
+      }
+    });
+    document.getElementById('stop-speak-btn').addEventListener('click', stopSpeech);
+
+    document.querySelectorAll('.rate-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        speechRate = parseFloat(btn.dataset.rate);
+        document.querySelectorAll('.rate-btn').forEach(b => {
+          b.className = b === btn
+            ? 'rate-btn px-2 py-0.5 rounded-full border border-[#1E293B] bg-[#1E293B] text-white'
+            : 'rate-btn px-2 py-0.5 rounded-full border border-[#1E293B] bg-white';
+        });
+      });
+    });
+
+    // ==================== SIDEBAR & MAIN RENDER ====================
+    function renderSidebar() {
+      const query = (document.getElementById('search-idiom').value || '').trim();
+      const activeItem = filteredList[currentIndex];
+      const listEl = document.getElementById('sidebar-list');
+
+      const visible = filteredList.filter(it => !query || it.word.includes(query));
+      listEl.innerHTML = visible.map(it => {
+        const isActive = activeItem && it.id === activeItem.id;
+        const isDone = completedSet.has(it.id);
+        return `
+          <button type="button" data-id="${it.id}"
+            class="side-item w-full px-3.5 py-2 rounded-full border-2 border-[#1E293B] flex items-center justify-between text-sm font-bold transition ${
+              isActive ? 'bg-[#F2545B] text-white shadow-[2px_2px_0px_#1E293B]' : 'bg-white text-[#1E293B] hover:bg-amber-50'
+            }">
+            <span>${it.id}. ${it.word}</span>
+            <span class="${isDone ? 'text-[#FCD34D]' : (isActive ? 'text-white/70' : 'text-slate-300')}">${isDone ? '★★' : '☆☆'}</span>
+          </button>
+        `;
+      }).join('') || '<p class="text-xs text-slate-400 text-center py-4">找不到相符的成語</p>';
+
+      listEl.querySelectorAll('.side-item').forEach(btn => {
+        btn.addEventListener('click', () => {
+          stopSpeech();
+          const id = parseInt(btn.dataset.id, 10);
+          currentIndex = filteredList.findIndex(x => x.id === id);
+          if (currentIndex < 0) currentIndex = 0;
+          renderIdiom();
+        });
+      });
+
+      document.getElementById('completed-label').textContent = `已完成 ${completedSet.size} / ${IDIOMS.length}`;
+      document.getElementById('current-pos-label').textContent = `${currentIndex + 1} / ${filteredList.length}`;
+      document.getElementById('completed-bar').style.width = `${Math.round((completedSet.size / IDIOMS.length) * 100)}%`;
+    }
+
+    function renderIdiom() {
+      const item = filteredList[currentIndex];
+      renderSidebar();
+
+      // 4 Tilted Coral-Red Tiles + Red Typo Circle
+      const tilts = ['-3deg', '2deg', '-2deg', '3deg'];
+      document.getElementById('chars-stage').innerHTML = item.word.split('').map((ch, idx) => {
+        const hasTypo = item.typoIdx && item.typoIdx.includes(idx);
+        const pronText = item.pron[idx];
+        return `
+          <div class="flex flex-col items-center">
+            <div style="--tilt:${tilts[idx]}" class="relative w-full aspect-square max-w-[82px] rounded-2xl border-2 border-[#1E293B] shadow-[3px_3px_0px_#1E293B] ${hasTypo ? 'bg-white text-[#DC2626]' : 'bg-[#F2545B] text-white'} flex items-center justify-center char-pop">
+              <span class="font-serif-tc font-black text-3xl sm:text-4xl leading-none select-none">${ch}</span>
+              ${hasTypo ? `
+                <svg viewBox="0 0 120 120" class="absolute inset-0 w-full h-full pointer-events-none">
+                  <ellipse cx="60" cy="60" rx="50" ry="48" fill="none" stroke="#DC2626" stroke-width="6" stroke-linecap="round" class="red-circle-stroke" style="animation-delay:${idx * 100 + 180}ms" />
+                </svg>
+              ` : ''}
+            </div>
+            ${pronText ? `<span class="mt-1.5 text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#FCD34D] border border-[#1E293B] text-[#1E293B]">讀:${pronText}</span>` : `<span class="mt-1.5 h-5"></span>`}
+          </div>
+        `;
+      }).join('');
+
+      // Typo banner
+      const typoBanner = document.getElementById('typo-banner');
+      if (item.typoNote) {
+        typoBanner.classList.remove('hidden');
+        typoBanner.textContent = '⭕ 正字：' + item.typoNote;
+      } else {
+        typoBanner.classList.add('hidden');
+      }
+
+      // Meaning & Usage
+      document.getElementById('meaning-box').textContent = item.meaning;
+      const sentCls = item.sentiment.includes('褒') ? 'bg-emerald-100 text-emerald-900' : item.sentiment.includes('貶') ? 'bg-red-100 text-red-900' : 'bg-sky-100 text-sky-900';
+      document.getElementById('usage-box').innerHTML = `
+        <span class="text-[11px] font-bold px-2 py-0.5 rounded-full border border-[#1E293B] ${sentCls}">${item.sentiment}</span>
+        <span class="text-[11px] font-bold px-2 py-0.5 rounded-full border border-[#1E293B] bg-white">${item.target}</span>
+      `;
+      document.getElementById('page-tag').textContent = item.page;
+
+      const doneBtn = document.getElementById('mark-done-btn');
+      if (completedSet.has(item.id)) {
+        doneBtn.textContent = '★ 已掌握';
+        doneBtn.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-600 text-white border border-[#1E293B] transition';
+      } else {
+        doneBtn.textContent = '☆ 標記已學';
+        doneBtn.className = 'text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 hover:bg-emerald-200 text-emerald-900 border border-[#1E293B] transition';
+      }
+
+      // Collocations
+      document.getElementById('morphemes-text').textContent = item.morphemes;
+      document.getElementById('syn-list').innerHTML = item.syn.length
+        ? item.syn.map(w => `<span class="px-2 py-0.5 rounded-lg bg-white border border-emerald-400 font-bold text-emerald-900">${w}</span>`).join('')
+        : '<span class="text-slate-400">（課本未列）</span>';
+      document.getElementById('ant-list').innerHTML = item.ant.length
+        ? item.ant.map(w => `<span class="px-2 py-0.5 rounded-lg bg-white border border-indigo-400 font-bold text-indigo-900">${w}</span>`).join('')
+        : '<span class="text-slate-400">（課本未列）</span>';
+
+      // Illustration
+      const imgEl = document.getElementById('idiom-img');
+      imgEl.src = item.img;
+      imgEl.alt = item.word + '情境圖片';
+
+      // Example Sentence (wavy coral underline like IMG_5123.jpeg)
+      const wordPattern = item.word === '大相逕庭' ? '大相[逕徑]庭' : item.word;
+      document.getElementById('example-text').innerHTML = item.example.replace(
+        new RegExp(wordPattern, 'g'),
+        m => `<span class="wavy-idiom">${m}</span>`
+      );
+
+      // Complex Sentence (Purple connectives + Blue idiom)
+      const connRegex = /(雖然|儘管|因為|由於|既然|只要|如果|即使|不但|不僅|為了|直到|但是|然而|可是|所以|因此|只好|反而|依然|仍然|而且|並且|結果|否則|偏偏|還是|卻|但|也|就|才|便)/g;
+      const idiomRegex = new RegExp(wordPattern, 'g');
+      const parts = (item.complexSentence || '').split(new RegExp(`(${wordPattern})`, 'g'));
+      document.getElementById('complex-text').innerHTML = parts.map(part => {
+        if (idiomRegex.test(part)) {
+          idiomRegex.lastIndex = 0;
+          return `<span class="font-bold text-[#1D4ED8] bg-blue-100 border border-blue-300 px-1.5 py-0.5 rounded">${part}</span>`;
+        }
+        return part.replace(connRegex, c => `<span class="font-bold text-purple-800 bg-purple-100 border border-purple-300 px-1.5 py-0.5 rounded">${c}</span>`);
+      }).join('');
+    }
+
+    document.getElementById('mark-done-btn').addEventListener('click', () => {
+      const item = filteredList[currentIndex];
+      if (completedSet.has(item.id)) completedSet.delete(item.id);
+      else completedSet.add(item.id);
+      saveCompleted();
+      renderIdiom();
+    });
+
+    document.getElementById('replay-anim-btn').addEventListener('click', renderIdiom);
+    document.getElementById('search-idiom').addEventListener('input', renderSidebar);
+    document.getElementById('prev-idiom-btn').addEventListener('click', () => {
+      stopSpeech();
+      currentIndex = (currentIndex - 1 + filteredList.length) % filteredList.length;
+      renderIdiom();
+    });
+    document.getElementById('next-idiom-btn').addEventListener('click', () => {
+      stopSpeech();
+      currentIndex = (currentIndex + 1) % filteredList.length;
+      renderIdiom();
+    });
+
+    // ==================== 40-IDIOM SUPER LARGE SLIDESHOW ====================
+    let ssIdx = 0;
+    let ssState = 'stopped';
+    let ssTimer = null;
+    let ssSessionId = 0;
+    window.__ssUtterance = null;
+
+    function renderSlideshowCard() {
+      const item = IDIOMS[ssIdx];
+      document.getElementById('ss-counter').textContent = `第 ${ssIdx + 1} / ${IDIOMS.length} 個`;
+      document.getElementById('ss-page').textContent = item.page;
+      document.getElementById('ss-meaning').textContent = item.meaning;
+
+      document.getElementById('ss-chars').innerHTML = item.word.split('').map((ch, idx) => {
+        const hasTypo = item.typoIdx && item.typoIdx.includes(idx);
+        const pronText = item.pron[idx];
+        return `
+          <div class="relative flex flex-col items-center w-full">
+            ${pronText ? `<span class="mb-2 text-xs sm:text-sm font-bold px-2.5 py-0.5 rounded-full bg-[#FCD34D] border border-[#1E293B]">讀：${pronText}</span>` : `<span class="mb-2 h-6 sm:h-7"></span>`}
+            <div class="relative w-full aspect-square max-w-[190px] rounded-3xl border-[3px] border-[#1E293B] shadow-[4px_4px_0px_#1E293B] ${hasTypo ? 'bg-white text-[#DC2626]' : 'bg-[#F2545B] text-white'} flex items-center justify-center char-pop" style="animation-delay:${idx * 70}ms">
+              <span class="font-serif-tc font-black text-[clamp(3.2rem,13vw,7.2rem)] leading-none select-none">${ch}</span>
+              ${hasTypo ? `
+                <svg viewBox="0 0 120 120" class="absolute inset-0 w-full h-full pointer-events-none">
+                  <ellipse cx="60" cy="60" rx="50" ry="48" fill="none" stroke="#DC2626" stroke-width="6" stroke-linecap="round" class="red-circle-stroke" style="animation-delay:${idx * 90 + 220}ms" />
+                </svg>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const typoBox = document.getElementById('ss-typo-note');
+      if (item.typoNote) {
+        typoBox.classList.remove('hidden');
+        typoBox.innerHTML = `<div class="rounded-2xl px-4 py-2 border-2 border-[#1E293B] bg-red-50 text-red-900 text-sm sm:text-base font-bold">⭕ 正字提醒：${item.typoNote}</div>`;
+      } else {
+        typoBox.classList.add('hidden');
+      }
+    }
+
+    function updateSlideshowButtons() {
+      const playBtn = document.getElementById('ss-play-btn');
+      const pauseBtn = document.getElementById('ss-pause-btn');
+      const statusEl = document.getElementById('ss-status');
+      if (ssState === 'playing') {
+        playBtn.classList.add('opacity-50');
+        pauseBtn.textContent = '⏸ Pause 暫停';
+        statusEl.textContent = '🔊 正在順序播放及朗讀…';
+      } else if (ssState === 'paused') {
+        playBtn.classList.remove('opacity-50');
+        pauseBtn.textContent = '▶ 繼續播放';
+        statusEl.textContent = '⏸ 已暫停';
+      } else {
+        playBtn.classList.remove('opacity-50');
+        pauseBtn.textContent = '⏸ Pause 暫停';
+        statusEl.textContent = '⏹ 已停止｜點擊全部自動播開始';
+      }
+    }
+
+    function speakAndAdvanceSlideshow(mySession) {
+      if (mySession !== ssSessionId || ssState !== 'playing') return;
+      renderSlideshowCard();
+      const item = IDIOMS[ssIdx];
+      const advanceNext = () => {
+        if (mySession !== ssSessionId || ssState !== 'playing') return;
+        const delayMs = parseInt(document.getElementById('ss-delay-select').value, 10) || 3000;
+        let remainSec = Math.ceil(delayMs / 1000);
+        const statusEl = document.getElementById('ss-status');
+        statusEl.textContent = `⏳ 停頓 ${remainSec} 秒後切換下一個…`;
+        const tickId = setInterval(() => {
+          if (mySession !== ssSessionId || ssState !== 'playing') { clearInterval(tickId); return; }
+          remainSec--;
+          if (remainSec > 0) statusEl.textContent = `⏳ 停頓 ${remainSec} 秒後切換下一個…`;
+          else clearInterval(tickId);
+        }, 1000);
+        ssTimer = setTimeout(() => {
+          clearInterval(tickId);
+          if (mySession !== ssSessionId || ssState !== 'playing') return;
+          if (ssIdx < IDIOMS.length - 1) { ssIdx++; speakAndAdvanceSlideshow(mySession); }
+          else if (document.getElementById('ss-loop-cb').checked) { ssIdx = 0; speakAndAdvanceSlideshow(mySession); }
+          else { ssState = 'stopped'; updateSlideshowButtons(); }
+        }, delayMs);
+      };
+
+      if (!('speechSynthesis' in window)) { ssTimer = setTimeout(advanceNext, 2200); return; }
+      const u = new SpeechSynthesisUtterance(item.word);
+      const best = pickBestChineseVoice();
+      if (best) { u.voice = best; u.lang = best.lang; }
+      else { u.lang = 'zh-HK'; }
+      u.rate = speechRate;
+      window.__ssUtterance = u;
+      u.onend = advanceNext;
+      u.onerror = advanceNext;
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+      window.speechSynthesis.speak(u);
+    }
+
+    function startSlideshow() {
+      clearTimeout(ssTimer);
+      if (ssState === 'paused') {
+        ssState = 'playing';
+        updateSlideshowButtons();
+        if ('speechSynthesis' in window && window.speechSynthesis.paused) window.speechSynthesis.resume();
+        else { ssSessionId++; speakAndAdvanceSlideshow(ssSessionId); }
+        return;
+      }
+      ssState = 'playing';
+      updateSlideshowButtons();
+      ssSessionId++;
+      const mySession = ssSessionId;
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      setTimeout(() => speakAndAdvanceSlideshow(mySession), 80);
+    }
+
+    function pauseSlideshow() {
+      if (ssState === 'playing') {
+        ssState = 'paused';
+        clearTimeout(ssTimer);
+        if ('speechSynthesis' in window) window.speechSynthesis.pause();
+        updateSlideshowButtons();
+      } else if (ssState === 'paused') startSlideshow();
+    }
+
+    function stopSlideshow() {
+      ssState = 'stopped';
+      ssSessionId++;
+      clearTimeout(ssTimer);
+      window.__ssUtterance = null;
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      updateSlideshowButtons();
+    }
+
+    document.getElementById('slideshow-tag-btn').addEventListener('click', () => {
+      stopSpeech();
+      document.getElementById('detail-panel').classList.add('hidden');
+      document.getElementById('slideshow-panel').classList.remove('hidden');
+      document.querySelectorAll('.grp-btn').forEach(b => {
+        b.className = 'grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50';
+      });
+      document.getElementById('slideshow-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#F2545B] text-white';
+      renderSlideshowCard();
+      updateSlideshowButtons();
+    });
+
+    document.getElementById('ss-play-btn').addEventListener('click', startSlideshow);
+    document.getElementById('ss-pause-btn').addEventListener('click', pauseSlideshow);
+    document.getElementById('ss-stop-btn').addEventListener('click', stopSlideshow);
+    document.getElementById('ss-prev-btn').addEventListener('click', () => {
+      stopSlideshow();
+      ssIdx = (ssIdx - 1 + IDIOMS.length) % IDIOMS.length;
+      renderSlideshowCard();
+    });
+    document.getElementById('ss-next-btn').addEventListener('click', () => {
+      stopSlideshow();
+      ssIdx = (ssIdx + 1) % IDIOMS.length;
+      renderSlideshowCard();
+    });
+
+    // ==================== GROUP TABS ====================
+    document.querySelectorAll('.grp-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        stopSlideshow();
+        stopSpeech();
+        document.getElementById('slideshow-panel').classList.add('hidden');
+        document.getElementById('detail-panel').classList.remove('hidden');
+        document.getElementById('slideshow-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#FCD34D] text-[#1E293B] hover:bg-amber-300';
+
+        const grp = btn.dataset.grp;
+        filteredList = grp === 'all' ? [...IDIOMS] : IDIOMS.filter(x => x.grp === grp);
+        currentIndex = 0;
+
+        document.querySelectorAll('.grp-btn').forEach(b => {
+          b.className = b === btn
+            ? 'grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#F2545B] text-white'
+            : 'grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50';
+        });
+        renderIdiom();
+      });
+    });
+
+    // ==================== AUTO-MINIMIZE HEADER ON SCROLL ====================
+    let isHeaderMinimized = false;
+    let lastScrollY = window.scrollY || 0;
+
+    function setHeaderMinimized(min) {
+      if (isHeaderMinimized === min) return;
+      isHeaderMinimized = min;
+      const collapsible = document.getElementById('header-collapsible');
+      const inner = document.getElementById('header-inner');
+      const sub = document.getElementById('header-subtitle');
+      const logo = document.getElementById('header-logo');
+      const toggleBtn = document.getElementById('toggle-menu-btn');
+      if (min) {
+        collapsible.classList.add('hidden');
+        sub.classList.add('hidden');
+        inner.classList.replace('py-2.5', 'py-1.5');
+        logo.classList.replace('w-10', 'w-7');
+        logo.classList.replace('h-10', 'h-7');
+        logo.classList.replace('text-xl', 'text-sm');
+        toggleBtn.textContent = '▼ 展開選單';
+      } else {
+        collapsible.classList.remove('hidden');
+        sub.classList.remove('hidden');
+        inner.classList.replace('py-1.5', 'py-2.5');
+        logo.classList.replace('w-7', 'w-10');
+        logo.classList.replace('h-7', 'h-10');
+        logo.classList.replace('text-sm', 'text-xl');
+        toggleBtn.textContent = '▲ 收合選單';
+      }
+    }
+
+    document.getElementById('toggle-menu-btn').addEventListener('click', () => setHeaderMinimized(!isHeaderMinimized));
+    window.addEventListener('scroll', () => {
+      const currY = window.scrollY || document.documentElement.scrollTop || 0;
+      const delta = currY - lastScrollY;
+      if (currY <= 35) setHeaderMinimized(false);
+      else if (delta > 8 && currY > 70) setHeaderMinimized(true);
+      else if (delta < -10) setHeaderMinimized(false);
+      lastScrollY = currY;
+    }, { passive: true });
+
+    // Init
+    renderIdiom();
+  </script>
+</body>
+</html>
