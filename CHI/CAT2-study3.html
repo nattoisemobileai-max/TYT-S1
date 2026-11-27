@@ -112,6 +112,7 @@
           <button type="button" data-grp="p20_21" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50">P20-21</button>
           <button type="button" data-grp="p22_23" class="grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50">P22-23</button>
           <button type="button" id="slideshow-tag-btn" class="comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#FCD34D] text-[#1E293B] hover:bg-amber-300">🎬 40成語大字連播</button>
+          <button type="button" id="games-tag-btn" class="comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-emerald-400 text-[#1E293B] hover:bg-emerald-300">🎮 遊戲區</button>
         </div>
       </div>
     </div>
@@ -154,6 +155,62 @@
         <button id="ss-pause-btn" type="button" class="comic-pill px-5 py-2 rounded-full bg-[#FCD34D] hover:bg-amber-300 text-[#1E293B] text-sm sm:text-base font-bold">⏸ Pause 暫停</button>
         <button id="ss-stop-btn" type="button" class="comic-pill px-5 py-2 rounded-full bg-[#1E293B] hover:bg-slate-700 text-white text-sm sm:text-base font-bold">⏹ Stop 停止</button>
         <button id="ss-next-btn" type="button" class="comic-pill px-4 py-2 rounded-full bg-white hover:bg-slate-100 text-sm font-bold">下一個 →</button>
+      </div>
+    </section>
+
+    <!-- MODE C: GAME ZONE (🧩 成語配對, 🖼️ 看圖猜成語, ✏️ 填字挑戰, ⏱️ 限時挑戰) -->
+    <section id="games-panel" class="hidden space-y-5">
+      <!-- Game Hub -->
+      <div id="game-hub" class="comic-card rounded-3xl p-5 sm:p-8 space-y-5 text-center">
+        <div class="space-y-1">
+          <h2 class="font-serif-tc text-2xl font-black text-[#1E293B]">🎮 成語遊戲區</h2>
+          <p class="text-sm font-bold text-slate-600">玩遊戲，溫成語！答得好就有星星 ⭐。最佳成績會記錄在這部裝置上。</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4 text-left">
+          <button type="button" data-game="match" class="game-launch-btn comic-card rounded-2xl p-5 hover:bg-amber-50 transition flex items-start justify-between gap-3">
+            <div class="space-y-1">
+              <div class="text-lg font-black text-[#1E293B]">🧩 成語配對</div>
+              <p class="text-xs sm:text-sm text-slate-600 font-medium">共 3 輪，每輪將 5 個成語配對正確解釋</p>
+            </div>
+            <span id="best-match" class="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B]">最佳: --</span>
+          </button>
+
+          <button type="button" data-game="pic" class="game-launch-btn comic-card rounded-2xl p-5 hover:bg-amber-50 transition flex items-start justify-between gap-3">
+            <div class="space-y-1">
+              <div class="text-lg font-black text-[#1E293B]">🖼️ 看圖猜成語</div>
+              <p class="text-xs sm:text-sm text-slate-600 font-medium">共 10 題，根據情境圖片選出正確成語</p>
+            </div>
+            <span id="best-pic" class="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B]">最佳: --</span>
+          </button>
+
+          <button type="button" data-game="fill" class="game-launch-btn comic-card rounded-2xl p-5 hover:bg-amber-50 transition flex items-start justify-between gap-3">
+            <div class="space-y-1">
+              <div class="text-lg font-black text-[#1E293B]">✏️ 填字挑戰（正字）</div>
+              <p class="text-xs sm:text-sm text-slate-600 font-medium">涵蓋全部正字題，選項必含課本易錯別字</p>
+            </div>
+            <span id="best-fill" class="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B]">最佳: --</span>
+          </button>
+
+          <button type="button" data-game="timed" class="game-launch-btn comic-card rounded-2xl p-5 hover:bg-amber-50 transition flex items-start justify-between gap-3">
+            <div class="space-y-1">
+              <div class="text-lg font-black text-[#1E293B]">⏱️ 限時挑戰（60秒）</div>
+              <p class="text-xs sm:text-sm text-slate-600 font-medium">60 秒內根據意思搶答最多正確成語</p>
+            </div>
+            <span id="best-timed" class="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B]">最佳: --</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Game Stage -->
+      <div id="game-stage" class="hidden comic-card rounded-3xl p-5 sm:p-7 space-y-5 max-w-3xl mx-auto">
+        <div class="flex items-center justify-between gap-2 border-b-2 border-slate-200 pb-3">
+          <button id="back-to-hub-btn" type="button" class="comic-pill px-3.5 py-1.5 rounded-full bg-slate-200 hover:bg-slate-300 text-xs sm:text-sm font-bold text-[#1E293B]">
+            ← 遊戲區
+          </button>
+          <div id="game-title" class="font-serif-tc text-lg sm:text-xl font-black text-[#1E293B]"></div>
+        </div>
+        <div id="game-content" class="space-y-4"></div>
       </div>
     </section>
 
@@ -1215,6 +1272,9 @@
 
     document.getElementById('slideshow-tag-btn').addEventListener('click', () => {
       stopSpeech();
+      stopActiveGame();
+      document.getElementById('games-panel').classList.add('hidden');
+      document.getElementById('games-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-emerald-400 text-[#1E293B] hover:bg-emerald-300';
       document.getElementById('detail-panel').classList.add('hidden');
       document.getElementById('slideshow-panel').classList.remove('hidden');
       document.querySelectorAll('.grp-btn').forEach(b => {
@@ -1244,6 +1304,9 @@
       btn.addEventListener('click', () => {
         stopSlideshow();
         stopSpeech();
+        stopActiveGame();
+        document.getElementById('games-panel').classList.add('hidden');
+        document.getElementById('games-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-emerald-400 text-[#1E293B] hover:bg-emerald-300';
         document.getElementById('slideshow-panel').classList.add('hidden');
         document.getElementById('detail-panel').classList.remove('hidden');
         document.getElementById('slideshow-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#FCD34D] text-[#1E293B] hover:bg-amber-300';
@@ -1301,6 +1364,401 @@
       else if (delta < -10) setHeaderMinimized(false);
       lastScrollY = currY;
     }, { passive: true });
+
+
+    // ==================== GAME ZONE (4 MINI GAMES) ====================
+    let gameTimerId = null;
+    let gameBest = { match: 0, pic: 0, fill: 0, timed: 0 };
+    try {
+      gameBest = Object.assign(gameBest, JSON.parse(localStorage.getItem('idiom_game_best') || '{}'));
+    } catch (e) {}
+
+    function saveGameBest(key, score) {
+      if (score > (gameBest[key] || 0)) {
+        gameBest[key] = score;
+        try { localStorage.setItem('idiom_game_best', JSON.stringify(gameBest)); } catch (e) {}
+      }
+      updateBestBadges();
+    }
+
+    function updateBestBadges() {
+      document.getElementById('best-match').textContent = `最佳: ${gameBest.match || '--'}/15`;
+      document.getElementById('best-pic').textContent = `最佳: ${gameBest.pic || '--'}/10`;
+      document.getElementById('best-fill').textContent = `最佳: ${gameBest.fill || '--'}/${buildAllFillQuestions().length}`;
+      document.getElementById('best-timed').textContent = `最佳: ${gameBest.timed || '--'} 分`;
+    }
+
+    function stopActiveGame() {
+      if (gameTimerId) { clearInterval(gameTimerId); gameTimerId = null; }
+    }
+
+    function shuffleArr(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    // Subtle Web Audio chime
+    function playTone(ok) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = ok ? 'sine' : 'triangle';
+        osc.frequency.setValueAtTime(ok ? 660 : 220, ctx.currentTime);
+        if (ok) osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.start(); osc.stop(ctx.currentTime + 0.2);
+      } catch (e) {}
+    }
+
+    function openGameHub() {
+      stopActiveGame();
+      updateBestBadges();
+      document.getElementById('game-stage').classList.add('hidden');
+      document.getElementById('game-hub').classList.remove('hidden');
+    }
+
+    document.getElementById('games-tag-btn').addEventListener('click', () => {
+      stopSlideshow();
+      stopSpeech();
+      document.getElementById('detail-panel').classList.add('hidden');
+      document.getElementById('slideshow-panel').classList.add('hidden');
+      document.getElementById('games-panel').classList.remove('hidden');
+      document.querySelectorAll('.grp-btn').forEach(b => {
+        b.className = 'grp-btn comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50';
+      });
+      document.getElementById('slideshow-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#FCD34D] text-[#1E293B] hover:bg-amber-300';
+      document.getElementById('games-tag-btn').className = 'comic-pill px-3.5 py-1 rounded-full text-xs sm:text-sm font-bold bg-[#F2545B] text-white';
+      openGameHub();
+    });
+
+    document.getElementById('back-to-hub-btn').addEventListener('click', openGameHub);
+
+    function showGameFinish(key, score, label, onRetry) {
+      stopActiveGame();
+      saveGameBest(key, score);
+      document.getElementById('game-content').innerHTML = `
+        <div class="text-center py-6 space-y-4">
+          <div class="text-5xl">⭐</div>
+          <h3 class="font-serif-tc text-2xl font-black text-[#1E293B]">挑戰完成！</h3>
+          <p class="text-lg font-bold text-[#F2545B]">${label}</p>
+          <div class="flex justify-center gap-3 pt-2">
+            <button id="g-retry-btn" type="button" class="comic-pill px-5 py-2.5 rounded-full bg-[#F2545B] text-white font-bold text-sm">再玩一次</button>
+            <button id="g-hub-btn" type="button" class="comic-pill px-5 py-2.5 rounded-full bg-white text-[#1E293B] font-bold text-sm">返回遊戲區</button>
+          </div>
+        </div>
+      `;
+      document.getElementById('g-retry-btn').addEventListener('click', onRetry);
+      document.getElementById('g-hub-btn').addEventListener('click', openGameHub);
+    }
+
+    // 1. 🧩 成語配對 (3 rounds x 5 idioms)
+    function startMatchGame() {
+      document.getElementById('game-title').textContent = '🧩 成語配對';
+      let round = 1;
+      let score = 0;
+      const pool = shuffleArr(IDIOMS).slice(0, 15);
+
+      function renderRound() {
+        const chunk = pool.slice((round - 1) * 5, round * 5);
+        const rights = shuffleArr(chunk);
+        let selLeft = null;
+        const matched = new Set();
+
+        function draw() {
+          document.getElementById('game-content').innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B] text-xs font-bold">第 ${round}/3 輪 ｜ ✓ ${score}</span>
+              <span class="text-xs font-bold text-slate-500">先按一個成語，再按它的解釋 👇</span>
+            </div>
+            <div class="grid grid-cols-12 gap-3">
+              <div class="col-span-5 space-y-2" id="gm-left">
+                ${chunk.map(it => {
+                  const done = matched.has(it.id);
+                  const active = selLeft === it.id;
+                  return `<button type="button" data-lid="${it.id}" ${done ? 'disabled' : ''} class="w-full py-3 px-2 rounded-2xl border-2 text-sm sm:text-base font-black transition ${
+                    done ? 'bg-emerald-100 border-emerald-500 text-emerald-800 opacity-60' :
+                    active ? 'bg-[#F2545B] border-[#1E293B] text-white shadow-[2px_2px_0px_#1E293B]' :
+                    'bg-white border-purple-200 hover:border-[#1E293B] text-[#1E293B]'
+                  }">${it.word}</button>`;
+                }).join('')}
+              </div>
+              <div class="col-span-7 space-y-2" id="gm-right">
+                ${rights.map(it => {
+                  const done = matched.has(it.id);
+                  return `<button type="button" data-rid="${it.id}" ${done ? 'disabled' : ''} class="w-full text-left py-2.5 px-3 rounded-2xl border-2 text-xs sm:text-sm font-semibold transition ${
+                    done ? 'bg-emerald-100 border-emerald-500 text-emerald-800 opacity-60' :
+                    'bg-white border-purple-200 hover:border-[#1E293B] text-[#1E293B]'
+                  }">${it.meaning}</button>`;
+                }).join('')}
+              </div>
+            </div>
+          `;
+          document.querySelectorAll('#gm-left button').forEach(b => {
+            b.addEventListener('click', () => { selLeft = parseInt(b.dataset.lid, 10); draw(); });
+          });
+          document.querySelectorAll('#gm-right button').forEach(b => {
+            b.addEventListener('click', () => {
+              if (selLeft === null) return;
+              const rid = parseInt(b.dataset.rid, 10);
+              if (selLeft === rid) {
+                playTone(true);
+                matched.add(rid);
+                score++;
+                selLeft = null;
+                if (matched.size === 5) {
+                  if (round < 3) { round++; setTimeout(renderRound, 350); }
+                  else { setTimeout(() => showGameFinish('match', score, `完成 3 輪配對！答對 ${score} / 15 組`, startMatchGame), 350); }
+                } else draw();
+              } else {
+                playTone(false);
+                b.classList.add('bg-red-100', 'border-red-500');
+                setTimeout(() => { selLeft = null; draw(); }, 350);
+              }
+            });
+          });
+        }
+        draw();
+      }
+      renderRound();
+    }
+
+    // 2. 🖼️ 看圖猜成語 (10 questions)
+    function startPicGame() {
+      document.getElementById('game-title').textContent = '🖼️ 看圖猜成語';
+      const qs = shuffleArr(IDIOMS).slice(0, 10);
+      let idx = 0, score = 0;
+
+      function renderQ() {
+        const target = qs[idx];
+        const distractors = shuffleArr(IDIOMS.filter(x => x.id !== target.id)).slice(0, 3);
+        const opts = shuffleArr([target, ...distractors]);
+        let locked = false;
+
+        document.getElementById('game-content').innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B] text-xs font-bold">第 ${idx + 1}/10 題 ｜ ✓ ${score}</span>
+          </div>
+          <p class="text-center font-bold text-base sm:text-lg">這幅圖畫的是哪個成語？</p>
+          <div class="max-w-sm mx-auto rounded-2xl overflow-hidden border-2 border-[#1E293B] bg-white shadow-[3px_3px_0px_#1E293B]">
+            <img src="${target.img}" alt="猜成語圖片" class="w-full h-52 object-cover" />
+          </div>
+          <div class="grid grid-cols-2 gap-3 pt-1">
+            ${opts.map(o => `<button type="button" data-oid="${o.id}" class="gp-opt py-3.5 px-3 rounded-2xl border-2 border-purple-200 hover:border-[#1E293B] bg-white font-black text-base sm:text-lg transition">${o.word}</button>`).join('')}
+          </div>
+        `;
+        document.querySelectorAll('.gp-opt').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (locked) return;
+            locked = true;
+            const chosen = parseInt(btn.dataset.oid, 10);
+            const ok = chosen === target.id;
+            playTone(ok);
+            if (ok) score++;
+            document.querySelectorAll('.gp-opt').forEach(b => {
+              const bid = parseInt(b.dataset.oid, 10);
+              if (bid === target.id) b.classList.add('bg-emerald-100', 'border-emerald-600', 'text-emerald-900');
+              else if (bid === chosen && !ok) b.classList.add('bg-red-100', 'border-red-500', 'text-red-900');
+            });
+            setTimeout(() => {
+              if (idx < 9) { idx++; renderQ(); }
+              else showGameFinish('pic', score, `看圖猜成語得分：${score} / 10 題`, startPicGame);
+            }, 800);
+          });
+        });
+      }
+      renderQ();
+    }
+
+    // 3. ✏️ 填字挑戰（正字）(All 正字 items with textbook wrong chars guaranteed in options)
+    const TEXTBOOK_WRONGS = {
+      '沸': ['佛', '弗', '費'],
+      '敷': ['數', '傅', '夫'],
+      '玲': ['鈴', '零', '令'],
+      '瓏': ['龍', '籠', '攏'],
+      '鑽': ['讚', '贊', '專'],
+      '竭': ['歇', '渴', '喝'],
+      '嘶': ['斯', '撕', '西'],
+      '均': ['勻', '軍', '君'],
+      '赦': ['敖', '赤', '卸'],
+      '令': ['今', '冷', '零'],
+      '申': ['伸', '神', '甲'],
+      '效': ['郊', '校', '交'],
+      '亡': ['忘', '芒', '忙'],
+      '迢': ['紹', '招', '條'],
+      '恩': ['思', '忠', '忘'],
+      '鈞': ['均', '軍', '勻'],
+      '髮': ['發', '拔', '撥'],
+      '載': ['栽', '裁', '再'],
+      '煉': ['練', '揀', '東'],
+      '碑': ['啤', '牌', '悲'],
+      '蜜': ['密', '秘', '甜'],
+      '腹': ['複', '覆', '復'],
+      '鼎': ['目', '日', '貝'],
+      '擂': ['雷', '蕾', '類'],
+      '慚': ['斬', '暫', '漸'],
+      '逕': ['脛', '經', '輕'],
+      '撈': ['勞', '澇', '牢'],
+      '霆': ['延', '挺', '停'],
+      '已': ['己', '巳', '以'],
+      '器': ['大', '哭', '臭']
+    };
+
+    function buildAllFillQuestions() {
+      const list = [];
+      IDIOMS.forEach(item => {
+        if (!item.typoIdx || !item.typoIdx.length) return;
+        const seenChar = new Set();
+        item.typoIdx.forEach(pos => {
+          const ch = item.word[pos];
+          if (seenChar.has(ch)) return; // avoid duplicate same-char question in 千里迢迢 / 大名鼎鼎
+          seenChar.add(ch);
+          list.push({ item, pos, ch });
+        });
+      });
+      return list;
+    }
+
+    function startFillGame() {
+      document.getElementById('game-title').textContent = '✏️ 填字挑戰（全部正字）';
+      const qs = shuffleArr(buildAllFillQuestions());
+      const total = qs.length;
+      let idx = 0, score = 0;
+
+      function renderQ() {
+        const q = qs[idx];
+        const target = q.item;
+        const blankPos = q.pos;
+        const correctChar = q.ch;
+        // Always include the textbook wrong character(s) first, then pad to 3 distractors
+        const wrongs = (TEXTBOOK_WRONGS[correctChar] || ['人', '大', '心']).filter(c => c !== correctChar).slice(0, 3);
+        const opts = shuffleArr([correctChar, ...wrongs]);
+        let locked = false;
+
+        document.getElementById('game-content').innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="px-3 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B] text-xs font-bold">第 ${idx + 1}/${total} 題 ｜ ✓ ${score}</span>
+            <span class="text-xs font-bold text-slate-500">${target.page}</span>
+          </div>
+          <p class="text-center font-bold text-base">選出正確的字，填進空格 ✏️</p>
+          <div class="flex justify-center gap-2.5 py-2">
+            ${target.word.split('').map((ch, ci) => ci === blankPos
+              ? `<div id="gf-blank" class="w-16 h-16 rounded-2xl border-2 border-dashed border-amber-500 bg-amber-50 flex items-center justify-center font-serif-tc font-black text-3xl text-[#F2545B]">？</div>`
+              : `<div class="w-16 h-16 rounded-2xl border-2 border-purple-300 bg-white flex items-center justify-center font-serif-tc font-black text-3xl text-[#1E293B]">${ch}</div>`
+            ).join('')}
+          </div>
+          <p class="text-center text-xs sm:text-sm text-slate-600 font-medium">💡 ${target.meaning}</p>
+          <div id="gf-note" class="hidden text-center text-xs font-bold px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900"></div>
+          <div class="grid grid-cols-2 gap-3 pt-1">
+            ${opts.map(ch => `<button type="button" data-ch="${ch}" class="gf-opt py-3.5 rounded-2xl border-2 border-purple-200 hover:border-[#1E293B] bg-white font-serif-tc font-black text-2xl transition">${ch}</button>`).join('')}
+          </div>
+        `;
+        document.querySelectorAll('.gf-opt').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (locked) return;
+            locked = true;
+            const chosen = btn.dataset.ch;
+            const ok = chosen === correctChar;
+            playTone(ok);
+            if (ok) score++;
+            document.getElementById('gf-blank').textContent = correctChar;
+            document.getElementById('gf-blank').className = `w-16 h-16 rounded-2xl border-2 flex items-center justify-center font-serif-tc font-black text-3xl ${ok ? 'border-emerald-600 bg-emerald-100 text-emerald-900' : 'border-red-500 bg-red-100 text-red-900'}`;
+            const noteEl = document.getElementById('gf-note');
+            if (target.typoNote) {
+              noteEl.textContent = '⭕ 正字提醒：' + target.typoNote;
+              noteEl.classList.remove('hidden');
+            }
+            document.querySelectorAll('.gf-opt').forEach(b => {
+              if (b.dataset.ch === correctChar) b.classList.add('bg-emerald-100', 'border-emerald-600');
+              else if (b.dataset.ch === chosen && !ok) b.classList.add('bg-red-100', 'border-red-500');
+            });
+            setTimeout(() => {
+              if (idx < total - 1) { idx++; renderQ(); }
+              else showGameFinish('fill', score, `填字正字挑戰得分：${score} / ${total} 題`, startFillGame);
+            }, 1100);
+          });
+        });
+      }
+      renderQ();
+    }
+
+    // 4. ⏱️ 限時挑戰 (60 seconds)
+    function startTimedGame() {
+      document.getElementById('game-title').textContent = '⏱️ 限時挑戰';
+      let timeLeft = 60;
+      let score = 0;
+
+      function renderQ() {
+        const target = IDIOMS[Math.floor(Math.random() * IDIOMS.length)];
+        const distractors = shuffleArr(IDIOMS.filter(x => x.id !== target.id)).slice(0, 3);
+        const opts = shuffleArr([target, ...distractors]);
+        let locked = false;
+
+        document.getElementById('game-content').innerHTML = `
+          <div class="flex items-center justify-between">
+            <span id="gt-pill" class="px-3.5 py-1 rounded-full bg-[#FCD34D] border border-[#1E293B] text-xs sm:text-sm font-bold">⏱️ ${timeLeft} 秒 ｜ 🏅 ${score} 分</span>
+          </div>
+          <div class="w-full h-3 bg-slate-100 rounded-full border border-[#1E293B] overflow-hidden">
+            <div id="gt-bar" class="h-full bg-gradient-to-r from-emerald-400 via-amber-400 to-rose-500 transition-all duration-1000" style="width:${(timeLeft/60)*100}%"></div>
+          </div>
+          <div class="text-center space-y-2 py-2">
+            <p class="text-sm font-bold text-slate-600">哪個成語的意思是：</p>
+            <p class="text-base sm:text-lg font-black text-purple-800">${target.meaning}</p>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            ${opts.map(o => `<button type="button" data-oid="${o.id}" class="gt-opt py-3.5 px-3 rounded-2xl border-2 border-purple-200 hover:border-[#1E293B] bg-white font-black text-base sm:text-lg transition">${o.word}</button>`).join('')}
+          </div>
+        `;
+
+        document.querySelectorAll('.gt-opt').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (locked) return;
+            locked = true;
+            const chosen = parseInt(btn.dataset.oid, 10);
+            const ok = chosen === target.id;
+            playTone(ok);
+            if (ok) score += 10;
+            document.querySelectorAll('.gt-opt').forEach(b => {
+              const bid = parseInt(b.dataset.oid, 10);
+              if (bid === target.id) b.classList.add('bg-emerald-100', 'border-emerald-600');
+              else if (bid === chosen && !ok) b.classList.add('bg-red-100', 'border-red-500');
+            });
+            setTimeout(() => { if (timeLeft > 0) renderQ(); }, 420);
+          });
+        });
+      }
+
+      renderQ();
+      gameTimerId = setInterval(() => {
+        timeLeft--;
+        const pill = document.getElementById('gt-pill');
+        const bar = document.getElementById('gt-bar');
+        if (pill) pill.textContent = `⏱️ ${timeLeft} 秒 ｜ 🏅 ${score} 分`;
+        if (bar) bar.style.width = `${Math.max(0, (timeLeft / 60) * 100)}%`;
+        if (timeLeft <= 0) {
+          showGameFinish('timed', score, `60 秒限時搶答總分：${score} 分`, startTimedGame);
+        }
+      }, 1000);
+    }
+
+    document.querySelectorAll('.game-launch-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        stopActiveGame();
+        document.getElementById('game-hub').classList.add('hidden');
+        document.getElementById('game-stage').classList.remove('hidden');
+        const g = btn.dataset.game;
+        if (g === 'match') startMatchGame();
+        else if (g === 'pic') startPicGame();
+        else if (g === 'fill') startFillGame();
+        else if (g === 'timed') startTimedGame();
+      });
+    });
 
     // Init
     renderIdiom();
