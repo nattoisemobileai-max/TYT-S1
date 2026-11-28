@@ -1356,10 +1356,15 @@
     // ==================== AUTO-MINIMIZE HEADER ON SCROLL ====================
     let isHeaderMinimized = false;
     let lastScrollY = window.scrollY || 0;
+    let scrollLockUntil = 0;
+    let manualHeaderOverride = false;
 
-    function setHeaderMinimized(min) {
+    function setHeaderMinimized(min, isManual = false) {
       if (isHeaderMinimized === min) return;
       isHeaderMinimized = min;
+      if (isManual) manualHeaderOverride = min;
+      scrollLockUntil = Date.now() + 380;
+
       const collapsible = document.getElementById('header-collapsible');
       const inner = document.getElementById('header-inner');
       const sub = document.getElementById('header-subtitle');
@@ -1371,7 +1376,6 @@
         inner.classList.replace('py-2.5', 'py-1.5');
         logo.classList.replace('w-11', 'w-8');
         logo.classList.replace('h-11', 'h-8');
-        logo.classList.replace('text-xl', 'text-sm');
         toggleBtn.textContent = '▼ 展開選單';
       } else {
         collapsible.classList.remove('hidden');
@@ -1379,18 +1383,37 @@
         inner.classList.replace('py-1.5', 'py-2.5');
         logo.classList.replace('w-8', 'w-11');
         logo.classList.replace('h-8', 'h-11');
-        logo.classList.replace('text-sm', 'text-xl');
         toggleBtn.textContent = '▲ 收合選單';
       }
+      requestAnimationFrame(() => {
+        lastScrollY = window.scrollY || document.documentElement.scrollTop || 0;
+      });
     }
 
-    document.getElementById('toggle-menu-btn').addEventListener('click', () => setHeaderMinimized(!isHeaderMinimized));
+    document.getElementById('toggle-menu-btn').addEventListener('click', () => {
+      setHeaderMinimized(!isHeaderMinimized, true);
+    });
+
     window.addEventListener('scroll', () => {
       const currY = window.scrollY || document.documentElement.scrollTop || 0;
+      if (Date.now() < scrollLockUntil) {
+        lastScrollY = currY;
+        return;
+      }
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      if (maxScroll < 140) {
+        lastScrollY = currY;
+        return;
+      }
       const delta = currY - lastScrollY;
-      if (currY <= 35) setHeaderMinimized(false);
-      else if (delta > 8 && currY > 70) setHeaderMinimized(true);
-      else if (delta < -10) setHeaderMinimized(false);
+      if (currY <= 15) {
+        manualHeaderOverride = false;
+        setHeaderMinimized(false);
+      } else if (!manualHeaderOverride && delta > 16 && currY > 120) {
+        setHeaderMinimized(true);
+      } else if (!manualHeaderOverride && delta < -45) {
+        setHeaderMinimized(false);
+      }
       lastScrollY = currY;
     }, { passive: true });
 
