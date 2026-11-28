@@ -155,71 +155,92 @@
       </div>
     </section>
 
-    <!-- ==================== PANEL 2: CAT2 MOCK PAPER (Matches P3.jpg) ==================== -->
+    <!-- ==================== PANEL 2: CAT2 MOCK PAPER (All 10 註釋 + 4 語譯 + P85 緒言) ==================== -->
     <section id="panel-quiz" class="hidden space-y-5">
       <div class="comic-card rounded-3xl p-5 sm:p-7 space-y-5">
         <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-200 pb-3">
           <div>
-            <h2 class="font-serif-tc text-xl font-black text-[#1E293B]">丙部、文言閱讀理解（5 分）</h2>
-            <p class="text-xs text-slate-600 font-medium">仿照持續評估格式：除非題目注明，否則應以白話文作答。</p>
+            <h2 class="font-serif-tc text-xl font-black text-[#1E293B]">丙部、文言閱讀理解全卷模擬（12.5 分）</h2>
+            <p class="text-xs text-slate-600 font-medium">涵蓋全部 10 項註釋、4 句全文語譯及 P.85 緒言填充（請以白話文作答）</p>
           </div>
           <div class="text-sm font-black px-3.5 py-1 rounded-full bg-[#FCD34D] border-2 border-[#1E293B]">
-            得分：<span id="q-score" class="text-[#2563EB]">0</span> / 5 分
+            得分：<span id="q-score" class="text-[#2563EB]">0</span> / 12.5 分
           </div>
         </div>
 
         <!-- Passage Box -->
         <div class="p-4 rounded-2xl bg-slate-50 border-2 border-[#1E293B] font-serif-tc text-base sm:text-lg leading-loose">
           <div class="text-center font-bold mb-1">《囊螢夜讀》 晉書</div>
-          晉之車胤，家<span class="double-under">貧</span>，不常得油。然日則耕作，無以夜讀。遇夏月，乃以<span class="double-under">練</span>為<span class="double-under">囊</span>，盛數十螢火以照書，以夜<span class="double-under">繼</span>日，勤學不倦。年長，博學多通，時人<span class="double-under">譽</span>之。
+          晉之<span class="double-under">車胤</span>，家<span class="double-under">貧</span>，<span class="double-under">不常得油</span>。然日則耕作，無以夜讀。遇<span class="double-under">夏月</span>，乃以<span class="double-under">練</span>為<span class="double-under">囊</span>，盛數十螢火以照書，以夜<span class="double-under">繼</span>日，勤學不倦。年長，<span class="double-under">博學多通</span>，時人<span class="double-under">譽</span>之。
         </div>
 
-        <!-- Q1: 字詞解釋 (2分) -->
+        <!-- Q1: 全部 10 項註釋字詞解釋 (5分) -->
         <div class="space-y-3">
-          <div class="font-bold text-base">1. 試解釋下列句中畫有雙底線字詞的意思，並把答案寫在橫線上。（2 分）</div>
-          <div class="grid sm:grid-cols-2 gap-3 text-sm">
-            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
-              <span>(A) 家<span class="double-under">貧</span>，不常得油</span>
-              <div class="flex items-center gap-1">
-                <span>貧：</span>
-                <input id="q1a" type="text" placeholder="解釋" class="blank-input w-24 text-center font-bold" />
-                <span class="text-xs text-slate-500">(0.5)</span>
-              </div>
+          <div class="font-bold text-base">1. 試解釋下列句中畫有雙底線字詞的意思（涵蓋全部註釋，每題 0.5 分，共 5 分）：</div>
+          <div class="grid sm:grid-cols-2 gap-2.5 text-sm">
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(A) <span class="double-under">囊螢</span>夜讀</span>
+              <div class="flex items-center gap-1"><span>囊螢：</span><input id="q1_1" type="text" placeholder="解釋" class="blank-input w-28 text-center font-bold" /><span class="text-xs text-slate-500">(0.5)</span></div>
             </div>
-            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
-              <span>(B) 乃以<span class="double-under">練</span>為囊</span>
-              <div class="flex items-center gap-1">
-                <span>練：</span>
-                <input id="q1b" type="text" placeholder="解釋" class="blank-input w-24 text-center font-bold" />
-                <span class="text-xs text-slate-500">(0.5)</span>
-              </div>
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(B) 晉之<span class="double-under">車胤</span>（朝代／人物）</span>
+              <div class="flex items-center gap-1"><span>車胤：</span><input id="q1_2" type="text" placeholder="如：晉朝好學之士" class="blank-input w-28 text-center font-bold" /><span class="text-xs text-slate-500">(0.5)</span></div>
             </div>
-            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
-              <span>(C) 以夜<span class="double-under">繼</span>日</span>
-              <div class="flex items-center gap-1">
-                <span>繼：</span>
-                <input id="q1c" type="text" placeholder="解釋" class="blank-input w-24 text-center font-bold" />
-                <span class="text-xs text-slate-500">(0.5)</span>
-              </div>
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(C) 家<span class="double-under">貧</span></span>
+              <div class="flex items-center gap-1"><span>貧：</span><input id="q1_3" type="text" placeholder="解釋" class="blank-input w-28 text-center font-bold" /><span class="text-xs text-slate-500">(0.5)</span></div>
             </div>
-            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
-              <span>(D) 時人<span class="double-under">譽</span>之</span>
-              <div class="flex items-center gap-1">
-                <span>譽：</span>
-                <input id="q1d" type="text" placeholder="解釋" class="blank-input w-24 text-center font-bold" />
-                <span class="text-xs text-slate-500">(0.5)</span>
-              </div>
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(D) <span class="double-under">不常得油</span></span>
+              <div class="flex items-center gap-1"><span>意思：</span><input id="q1_4" type="text" placeholder="不能常得油燈" class="blank-input w-28 text-center font-bold" /><span class="text-xs text-slate-500">(0.5)</span></div>
+            </div>
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(E) 遇<span class="double-under">夏月</span></span>
+              <div class="flex items-center gap-1"><span>夏月：</span><input id="q1_5" type="text" placeholder="解釋" class="blank-input w-28 text-center font-bold" /><span class="text-xs text-slate-500">(0.5)</span></div>
+            </div>
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(F) 乃以<span class="double-under">練</span>為囊</span>
+              <div class="flex items-center gap-1"><span>練：</span><input id="q1_6" type="text" placeholder="解釋" class="blank-input w-28 text-center font-bold" /><span class="text-xs text-slate-500">(0.5)</span></div>
+            </div>
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(G) 乃以練為<span class="double-under">囊</span></span>
+              <div class="flex items-center gap-1"><span>囊：</span><input id="q1_7" type="text" placeholder="解釋" class="blank-input w-28 text-center font-bold" /><span class="text-xs text-slate-500">(0.5)</span></div>
+            </div>
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(H) 以夜<span class="double-under">繼</span>日</span>
+              <div class="flex items-center gap-1"><span>繼：</span><input id="q1_8" type="text" placeholder="解釋" class="blank-input w-28 text-center font-bold" /><span class="text-xs text-slate-500">(0.5)</span></div>
+            </div>
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(I) <span class="double-under">博學多通</span></span>
+              <div class="flex items-center gap-1"><span>通：</span><input id="q1_9" type="text" placeholder="解釋" class="blank-input w-28 text-center font-bold" /><span class="text-xs text-slate-500">(0.5)</span></div>
+            </div>
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(J) 時人<span class="double-under">譽</span>之</span>
+              <div class="flex items-center gap-1"><span>譽：</span><input id="q1_10" type="text" placeholder="解釋" class="blank-input w-28 text-center font-bold" /><span class="text-xs text-slate-500">(0.5)</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Q2: 語譯 (1.5分) -->
-        <div class="space-y-2">
-          <div class="font-bold text-base">2. 試語譯以下句子：</div>
-          <p class="pl-4 font-serif-tc font-bold text-base text-[#1E3A8A]">盛數十螢火以照書，以夜繼日，勤學不倦。（1.5 分）</p>
-          <div class="flex items-end gap-2">
-            <span class="font-bold text-sm shrink-0">答案：</span>
-            <input id="q2" type="text" placeholder="請以白話文語譯整句……" class="blank-input flex-1 text-sm py-1" />
+        <!-- Q2: 試語譯以下句子 (4 句，每句 1.5 分，共 6 分) -->
+        <div class="space-y-3">
+          <div class="font-bold text-base">2. 試語譯以下句子（每題 1.5 分，共 6 分）：</div>
+          <div class="space-y-3">
+            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 space-y-1.5">
+              <p class="font-serif-tc font-bold text-sm sm:text-base text-[#1E3A8A]">(1) 晉之車胤，家貧，不常得油。（1.5 分）</p>
+              <input id="q2_1" type="text" placeholder="請以白話文語譯第(1)句……" class="blank-input w-full text-sm py-1" />
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 space-y-1.5">
+              <p class="font-serif-tc font-bold text-sm sm:text-base text-[#1E3A8A]">(2) 然日則耕作，無以夜讀。（1.5 分）</p>
+              <input id="q2_2" type="text" placeholder="請以白話文語譯第(2)句……" class="blank-input w-full text-sm py-1" />
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 space-y-1.5">
+              <p class="font-serif-tc font-bold text-sm sm:text-base text-[#1E3A8A]">(3) 遇夏月，乃以練為囊，盛數十螢火以照書，以夜繼日，勤學不倦。（1.5 分）</p>
+              <input id="q2_3" type="text" placeholder="請以白話文語譯第(3)句……" class="blank-input w-full text-sm py-1" />
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 space-y-1.5">
+              <p class="font-serif-tc font-bold text-sm sm:text-base text-[#1E3A8A]">(4) 年長，博學多通，時人譽之。（1.5 分）</p>
+              <input id="q2_4" type="text" placeholder="請以白話文語譯第(4)句……" class="blank-input w-full text-sm py-1" />
+            </div>
           </div>
         </div>
 
@@ -237,7 +258,7 @@
         </div>
 
         <!-- Quiz Feedback -->
-        <div id="quiz-feedback" class="hidden rounded-2xl p-4 bg-slate-50 border-2 border-[#1E293B] space-y-2 text-sm"></div>
+        <div id="quiz-feedback" class="hidden rounded-2xl p-4 bg-slate-50 border-2 border-[#1E293B] space-y-2.5 text-sm"></div>
       </div>
     </section>
 
@@ -359,26 +380,46 @@
       });
     });
 
-    // Grading Logic
+    // Grading Logic (All 10 註釋 + 4 語譯 + P85 緒言)
     document.getElementById('quiz-submit-btn').addEventListener('click', () => {
       let score = 0;
       const val = id => document.getElementById(id).value.trim();
 
-      const ok1a = ['貧窮', '窮困', '貧寒', '窮'].some(k => val('q1a').includes(k));
-      const ok1b = ['白絹', '白色絹子', '絹'].some(k => val('q1b').includes(k));
-      const ok1c = ['緊接', '接著', '接續', '繼續'].some(k => val('q1c').includes(k));
-      const ok1d = ['稱讚', '稱頌', '讚美', '讚揚'].some(k => val('q1d').includes(k));
-      if (ok1a) score += 0.5;
-      if (ok1b) score += 0.5;
-      if (ok1c) score += 0.5;
-      if (ok1d) score += 0.5;
+      const q1Checks = [
+        { id: 'q1_1', label: '(A) 囊螢', keys: ['袋', '裝', '螢火蟲'], ans: '用袋子裝着螢火蟲' },
+        { id: 'q1_2', label: '(B) 車胤', keys: ['晉', '武子', '好學', '南平', '人'], ans: '晉朝（東晉）好學之士，字武子' },
+        { id: 'q1_3', label: '(C) 貧', keys: ['貧窮', '窮困', '貧寒', '窮'], ans: '貧窮／窮困' },
+        { id: 'q1_4', label: '(D) 不常得油', keys: ['油', '燈', '買', '得'], ans: '不能經常得到香油點燈' },
+        { id: 'q1_5', label: '(E) 夏月', keys: ['夏', '夏天', '夏季'], ans: '夏季／夏天' },
+        { id: 'q1_6', label: '(F) 練', keys: ['白絹', '白色絹子', '絹'], ans: '白色絹子／白絹' },
+        { id: 'q1_7', label: '(G) 囊', keys: ['袋', '袋子'], ans: '袋子' },
+        { id: 'q1_8', label: '(H) 繼', keys: ['緊接', '接著', '接續', '繼續', '接'], ans: '緊接着' },
+        { id: 'q1_9', label: '(I) 博學多通', keys: ['精通', '通達', '廣博'], ans: '精通（學識廣博且深入精通）' },
+        { id: 'q1_10', label: '(J) 譽', keys: ['稱讚', '稱頌', '讚美', '讚揚', '讚'], ans: '稱讚／稱頌' }
+      ];
 
-      const q2v = val('q2');
-      let s2 = 0;
-      if (q2v.includes('螢火蟲') && q2v.includes('書')) s2 += 0.5;
-      if (q2v.includes('夜以繼日') || q2v.includes('日夜') || q2v.includes('白天')) s2 += 0.5;
-      if (q2v.includes('勤奮') || q2v.includes('疲倦') || q2v.includes('不倦')) s2 += 0.5;
-      score += s2;
+      const q1Res = q1Checks.map(c => {
+        const ok = c.keys.some(k => val(c.id).includes(k));
+        if (ok) score += 0.5;
+        return `${c.label}：${c.ans} ${ok ? '✓' : '✕'}`;
+      });
+
+      const q2Checks = [
+        { id: 'q2_1', label: '(1)', keys: [['晉', '車胤'], ['貧', '窮'], ['油', '燈']], ans: '晉朝人車胤，因為家境貧寒，不能經常得到香油點燈。' },
+        { id: 'q2_2', label: '(2)', keys: [['白天', '日間', '耕'], ['沒', '無', '不'], ['夜', '晚', '讀']], ans: '但是他白天要耕作，晚上又（因沒有油燈照明而）不能讀書。' },
+        { id: 'q2_3', label: '(3)', keys: [['夏', '白絹', '袋'], ['螢火蟲', '書'], ['夜以繼日', '日夜', '勤奮', '疲倦']], ans: '每逢夏天，就用白絹做成袋子，裝着幾十個螢火蟲照着書本，夜以繼日地學習，勤奮學習而不知疲倦。' },
+        { id: 'q2_4', label: '(4)', keys: [['長大', '時間久', '年長'], ['博學', '知識', '精通'], ['稱頌', '稱讚', '讚']], ans: '時間久了（長大後），知識廣博，學問精通，深受當時的人所稱頌。' }
+      ];
+
+      const q2Res = q2Checks.map(c => {
+        const v = val(c.id);
+        let pts = 0;
+        c.keys.forEach(group => {
+          if (group.some(k => v.includes(k))) pts += 0.5;
+        });
+        score += pts;
+        return `<div><span class="font-semibold">${c.label}（得 ${pts} 分）：</span>${c.ans}</div>`;
+      });
 
       const ok3a = val('q3a') === '堅韌不拔';
       const ok3b = val('q3b') === '自律有節';
@@ -387,19 +428,22 @@
       if (ok3b) score += 0.5;
       if (ok3c) score += 0.5;
 
-      document.getElementById('q-score').textContent = Number.isInteger(score) ? score : score.toFixed(1);
+      const scoreStr = Number.isInteger(score) ? score : score.toFixed(1);
+      document.getElementById('q-score').textContent = scoreStr;
       const fb = document.getElementById('quiz-feedback');
       fb.classList.remove('hidden');
       fb.innerHTML = `
-        <div class="font-black text-base text-[#2563EB]">批改結果：${Number.isInteger(score) ? score : score.toFixed(1)} / 5 分</div>
-        <div><span class="font-bold">1. 字詞解釋：</span>(A) 貧窮／窮困 ${ok1a ? '✓' : '✕'} ｜ (B) 白絹／白色絹子 ${ok1b ? '✓' : '✕'} ｜ (C) 緊接著 ${ok1c ? '✓' : '✕'} ｜ (D) 稱讚／稱頌 ${ok1d ? '✓' : '✕'}</div>
-        <div><span class="font-bold">2. 語譯參考（得 ${s2} 分）：</span>（車胤）裝着幾十個螢火蟲照着書本，夜以繼日地學習，勤奮學習而不知疲倦。</div>
-        <div><span class="font-bold">3. P85 緒言填充：</span>堅韌不拔 ${ok3a ? '✓' : '✕'} ｜ 自律有節 ${ok3b ? '✓' : '✕'} ｜ 克難 ${ok3c ? '✓' : '✕'}</div>
+        <div class="font-black text-base text-[#2563EB]">批改結果：${scoreStr} / 12.5 分</div>
+        <div><span class="font-bold">1. 全部註釋字詞解釋（共 5 分）：</span><br/>${q1Res.join(' ｜ ')}</div>
+        <div class="space-y-1"><span class="font-bold">2. 全文句子語譯參考（共 6 分）：</span>${q2Res.join('')}</div>
+        <div><span class="font-bold">3. P85 緒言填充（共 1.5 分）：</span>堅韌不拔 ${ok3a ? '✓' : '✕'} ｜ 自律有節 ${ok3b ? '✓' : '✕'} ｜ 克難 ${ok3c ? '✓' : '✕'}</div>
       `;
     });
 
     document.getElementById('quiz-reset-btn').addEventListener('click', () => {
-      ['q1a','q1b','q1c','q1d','q2','q3a','q3b','q3c'].forEach(id => document.getElementById(id).value = '');
+      ['q1_1','q1_2','q1_3','q1_4','q1_5','q1_6','q1_7','q1_8','q1_9','q1_10','q2_1','q2_2','q2_3','q2_4','q3a','q3b','q3c'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
       document.getElementById('q-score').textContent = '0';
       document.getElementById('quiz-feedback').classList.add('hidden');
     });
