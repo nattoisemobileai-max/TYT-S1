@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAT2 第五部分：名言佳句（第 2、3、5、8 句）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=Noto+Sans+TC:wght@500;700;900&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-base: #EFF6FF;
+      --bg-dot: #BFDBFE;
+      --ink: #1E293B;
+      --blue: #2563EB;
+      --blue-dark: #1D4ED8;
+      --blue-light: #DBEAFE;
+      --orange: #F97316;
+      --orange-light: #FFEDD5;
+      --amber: #FCD34D;
+      --green: #16A34A;
+      --green-light: #DCFCE7;
+      --red: #DC2626;
+      --red-light: #FEE2E2;
+      --card-bg: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      color: var(--ink);
+      background-color: var(--bg-base);
+      background-image: radial-gradient(var(--bg-dot) 2.5px, transparent 2.5px);
+      background-size: 22px 22px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .topbar {
+      background: #FFFFFF;
+      border-bottom: 3px solid var(--ink);
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      box-shadow: 0 4px 0 rgba(30, 41, 59, 0.1);
+    }
+
+    .topbar-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cat-logo {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      filter: drop-shadow(2px 2px 0px #1E293B);
+    }
+
+    .brand-title {
+      font-size: 1.28rem;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .brand-sub {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      font-family: inherit;
+      font-size: 0.94rem;
+      font-weight: 800;
+      padding: 8px 16px;
+      border: 2.5px solid var(--ink);
+      border-radius: 12px;
+      background: #FFFFFF;
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 3px 3px 0px var(--ink);
+      transition: transform 0.12s ease, background 0.15s ease;
+    }
+
+    .tab-btn:hover {
+      transform: translate(-1px, -2px);
+      background: var(--blue-light);
+    }
+
+    .tab-btn.active {
+      background: var(--blue);
+      color: #FFFFFF;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1040px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 26px 18px 48px;
+      flex: 1;
+    }
+
+    .section-panel {
+      display: none;
+    }
+
+    .section-panel.active {
+      display: block;
+    }
+
+    /* Audio Toolbar */
+    .audio-bar {
+      background: #FFFFFF;
+      border: 2.5px solid var(--ink);
+      border-radius: 16px;
+      padding: 14px 18px;
+      margin-bottom: 22px;
+      box-shadow: 4px 4px 0px var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .audio-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+
+    .speed-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .speed-btn {
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      background: #F8FAFC;
+      cursor: pointer;
+    }
+
+    .speed-btn.active {
+      background: var(--amber);
+    }
+
+    /* Quote Cards */
+    .quote-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .quote-card {
+      background: #FFFFFF;
+      border: 3px solid var(--ink);
+      border-radius: 20px;
+      padding: 20px 22px;
+      box-shadow: 5px 5px 0px var(--ink);
+      display: grid;
+      grid-template-columns: 1fr 148px;
+      gap: 18px;
+      align-items: center;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .quote-card.speaking {
+      border-color: var(--blue);
+      background: #F0F7FF;
+    }
+
+    .quote-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .quote-badge-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .num-badge {
+      background: var(--amber);
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      padding: 3px 10px;
+      font-weight: 900;
+      font-size: 0.9rem;
+      box-shadow: 2px 2px 0px var(--ink);
+    }
+
+    .source-name {
+      font-weight: 900;
+      font-size: 1.05rem;
+      color: var(--blue);
+    }
+
+    .mini-audio {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mini-btn {
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 5px 10px;
+      border: 2px solid var(--ink);
+      border-radius: 9px;
+      background: #FFFFFF;
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 2px 2px 0px var(--ink);
+      transition: background 0.12s ease;
+    }
+
+    .mini-btn.play {
+      background: var(--blue);
+      color: #FFFFFF;
+    }
+
+    .mini-btn.play:hover {
+      background: var(--orange);
+    }
+
+    .mini-btn.pause {
+      background: var(--amber);
+    }
+
+    .mini-btn.stop {
+      background: #F1F5F9;
+    }
+
+    .quote-original {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.38rem;
+      font-weight: 900;
+      line-height: 1.6;
+      color: var(--ink);
+      margin-bottom: 10px;
+      padding: 10px 14px;
+      background: #F8FAFC;
+      border-left: 5px solid var(--blue);
+      border-radius: 8px;
+    }
+
+    .quote-meaning {
+      font-size: 0.98rem;
+      font-weight: 600;
+      line-height: 1.6;
+      color: #334155;
+    }
+
+    .quote-meaning strong {
+      color: var(--orange);
+      font-weight: 900;
+    }
+
+    .quote-illus {
+      width: 148px;
+      height: 132px;
+      background: var(--blue-light);
+      border: 2.5px solid var(--ink);
+      border-radius: 16px;
+      box-shadow: 3px 3px 0px var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .quote-illus svg {
+      width: 78px;
+      height: 78px;
+      margin-bottom: 4px;
+    }
+
+    .illus-caption {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    /* Exam Paper (CAT1-P40 style) */
+    .exam-paper {
+      background: #FFFFFF;
+      border: 3px solid var(--ink);
+      border-radius: 20px;
+      padding: 28px 30px;
+      box-shadow: 6px 6px 0px var(--ink);
+    }
+
+    .exam-top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+      border-bottom: 2.5px dashed #CBD5E1;
+    }
+
+    .exam-title-badge {
+      background: var(--blue);
+      color: #FFFFFF;
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      padding: 5px 14px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      box-shadow: 2px 2px 0px var(--ink);
+    }
+
+    .exam-controls-top {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-btn {
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 800;
+      padding: 7px 13px;
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      background: var(--amber);
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 2.5px 2.5px 0px var(--ink);
+    }
+
+    .ctrl-btn.secondary {
+      background: #F1F5F9;
+    }
+
+    .exam-stem {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+
+    .q-row {
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 2px solid #E2E8F0;
+      background: #F8FAFC;
+      margin-bottom: 14px;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .q-row.correct {
+      border-color: var(--green);
+      background: var(--green-light);
+    }
+
+    .q-row.wrong {
+      border-color: var(--red);
+      background: var(--red-light);
+    }
+
+    .q-line {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.16rem;
+      font-weight: 700;
+      line-height: 2.1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .q-mark {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #64748B;
+      margin-left: 4px;
+    }
+
+    .blank-input {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.12rem;
+      font-weight: 700;
+      color: var(--blue-dark);
+      background: #FFFFFF;
+      border: none;
+      border-bottom: 2.5px solid var(--ink);
+      padding: 2px 8px;
+      min-width: 210px;
+      max-width: 100%;
+      outline: none;
+      border-radius: 4px 4px 0 0;
+      text-align: center;
+    }
+
+    .blank-input:focus {
+      border-bottom-color: var(--orange);
+      background: #FFF7ED;
+    }
+
+    .q-feedback {
+      margin-top: 8px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      display: none;
+    }
+
+    .q-feedback.show {
+      display: block;
+    }
+
+    .q-feedback.ok {
+      color: var(--green);
+    }
+
+    .q-feedback.err {
+      color: var(--red);
+    }
+
+    .exam-end {
+      text-align: center;
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 900;
+      font-size: 1.05rem;
+      color: #475569;
+      margin: 20px 0 18px;
+      letter-spacing: 0.08em;
+    }
+
+    .exam-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .submit-btn {
+      font-family: inherit;
+      font-size: 1.02rem;
+      font-weight: 900;
+      padding: 11px 26px;
+      border: 2.5px solid var(--ink);
+      border-radius: 14px;
+      background: var(--blue);
+      color: #FFFFFF;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px var(--ink);
+    }
+
+    .submit-btn:hover {
+      background: var(--orange);
+    }
+
+    .reset-btn {
+      font-family: inherit;
+      font-size: 1.02rem;
+      font-weight: 800;
+      padding: 11px 22px;
+      border: 2.5px solid var(--ink);
+      border-radius: 14px;
+      background: #FFFFFF;
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 4px 4px 0px var(--ink);
+    }
+
+    .score-summary {
+      display: none;
+      margin-top: 22px;
+      padding: 18px 20px;
+      border: 3px solid var(--ink);
+      border-radius: 16px;
+      background: var(--amber);
+      box-shadow: 4px 4px 0px var(--ink);
+      text-align: center;
+    }
+
+    .score-summary.show {
+      display: block;
+    }
+
+    .score-big {
+      font-size: 1.55rem;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .score-msg {
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 720px) {
+      .quote-card {
+        grid-template-columns: 1fr;
+      }
+      .quote-illus {
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        gap: 14px;
+      }
+      .quote-illus svg {
+        width: 56px;
+        height: 56px;
+        margin-bottom: 0;
+      }
+      .exam-paper {
+        padding: 20px 16px;
+      }
+      .blank-input {
+        min-width: 160px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <svg class="cat-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="CAT2 貓咪標誌">
+          <circle cx="32" cy="34" r="24" fill="#F97316" stroke="#1E293B" stroke-width="3.5"/>
+          <path d="M12 24L16 8L27 17" fill="#F97316" stroke="#1E293B" stroke-width="3.5" stroke-linejoin="round"/>
+          <path d="M52 24L48 8L37 17" fill="#F97316" stroke="#1E293B" stroke-width="3.5" stroke-linejoin="round"/>
+          <path d="M18 19C22 12 42 12 46 19L49 23H15L18 19Z" fill="#2563EB" stroke="#1E293B" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M46 21H57C58.5 21 59 24 56 24.5H45" fill="#1D4ED8" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse cx="32" cy="39" rx="14" ry="11" fill="#FFEDD5"/>
+          <circle cx="24" cy="33" r="3" fill="#1E293B"/>
+          <circle cx="40" cy="33" r="3" fill="#1E293B"/>
+          <circle cx="25" cy="32" r="1" fill="#FFFFFF"/>
+          <circle cx="41" cy="32" r="1" fill="#FFFFFF"/>
+          <polygon points="32,37 29,40 35,40" fill="#1E293B"/>
+          <path d="M27 43C29 45.5 31 45.5 32 43C33 45.5 35 45.5 37 43" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M11 36H19M11 41H19M45 36H53M45 41H53" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <div class="brand-title">戊. 名言佳句「專心致志」</div>
+          <div class="brand-sub">中一中文 CAT2（第 2、3、5、8 共四句・P.93–94）</div>
+        </div>
+      </div>
+
+      <div class="nav-tabs">
+        <button class="tab-btn active" data-tab="study" type="button">📖 溫習名言</button>
+        <button class="tab-btn" data-tab="exam" type="button">📝 模擬測驗（仿 CAT1）</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- STUDY PANEL -->
+    <section id="panel-study" class="section-panel active">
+      <div class="audio-bar">
+        <div class="audio-bar-left">
+          <span>🔊 粵語朗讀設定（點選每句嘅播放制收聽原文同語譯）</span>
+        </div>
+        <div class="speed-group">
+          <span style="font-size:0.85rem;font-weight:800;">語速：</span>
+          <button class="speed-btn" data-rate="0.8" type="button">0.8x 慢</button>
+          <button class="speed-btn active" data-rate="1.0" type="button">1.0x 正常</button>
+          <button class="speed-btn" data-rate="1.2" type="button">1.2x 快</button>
+        </div>
+      </div>
+
+      <div class="quote-list" id="quoteList"></div>
+    </section>
+
+    <!-- EXAM PANEL -->
+    <section id="panel-exam" class="section-panel">
+      <div class="exam-paper">
+        <div class="exam-top-meta">
+          <span class="exam-title-badge">名言佳句填充測驗（共 4 句・每題 0.5 分）</span>
+          <div class="exam-controls-top">
+            <button class="ctrl-btn" id="swapModeBtn" type="button">🔀 切換挖空位置</button>
+            <button class="ctrl-btn secondary" id="showAnsBtn" type="button">👁️ 顯示標準答案</button>
+          </div>
+        </div>
+
+        <p class="exam-stem">中國自古以來均有不少哲理名言談論「專心致志」，例如以下四句：</p>
+
+        <div id="examQuestions"></div>
+
+        <div class="exam-end">~試卷完~</div>
+
+        <div class="exam-actions">
+          <button class="submit-btn" id="submitExamBtn" type="button">✅ 交卷批改</button>
+          <button class="reset-btn" id="resetExamBtn" type="button">🔄 重新作答</button>
+        </div>
+
+        <div class="score-summary" id="scoreSummary">
+          <div class="score-big" id="scoreBig"></div>
+          <div class="score-msg" id="scoreMsg"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const QUOTES = [
+      {
+        id: 2,
+        source: "《荀子》",
+        original: "目不能兩視而明，耳不能兩聽而聰。",
+        meaning: "眼睛不能同時看兩件事物而看得清楚，耳朵不能同時聽兩道聲音而聽得明白。",
+        caption: "眼不兩視・耳不兩聽",
+        svg: `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="40" cy="30" rx="24" ry="13" fill="#FFFFFF" stroke="#1E293B" stroke-width="3"/>
+          <circle cx="40" cy="30" r="7" fill="#2563EB" stroke="#1E293B" stroke-width="2.5"/>
+          <circle cx="42" cy="28" r="2" fill="#FFFFFF"/>
+          <path d="M22 58C22 50 29 46 36 48C40 49 42 54 39 58C37 61 33 61 31 64" stroke="#F97316" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M50 50C55 52 57 58 53 62" stroke="#2563EB" stroke-width="3" stroke-linecap="round"/>
+          <path d="M56 46C63 50 65 60 59 66" stroke="#2563EB" stroke-width="3" stroke-linecap="round"/>
+        </svg>`,
+        modes: [
+          { before: "目不能兩視而明，", blanks: ["耳不能兩聽而聰"], after: "。" },
+          { before: "", blanks: ["目不能兩視而明"], after: "，耳不能兩聽而聰。" }
+        ]
+      },
+      {
+        id: 3,
+        source: "《增廣賢文》",
+        original: "兩耳不聞窗外事，一心唯讀聖賢書。",
+        meaning: "雙耳聽不到窗外發生的事，只是專心一意地誦讀聖人著作。",
+        caption: "專心讀聖賢書",
+        svg: `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="14" y="14" width="24" height="24" rx="4" fill="#DBEAFE" stroke="#1E293B" stroke-width="2.8"/>
+          <line x1="26" y1="14" x2="26" y2="38" stroke="#1E293B" stroke-width="2.2"/>
+          <line x1="14" y1="26" x2="38" y2="26" stroke="#1E293B" stroke-width="2.2"/>
+          <path d="M20 50H60L64 66H16L20 50Z" fill="#FCD34D" stroke="#1E293B" stroke-width="3" stroke-linejoin="round"/>
+          <line x1="40" y1="50" x2="40" y2="66" stroke="#1E293B" stroke-width="2.5"/>
+          <line x1="25" y1="56" x2="35" y2="56" stroke="#1E293B" stroke-width="2" stroke-linecap="round"/>
+          <line x1="45" y1="56" x2="55" y2="56" stroke="#1E293B" stroke-width="2" stroke-linecap="round"/>
+        </svg>`,
+        modes: [
+          { before: "", blanks: ["兩耳不聞窗外事"], after: "，一心唯讀聖賢書。" },
+          { before: "兩耳不聞窗外事，", blanks: ["一心唯讀聖賢書"], after: "。" }
+        ]
+      },
+      {
+        id: 5,
+        source: "諸葛亮",
+        original: "非靜無以成學。",
+        meaning: "不安靜就不能成就學業。",
+        caption: "寧靜致遠・成學",
+        svg: `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="16" y="20" width="48" height="40" rx="10" fill="#FFFFFF" stroke="#1E293B" stroke-width="3"/>
+          <path d="M26 42L36 32L44 40L54 28" stroke="#2563EB" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="54" cy="28" r="4" fill="#F97316" stroke="#1E293B" stroke-width="2"/>
+          <path d="M24 52H56" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>`,
+        modes: [
+          { before: "", blanks: ["非靜無以成學"], after: "。" },
+          { before: "非靜", blanks: ["無以成學"], after: "。" }
+        ]
+      },
+      {
+        id: 8,
+        source: "《淮南子》",
+        original: "目察秋毫之末，耳不聞雷霆之聲；耳調玉石之聲，目不見太山之高。",
+        meaning: "眼睛看得到鳥獸在秋天所生的細毛末端時，耳朵聽不到打雷的聲音；耳朵聽到玉石敲擊的聲音時，眼睛看不到太山那麼高大的東西。",
+        caption: "秋毫與太山",
+        svg: `<svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 62L30 28L44 48L54 34L68 62H12Z" fill="#93C5FD" stroke="#1E293B" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M24 38L30 28L36 38" fill="#FFFFFF" stroke="#1E293B" stroke-width="2"/>
+          <path d="M54 14L48 24H55L50 32" stroke="#F97316" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>`,
+        modes: [
+          { before: "目察秋毫之末，", blanks: ["耳不聞雷霆之聲", "目不見太山之高"], mid: "；耳調玉石之聲，", after: "。" },
+          { before: "", blanks: ["目察秋毫之末", "耳調玉石之聲"], mid: "，耳不聞雷霆之聲；", after: "，目不見太山之高。" }
+        ]
+      }
+    ];
+
+    // Tabs
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".section-panel").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+        stopAudio();
+      });
+    });
+
+    // Audio (Cantonese TTS)
+    let speechRate = 1.0;
+    let activeCardId = null;
+
+    document.querySelectorAll(".speed-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        speechRate = parseFloat(btn.dataset.rate);
+      });
+    });
+
+    function clearSpeakingHighlight() {
+      document.querySelectorAll(".quote-card").forEach(c => c.classList.remove("speaking"));
+      activeCardId = null;
+    }
+
+    function playQuote(id) {
+      if (!("speechSynthesis" in window)) return;
+      const q = QUOTES.find(item => item.id === id);
+      if (!q) return;
+
+      if (window.speechSynthesis.paused && activeCardId === id) {
+        window.speechSynthesis.resume();
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      clearSpeakingHighlight();
+
+      const card = document.getElementById("quote-card-" + id);
+      if (card) card.classList.add("speaking");
+      activeCardId = id;
+
+      const text = `第 ${q.id} 句，${q.source.replace(/[《》]/g, "")}：${q.original} 語譯：${q.meaning}`;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "zh-HK";
+      utter.rate = speechRate;
+      const voices = window.speechSynthesis.getVoices();
+      const hkVoice = voices.find(v => v.lang.toLowerCase().includes("zh-hk") || v.lang.toLowerCase().includes("yue"));
+      if (hkVoice) utter.voice = hkVoice;
+      utter.onend = clearSpeakingHighlight;
+      utter.onerror = clearSpeakingHighlight;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function pauseAudio() {
+      if ("speechSynthesis" in window && window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+      }
+    }
+
+    function stopAudio() {
+      if ("speechSynthesis" in window) {
+        window.speechSynthesis.cancel();
+      }
+      clearSpeakingHighlight();
+    }
+
+    // Render Study Cards
+    const quoteList = document.getElementById("quoteList");
+    QUOTES.forEach(q => {
+      const card = document.createElement("article");
+      card.className = "quote-card";
+      card.id = "quote-card-" + q.id;
+      card.innerHTML = `
+        <div>
+          <div class="quote-header">
+            <div class="quote-badge-wrap">
+              <span class="num-badge">第 ${q.id} 句</span>
+              <span class="source-name">${q.source}</span>
+            </div>
+            <div class="mini-audio">
+              <button class="mini-btn play" type="button" onclick="playQuote(${q.id})">▶ 播放</button>
+              <button class="mini-btn pause" type="button" onclick="pauseAudio()">⏸ 暫停</button>
+              <button class="mini-btn stop" type="button" onclick="stopAudio()">⏹ 停止</button>
+            </div>
+          </div>
+          <div class="quote-original">${q.original}</div>
+          <div class="quote-meaning"><strong>語譯：</strong>${q.meaning}</div>
+        </div>
+        <div class="quote-illus">
+          ${q.svg}
+          <div class="illus-caption">${q.caption}</div>
+        </div>
+      `;
+      quoteList.appendChild(card);
+    });
+
+    // Render Exam Questions (CAT1-P40 style)
+    let modeIndex = 0;
+    const examQuestionsEl = document.getElementById("examQuestions");
+    const scoreSummaryEl = document.getElementById("scoreSummary");
+
+    function renderExam() {
+      examQuestionsEl.innerHTML = "";
+      scoreSummaryEl.classList.remove("show");
+      QUOTES.forEach((q, idx) => {
+        const m = q.modes[modeIndex];
+        const row = document.createElement("div");
+        row.className = "q-row";
+        row.id = "q-row-" + idx;
+
+        let lineHtml = `<span>(${idx + 1}) ${q.source}：</span>`;
+        if (m.blanks.length === 1) {
+          lineHtml += `
+            <span>${m.before}</span>
+            <input class="blank-input" type="text" data-q="${idx}" data-b="0" placeholder="請輸入原文" autocomplete="off" />
+            <span>${m.after}</span>
+          `;
+        } else {
+          // Two blanks (Quote 8)
+          if (modeIndex === 0) {
+            lineHtml += `
+              <span>${m.before}</span>
+              <input class="blank-input" type="text" data-q="${idx}" data-b="0" placeholder="第一空" autocomplete="off" />
+              <span>${m.mid}</span>
+              <input class="blank-input" type="text" data-q="${idx}" data-b="1" placeholder="第二空" autocomplete="off" />
+              <span>${m.after}</span>
+            `;
+          } else {
+            lineHtml += `
+              <input class="blank-input" type="text" data-q="${idx}" data-b="0" placeholder="第一空" autocomplete="off" />
+              <span>${m.mid}</span>
+              <input class="blank-input" type="text" data-q="${idx}" data-b="1" placeholder="第二空" autocomplete="off" />
+              <span>${m.after}</span>
+            `;
+          }
+        }
+        lineHtml += `<span class="q-mark">（0.5 分）</span>`;
+
+        row.innerHTML = `
+          <div class="q-line">${lineHtml}</div>
+          <div class="q-feedback" id="q-fb-${idx}"></div>
+        `;
+        examQuestionsEl.appendChild(row);
+      });
+    }
+
+    function normalizeAns(str) {
+      return str.replace(/[\s，。；、！？,.!?;:]/g, "").trim();
+    }
+
+    document.getElementById("swapModeBtn").addEventListener("click", () => {
+      modeIndex = modeIndex === 0 ? 1 : 0;
+      renderExam();
+    });
+
+    document.getElementById("showAnsBtn").addEventListener("click", () => {
+      QUOTES.forEach((q, idx) => {
+        const m = q.modes[modeIndex];
+        m.blanks.forEach((ans, bIdx) => {
+          const input = document.querySelector(`input[data-q="${idx}"][data-b="${bIdx}"]`);
+          if (input) input.value = ans;
+        });
+      });
+    });
+
+    document.getElementById("resetExamBtn").addEventListener("click", () => {
+      renderExam();
+    });
+
+    document.getElementById("submitExamBtn").addEventListener("click", () => {
+      let score = 0;
+      QUOTES.forEach((q, idx) => {
+        const m = q.modes[modeIndex];
+        const row = document.getElementById("q-row-" + idx);
+        const fb = document.getElementById("q-fb-" + idx);
+        row.classList.remove("correct", "wrong");
+
+        let allOk = true;
+        m.blanks.forEach((ans, bIdx) => {
+          const input = document.querySelector(`input[data-q="${idx}"][data-b="${bIdx}"]`);
+          const userVal = normalizeAns(input ? input.value : "");
+          if (userVal !== normalizeAns(ans)) {
+            allOk = false;
+          }
+        });
+
+        if (allOk) {
+          score += 0.5;
+          row.classList.add("correct");
+          fb.className = "q-feedback show ok";
+          fb.textContent = "✔ 答對！（+0.5 分）";
+        } else {
+          row.classList.add("wrong");
+          fb.className = "q-feedback show err";
+          fb.textContent = "✘ 正確答案：" + m.blanks.join(" ／ ");
+        }
+      });
+
+      const scoreBig = document.getElementById("scoreBig");
+      const scoreMsg = document.getElementById("scoreMsg");
+      scoreBig.textContent = `總分：${score.toFixed(1)} / 2.0 分`;
+      if (score === 2) {
+        scoreMsg.textContent = "滿分！四句「專心致志」名言完全掌握晒，CAT2 實無問題！";
+      } else if (score >= 1) {
+        scoreMsg.textContent = "做得唔錯！睇清楚上面紅字嘅正確寫法，再試一次就滿分！";
+      } else {
+        scoreMsg.textContent = "可以返去「📖 溫習名言」聽多幾次粵語朗讀，再返嚟挑戰！";
+      }
+      scoreSummaryEl.classList.add("show");
+    });
+
+    renderExam();
+  </script>
+</body>
+</html>
