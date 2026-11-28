@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAT2 文言文溫習與模擬測驗｜P.87《囊螢夜讀》</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      background-color: #EFF6FF;
+      background-image: radial-gradient(#BFDBFE 2.5px, transparent 2.5px);
+      background-size: 22px 22px;
+      color: #1E293B;
+    }
+    .font-serif-tc {
+      font-family: 'Noto Serif TC', serif;
+    }
+    .comic-card {
+      background: #FFFFFF;
+      border: 2.5px solid #1E293B;
+      box-shadow: 4px 4px 0px #1E293B;
+    }
+    .comic-pill {
+      border: 2px solid #1E293B;
+      box-shadow: 2.5px 2.5px 0px #1E293B;
+    }
+    .double-under {
+      text-decoration: underline double #2563EB 2px;
+      text-underline-offset: 4px;
+      font-weight: 800;
+      color: #1E3A8A;
+    }
+    .word-link {
+      cursor: pointer;
+      border-radius: 6px;
+      padding: 0 3px;
+      transition: all 0.18s ease;
+      border-bottom: 2px dotted #F59E0B;
+    }
+    .word-link:hover, .word-link.active-word {
+      background-color: #FDE68A;
+      color: #1E293B;
+      box-shadow: 0 0 0 2px #2563EB;
+    }
+    .note-item {
+      border-radius: 10px;
+      padding: 5px 8px;
+      transition: all 0.25s ease;
+    }
+    .note-highlight {
+      background-color: #FEF08A;
+      box-shadow: 0 0 0 2.5px #2563EB;
+      transform: scale(1.01);
+    }
+    .blank-input {
+      border: none;
+      border-bottom: 2px solid #1E293B;
+      background: transparent;
+      outline: none;
+    }
+    .blank-input:focus {
+      border-bottom-color: #2563EB;
+      background-color: #EFF6FF;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-30 bg-[#EFF6FF]/95 backdrop-blur-sm border-b-2 border-[#1E293B]">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2.5">
+        <div class="w-10 h-10 rounded-xl bg-[#2563EB] text-white font-serif-tc font-black text-lg flex items-center justify-center border-2 border-[#1E293B] shadow-[2.5px_2.5px_0px_#1E293B] -rotate-3">
+          文
+        </div>
+        <div>
+          <h1 class="font-serif-tc text-lg sm:text-xl font-black text-[#1E293B]">CAT2 文言文溫習｜P.87《囊螢夜讀》</h1>
+          <p class="text-[11px] font-bold text-slate-600">課文精讀（註釋·語譯·賞析）＋ 仿 CAT 丙部模擬測試</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="tab-study-btn" type="button" class="comic-pill px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-[#2563EB] text-white">📖 課文溫習</button>
+        <button id="tab-quiz-btn" type="button" class="comic-pill px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50">📝 CAT2 模擬小測</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-4xl w-full mx-auto px-4 py-6 space-y-5">
+
+    <!-- ==================== PANEL 1: STUDY MODE ==================== -->
+    <section id="panel-study" class="space-y-5">
+      <!-- Original Text + Audio -->
+      <article class="comic-card rounded-3xl p-5 sm:p-7 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-200 pb-3">
+          <div>
+            <h2 class="font-serif-tc text-2xl font-black text-[#1E293B]">囊螢夜讀 <span class="text-base font-bold text-slate-500">《晉書》</span></h2>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button id="study-play-btn" type="button" class="comic-pill px-3 py-1 rounded-full bg-[#2563EB] text-white text-xs font-bold">▶ 廣東話讀原文</button>
+            <button id="study-pause-btn" type="button" class="hidden comic-pill px-2.5 py-1 rounded-full bg-[#FCD34D] text-[#1E293B] text-xs font-bold">⏸</button>
+            <button id="study-stop-btn" type="button" class="hidden comic-pill px-2.5 py-1 rounded-full bg-[#1E293B] text-white text-xs font-bold">⏹</button>
+          </div>
+        </div>
+
+        <div id="interactive-passage" class="p-4 sm:p-5 rounded-2xl bg-amber-50/70 border-2 border-[#1E293B] font-serif-tc text-lg sm:text-xl leading-loose text-[#1E293B]">
+          晉之<span class="word-link" data-note="note-2">車胤</span>，家<span class="word-link double-under" data-note="note-3">貧</span>，<span class="word-link" data-note="note-4">不常得油</span>。然日則耕作，無以夜讀。遇<span class="word-link" data-note="note-5">夏月</span>，乃以<span class="word-link double-under" data-note="note-6">練</span>為<span class="word-link double-under" data-note="note-7">囊</span>，盛數十<span class="word-link" data-note="note-1">螢火</span>以照書，以夜<span class="word-link double-under" data-note="note-8">繼</span>日，勤學不倦。年長，<span class="word-link" data-note="note-9">博學多通</span>，時人<span class="word-link double-under" data-note="note-10">譽</span>之。
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <p class="text-xs font-bold text-slate-500">💡 滑鼠移到或點擊文言字詞，即自動高亮並捲動定位至下方註釋（點擊可兼聽朗讀）</p>
+          <label class="inline-flex items-center gap-1.5 text-xs font-bold text-[#1E293B] bg-amber-100 border border-[#1E293B] px-2.5 py-1 rounded-full cursor-pointer">
+            <input id="hover-speak-cb" type="checkbox" class="accent-[#2563EB]" checked />
+            <span>移到字詞時自動讀解釋</span>
+          </label>
+        </div>
+      </article>
+
+      <!-- Notes + Translation -->
+      <div class="grid md:grid-cols-2 gap-4">
+        <article class="comic-card rounded-3xl p-5 space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-serif-tc text-lg font-black text-[#2563EB]">【註釋與字詞解釋】</h3>
+            <span class="text-[11px] font-bold text-slate-500">按 🔊 朗讀該條解釋</span>
+          </div>
+          <ol class="space-y-1.5 text-sm leading-relaxed text-slate-800 list-decimal pl-5">
+            <li id="note-1" class="note-item"><div class="flex items-start justify-between gap-2"><span><span class="font-bold">囊螢／螢火：</span>用袋子裝着螢火蟲。</span><button type="button" class="note-play-btn shrink-0 px-2 py-0.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold" data-speak="囊螢：用袋子裝着螢火蟲。">🔊</button></div></li>
+            <li id="note-2" class="note-item"><div class="flex items-start justify-between gap-2"><span><span class="font-bold">車胤：</span>字武子，東晉南平郡人。自幼聰穎好學，為人公正、不畏強權。</span><button type="button" class="note-play-btn shrink-0 px-2 py-0.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold" data-speak="車胤：字武子，東晉南平郡人。自幼聰穎好學，為人公正、不畏強權。">🔊</button></div></li>
+            <li id="note-3" class="note-item"><div class="flex items-start justify-between gap-2"><span><span class="font-bold">貧（家貧）：</span>貧窮、窮困、家境貧寒。</span><button type="button" class="note-play-btn shrink-0 px-2 py-0.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold" data-speak="貧：貧窮、窮困、家境貧寒。">🔊</button></div></li>
+            <li id="note-4" class="note-item"><div class="flex items-start justify-between gap-2"><span><span class="font-bold">不常得油：</span>古人於夜間燃點香油燈照明讀書，但香油價格不菲。</span><button type="button" class="note-play-btn shrink-0 px-2 py-0.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold" data-speak="不常得油：古人於夜間燃點香油燈照明讀書，但香油價格不菲。">🔊</button></div></li>
+            <li id="note-5" class="note-item"><div class="flex items-start justify-between gap-2"><span><span class="font-bold">夏月：</span>即夏季。</span><button type="button" class="note-play-btn shrink-0 px-2 py-0.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold" data-speak="夏月：即夏季。">🔊</button></div></li>
+            <li id="note-6" class="note-item"><div class="flex items-start justify-between gap-2"><span><span class="font-bold">練（以練為囊）：</span>白色絹子、白絹。</span><button type="button" class="note-play-btn shrink-0 px-2 py-0.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold" data-speak="練：白色絹子、白絹。">🔊</button></div></li>
+            <li id="note-7" class="note-item"><div class="flex items-start justify-between gap-2"><span><span class="font-bold">囊（以練為囊）：</span>袋子。</span><button type="button" class="note-play-btn shrink-0 px-2 py-0.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold" data-speak="囊：袋子。">🔊</button></div></li>
+            <li id="note-8" class="note-item"><div class="flex items-start justify-between gap-2"><span><span class="font-bold">繼（以夜繼日）：</span>緊接着（夜裏緊接着白天）。</span><button type="button" class="note-play-btn shrink-0 px-2 py-0.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold" data-speak="繼，以夜繼日：緊接着，夜裏緊接着白天。">🔊</button></div></li>
+            <li id="note-9" class="note-item"><div class="flex items-start justify-between gap-2"><span><span class="font-bold">博學多通：</span>通，精通。指車胤的學識不但廣博，而且深入精通。</span><button type="button" class="note-play-btn shrink-0 px-2 py-0.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold" data-speak="博學多通：通，精通。指車胤的學識不但廣博，而且深入精通。">🔊</button></div></li>
+            <li id="note-10" class="note-item"><div class="flex items-start justify-between gap-2"><span><span class="font-bold">譽（時人譽之）：</span>稱讚、稱頌。</span><button type="button" class="note-play-btn shrink-0 px-2 py-0.5 rounded-full bg-[#2563EB] text-white text-[11px] font-bold" data-speak="譽，時人譽之：稱讚、稱頌。">🔊</button></div></li>
+          </ol>
+        </article>
+
+        <article class="comic-card rounded-3xl p-5 space-y-3">
+          <h3 class="font-serif-tc text-lg font-black text-[#2563EB]">【語譯】</h3>
+          <p class="text-sm sm:text-base leading-relaxed text-slate-800">
+            晉朝人車胤，因為家境貧寒，不能經常得到香油點燈。但是他白天要耕作，晚上又（因沒有油燈照明而）不能讀書。每逢夏天，（車胤）就用白絹做成（透光的）袋子，裝着幾十個螢火蟲照着書本，夜以繼日地學習，勤奮學習而不知疲倦。時間久了，（他）知識廣博，學問精通，深受當時的人所稱頌。
+          </p>
+          <div class="pt-2 border-t border-slate-200">
+            <h4 class="font-bold text-sm text-[#1E293B] mb-1">【賞析重點】</h4>
+            <p class="text-xs sm:text-sm leading-relaxed text-slate-700">
+              本文選自《晉書》，借晉朝車胤家貧、夜晚以螢火蟲照明學習的故事，頌讚了車胤<span class="font-bold text-[#2563EB]">勤學不倦</span>、<span class="font-bold text-[#2563EB]">不因不利條件而放棄志向</span>，以及<span class="font-bold text-[#2563EB]">極具恆心、日以繼夜學習</span>的精神，是莘莘學子的典範。
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ==================== PANEL 2: CAT2 MOCK PAPER (Matches P3.jpg) ==================== -->
+    <section id="panel-quiz" class="hidden space-y-5">
+      <div class="comic-card rounded-3xl p-5 sm:p-7 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-200 pb-3">
+          <div>
+            <h2 class="font-serif-tc text-xl font-black text-[#1E293B]">丙部、文言閱讀理解（5 分）</h2>
+            <p class="text-xs text-slate-600 font-medium">仿照持續評估格式：除非題目注明，否則應以白話文作答。</p>
+          </div>
+          <div class="text-sm font-black px-3.5 py-1 rounded-full bg-[#FCD34D] border-2 border-[#1E293B]">
+            得分：<span id="q-score" class="text-[#2563EB]">0</span> / 5 分
+          </div>
+        </div>
+
+        <!-- Passage Box -->
+        <div class="p-4 rounded-2xl bg-slate-50 border-2 border-[#1E293B] font-serif-tc text-base sm:text-lg leading-loose">
+          <div class="text-center font-bold mb-1">《囊螢夜讀》 晉書</div>
+          晉之車胤，家<span class="double-under">貧</span>，不常得油。然日則耕作，無以夜讀。遇夏月，乃以<span class="double-under">練</span>為<span class="double-under">囊</span>，盛數十螢火以照書，以夜<span class="double-under">繼</span>日，勤學不倦。年長，博學多通，時人<span class="double-under">譽</span>之。
+        </div>
+
+        <!-- Q1: 字詞解釋 (2分) -->
+        <div class="space-y-3">
+          <div class="font-bold text-base">1. 試解釋下列句中畫有雙底線字詞的意思，並把答案寫在橫線上。（2 分）</div>
+          <div class="grid sm:grid-cols-2 gap-3 text-sm">
+            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(A) 家<span class="double-under">貧</span>，不常得油</span>
+              <div class="flex items-center gap-1">
+                <span>貧：</span>
+                <input id="q1a" type="text" placeholder="解釋" class="blank-input w-24 text-center font-bold" />
+                <span class="text-xs text-slate-500">(0.5)</span>
+              </div>
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(B) 乃以<span class="double-under">練</span>為囊</span>
+              <div class="flex items-center gap-1">
+                <span>練：</span>
+                <input id="q1b" type="text" placeholder="解釋" class="blank-input w-24 text-center font-bold" />
+                <span class="text-xs text-slate-500">(0.5)</span>
+              </div>
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(C) 以夜<span class="double-under">繼</span>日</span>
+              <div class="flex items-center gap-1">
+                <span>繼：</span>
+                <input id="q1c" type="text" placeholder="解釋" class="blank-input w-24 text-center font-bold" />
+                <span class="text-xs text-slate-500">(0.5)</span>
+              </div>
+            </div>
+            <div class="p-3 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-between gap-2">
+              <span>(D) 時人<span class="double-under">譽</span>之</span>
+              <div class="flex items-center gap-1">
+                <span>譽：</span>
+                <input id="q1d" type="text" placeholder="解釋" class="blank-input w-24 text-center font-bold" />
+                <span class="text-xs text-slate-500">(0.5)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Q2: 語譯 (1.5分) -->
+        <div class="space-y-2">
+          <div class="font-bold text-base">2. 試語譯以下句子：</div>
+          <p class="pl-4 font-serif-tc font-bold text-base text-[#1E3A8A]">盛數十螢火以照書，以夜繼日，勤學不倦。（1.5 分）</p>
+          <div class="flex items-end gap-2">
+            <span class="font-bold text-sm shrink-0">答案：</span>
+            <input id="q2" type="text" placeholder="請以白話文語譯整句……" class="blank-input flex-1 text-sm py-1" />
+          </div>
+        </div>
+
+        <!-- Q3: P85 緒言填充 (1.5分) -->
+        <div class="space-y-2">
+          <div class="font-bold text-base">3. 根據《主題二：勤勞》緒言（P.85）填充：（1.5 分）</div>
+          <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-300 text-sm sm:text-base leading-loose">
+            培養勤勞精神，要磨煉 <input id="q3a" type="text" placeholder="4字成語" class="blank-input w-28 text-center font-bold" /> (0.5 分) 的意志，並在生活上 <input id="q3b" type="text" placeholder="4字詞" class="blank-input w-28 text-center font-bold" /> (0.5 分)，不沉迷玩樂。《囊螢夜讀》展現了古人在艱難環境中捉螢火蟲代替蠟燭的 <input id="q3c" type="text" placeholder="2字詞" class="blank-input w-20 text-center font-bold" /> (0.5 分) 智慧。
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-2 border-t border-slate-200">
+          <button id="quiz-reset-btn" type="button" class="comic-pill px-4 py-2 rounded-full bg-white text-sm font-bold">↺ 重做</button>
+          <button id="quiz-submit-btn" type="button" class="comic-pill px-6 py-2 rounded-full bg-[#2563EB] text-white text-sm font-bold">✓ 交卷批改及看解析</button>
+        </div>
+
+        <!-- Quiz Feedback -->
+        <div id="quiz-feedback" class="hidden rounded-2xl p-4 bg-slate-50 border-2 border-[#1E293B] space-y-2 text-sm"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Tabs
+    const studyBtn = document.getElementById('tab-study-btn');
+    const quizBtn = document.getElementById('tab-quiz-btn');
+    const panelStudy = document.getElementById('panel-study');
+    const panelQuiz = document.getElementById('panel-quiz');
+
+    studyBtn.addEventListener('click', () => {
+      panelStudy.classList.remove('hidden');
+      panelQuiz.classList.add('hidden');
+      studyBtn.className = 'comic-pill px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-[#2563EB] text-white';
+      quizBtn.className = 'comic-pill px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50';
+    });
+
+    quizBtn.addEventListener('click', () => {
+      stopStudyAudio();
+      panelStudy.classList.add('hidden');
+      panelQuiz.classList.remove('hidden');
+      quizBtn.className = 'comic-pill px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-[#2563EB] text-white';
+      studyBtn.className = 'comic-pill px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-bold bg-white text-[#1E293B] hover:bg-amber-50';
+    });
+
+    // Cantonese TTS for 《囊螢夜讀》
+    let isPaused = false;
+    window.__u = null;
+    function stopStudyAudio() {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      isPaused = false;
+      document.getElementById('study-pause-btn').classList.add('hidden');
+      document.getElementById('study-stop-btn').classList.add('hidden');
+    }
+
+    document.getElementById('study-play-btn').addEventListener('click', () => {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      isPaused = false;
+      const txt = '囊螢夜讀，晉書。晉之車胤，家貧，不常得油。然日則耕作，無以夜讀。遇夏月，乃以練為囊，盛數十螢火以照書，以夜繼日，勤學不倦。年長，博學多通，時人譽之。';
+      const u = new SpeechSynthesisUtterance(txt);
+      const voices = window.speechSynthesis.getVoices() || [];
+      const hk = voices.find(v => /zh[-_]HK|yue/i.test(v.lang)) || voices.find(v => /^zh/i.test(v.lang));
+      if (hk) { u.voice = hk; u.lang = hk.lang; } else { u.lang = 'zh-HK'; }
+      u.rate = 0.9;
+      window.__u = u;
+      document.getElementById('study-pause-btn').classList.remove('hidden');
+      document.getElementById('study-stop-btn').classList.remove('hidden');
+      document.getElementById('study-pause-btn').textContent = '⏸';
+      u.onend = u.onerror = stopStudyAudio;
+      setTimeout(() => window.speechSynthesis.speak(u), 60);
+    });
+
+    document.getElementById('study-pause-btn').addEventListener('click', () => {
+      if (!('speechSynthesis' in window)) return;
+      const btn = document.getElementById('study-pause-btn');
+      if (!isPaused) { isPaused = true; window.speechSynthesis.pause(); btn.textContent = '▶'; }
+      else { isPaused = false; window.speechSynthesis.resume(); btn.textContent = '⏸'; }
+    });
+    document.getElementById('study-stop-btn').addEventListener('click', stopStudyAudio);
+
+    // Interactive Word Hover/Click -> Highlight + Scroll to Note + Play Description
+    function speakText(txt) {
+      if (!('speechSynthesis' in window) || !txt) return;
+      window.speechSynthesis.cancel();
+      isPaused = false;
+      const u = new SpeechSynthesisUtterance(txt);
+      const voices = window.speechSynthesis.getVoices() || [];
+      const hk = voices.find(v => /zh[-_]HK|yue/i.test(v.lang)) || voices.find(v => /^zh/i.test(v.lang));
+      if (hk) { u.voice = hk; u.lang = hk.lang; } else { u.lang = 'zh-HK'; }
+      u.rate = 0.92;
+      window.__u = u;
+      document.getElementById('study-pause-btn').classList.remove('hidden');
+      document.getElementById('study-stop-btn').classList.remove('hidden');
+      document.getElementById('study-pause-btn').textContent = '⏸';
+      u.onend = u.onerror = stopStudyAudio;
+      setTimeout(() => window.speechSynthesis.speak(u), 50);
+    }
+
+    function focusWordAndNote(wordEl, shouldSpeak) {
+      document.querySelectorAll('.word-link.active-word').forEach(el => el.classList.remove('active-word'));
+      document.querySelectorAll('.note-item.note-highlight').forEach(el => el.classList.remove('note-highlight'));
+      wordEl.classList.add('active-word');
+      const noteId = wordEl.dataset.note;
+      const noteEl = document.getElementById(noteId);
+      if (noteEl) {
+        noteEl.classList.add('note-highlight');
+        noteEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (shouldSpeak) {
+          const btn = noteEl.querySelector('.note-play-btn');
+          if (btn) speakText(btn.dataset.speak);
+        }
+      }
+    }
+
+    let hoverTimer = null;
+    document.querySelectorAll('#interactive-passage .word-link').forEach(wEl => {
+      wEl.addEventListener('mouseenter', () => {
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(() => {
+          const autoSpeak = document.getElementById('hover-speak-cb').checked;
+          focusWordAndNote(wEl, autoSpeak);
+        }, 120);
+      });
+      wEl.addEventListener('mouseleave', () => clearTimeout(hoverTimer));
+      wEl.addEventListener('click', () => {
+        focusWordAndNote(wEl, true);
+      });
+    });
+
+    document.querySelectorAll('.note-play-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const li = btn.closest('.note-item');
+        document.querySelectorAll('.note-item.note-highlight').forEach(el => el.classList.remove('note-highlight'));
+        if (li) li.classList.add('note-highlight');
+        speakText(btn.dataset.speak);
+      });
+    });
+
+    // Grading Logic
+    document.getElementById('quiz-submit-btn').addEventListener('click', () => {
+      let score = 0;
+      const val = id => document.getElementById(id).value.trim();
+
+      const ok1a = ['貧窮', '窮困', '貧寒', '窮'].some(k => val('q1a').includes(k));
+      const ok1b = ['白絹', '白色絹子', '絹'].some(k => val('q1b').includes(k));
+      const ok1c = ['緊接', '接著', '接續', '繼續'].some(k => val('q1c').includes(k));
+      const ok1d = ['稱讚', '稱頌', '讚美', '讚揚'].some(k => val('q1d').includes(k));
+      if (ok1a) score += 0.5;
+      if (ok1b) score += 0.5;
+      if (ok1c) score += 0.5;
+      if (ok1d) score += 0.5;
+
+      const q2v = val('q2');
+      let s2 = 0;
+      if (q2v.includes('螢火蟲') && q2v.includes('書')) s2 += 0.5;
+      if (q2v.includes('夜以繼日') || q2v.includes('日夜') || q2v.includes('白天')) s2 += 0.5;
+      if (q2v.includes('勤奮') || q2v.includes('疲倦') || q2v.includes('不倦')) s2 += 0.5;
+      score += s2;
+
+      const ok3a = val('q3a') === '堅韌不拔';
+      const ok3b = val('q3b') === '自律有節';
+      const ok3c = val('q3c') === '克難';
+      if (ok3a) score += 0.5;
+      if (ok3b) score += 0.5;
+      if (ok3c) score += 0.5;
+
+      document.getElementById('q-score').textContent = Number.isInteger(score) ? score : score.toFixed(1);
+      const fb = document.getElementById('quiz-feedback');
+      fb.classList.remove('hidden');
+      fb.innerHTML = `
+        <div class="font-black text-base text-[#2563EB]">批改結果：${Number.isInteger(score) ? score : score.toFixed(1)} / 5 分</div>
+        <div><span class="font-bold">1. 字詞解釋：</span>(A) 貧窮／窮困 ${ok1a ? '✓' : '✕'} ｜ (B) 白絹／白色絹子 ${ok1b ? '✓' : '✕'} ｜ (C) 緊接著 ${ok1c ? '✓' : '✕'} ｜ (D) 稱讚／稱頌 ${ok1d ? '✓' : '✕'}</div>
+        <div><span class="font-bold">2. 語譯參考（得 ${s2} 分）：</span>（車胤）裝着幾十個螢火蟲照着書本，夜以繼日地學習，勤奮學習而不知疲倦。</div>
+        <div><span class="font-bold">3. P85 緒言填充：</span>堅韌不拔 ${ok3a ? '✓' : '✕'} ｜ 自律有節 ${ok3b ? '✓' : '✕'} ｜ 克難 ${ok3c ? '✓' : '✕'}</div>
+      `;
+    });
+
+    document.getElementById('quiz-reset-btn').addEventListener('click', () => {
+      ['q1a','q1b','q1c','q1d','q2','q3a','q3b','q3c'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('q-score').textContent = '0';
+      document.getElementById('quiz-feedback').classList.add('hidden');
+    });
+  </script>
+</body>
+</html>
