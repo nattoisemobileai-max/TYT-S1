@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAT2 第四部分：緒言「主題二：勤勞」（P.85）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&family=Noto+Sans+TC:wght@500;700;900&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-base: #EFF6FF;
+      --bg-dot: #BFDBFE;
+      --ink: #1E293B;
+      --blue: #2563EB;
+      --blue-dark: #1D4ED8;
+      --blue-light: #DBEAFE;
+      --orange: #F97316;
+      --orange-light: #FFEDD5;
+      --amber: #FCD34D;
+      --amber-soft: #FEF3C7;
+      --green: #16A34A;
+      --green-light: #DCFCE7;
+      --red: #DC2626;
+      --red-light: #FEE2E2;
+      --purple: #7C3AED;
+      --purple-light: #EDE9FE;
+      --card-bg: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      color: var(--ink);
+      background-color: var(--bg-base);
+      background-image: radial-gradient(var(--bg-dot) 2.5px, transparent 2.5px);
+      background-size: 22px 22px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .topbar {
+      background: #FFFFFF;
+      border-bottom: 3px solid var(--ink);
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      box-shadow: 0 4px 0 rgba(30, 41, 59, 0.1);
+    }
+
+    .topbar-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cat-logo {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      filter: drop-shadow(2px 2px 0px #1E293B);
+    }
+
+    .brand-title {
+      font-size: 1.28rem;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+
+    .brand-sub {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      font-family: inherit;
+      font-size: 0.94rem;
+      font-weight: 800;
+      padding: 8px 16px;
+      border: 2.5px solid var(--ink);
+      border-radius: 12px;
+      background: #FFFFFF;
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 3px 3px 0px var(--ink);
+      transition: transform 0.12s ease, background 0.15s ease;
+    }
+
+    .tab-btn:hover {
+      transform: translate(-1px, -2px);
+      background: var(--blue-light);
+    }
+
+    .tab-btn.active {
+      background: var(--blue);
+      color: #FFFFFF;
+    }
+
+    .container {
+      max-width: 1060px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 18px 50px;
+      flex: 1;
+    }
+
+    .section-panel {
+      display: none;
+    }
+
+    .section-panel.active {
+      display: block;
+    }
+
+    /* Toolbar */
+    .study-toolbar {
+      background: #FFFFFF;
+      border: 2.5px solid var(--ink);
+      border-radius: 16px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      box-shadow: 4px 4px 0px var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .legend-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .legend-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 2px solid var(--ink);
+    }
+
+    .legend-chip.quote { background: var(--amber); }
+    .legend-chip.keyword { background: var(--blue-light); color: var(--blue-dark); }
+    .legend-chip.story { background: var(--orange-light); color: #C2410C; }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-btn {
+      font-family: inherit;
+      font-size: 0.86rem;
+      font-weight: 800;
+      padding: 7px 13px;
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      background: var(--amber);
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 2.5px 2.5px 0px var(--ink);
+    }
+
+    .ctrl-btn.secondary {
+      background: #F1F5F9;
+    }
+
+    .ctrl-btn.active-toggle {
+      background: var(--orange);
+      color: #FFFFFF;
+    }
+
+    /* Paragraph Cards */
+    .para-card {
+      background: #FFFFFF;
+      border: 3px solid var(--ink);
+      border-radius: 20px;
+      padding: 20px 24px;
+      box-shadow: 5px 5px 0px var(--ink);
+      margin-bottom: 20px;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .para-card.speaking {
+      border-color: var(--blue);
+      background: #F0F7FF;
+    }
+
+    .para-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed #CBD5E1;
+    }
+
+    .para-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .para-badge {
+      background: var(--blue);
+      color: #FFFFFF;
+      border: 2px solid var(--ink);
+      border-radius: 9px;
+      padding: 3px 11px;
+      font-size: 0.86rem;
+      font-weight: 900;
+      box-shadow: 2px 2px 0px var(--ink);
+    }
+
+    .para-focus {
+      font-weight: 900;
+      font-size: 1.02rem;
+      color: var(--ink);
+    }
+
+    .mini-audio {
+      display: inline-flex;
+      gap: 6px;
+    }
+
+    .mini-btn {
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 800;
+      padding: 5px 10px;
+      border: 2px solid var(--ink);
+      border-radius: 9px;
+      background: #FFFFFF;
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 2px 2px 0px var(--ink);
+    }
+
+    .mini-btn.play { background: var(--blue); color: #FFFFFF; }
+    .mini-btn.pause { background: var(--amber); }
+    .mini-btn.stop { background: #F1F5F9; }
+
+    .para-text {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.22rem;
+      font-weight: 600;
+      line-height: 2.05;
+      color: var(--ink);
+    }
+
+    /* Highlighted Memorization Spans */
+    .mem {
+      display: inline-block;
+      padding: 0 6px;
+      margin: 0 2px;
+      border-radius: 7px;
+      border-bottom: 3px solid var(--ink);
+      font-weight: 900;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .mem.quote {
+      background: var(--amber-soft);
+      border-bottom-color: #D97706;
+      color: #92400E;
+    }
+
+    .mem.keyword {
+      background: var(--blue-light);
+      border-bottom-color: var(--blue);
+      color: var(--blue-dark);
+    }
+
+    .mem.story {
+      background: var(--orange-light);
+      border-bottom-color: var(--orange);
+      color: #9A3412;
+    }
+
+    .mem.cloze-hidden {
+      background: #1E293B !important;
+      color: transparent !important;
+      border-bottom-color: var(--orange) !important;
+      user-select: none;
+      position: relative;
+    }
+
+    .mem.cloze-hidden::after {
+      content: "？";
+      color: #FCD34D;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.9rem;
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+
+    .para-note {
+      margin-top: 12px;
+      padding: 10px 14px;
+      background: #F8FAFC;
+      border-left: 4px solid var(--orange);
+      border-radius: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    /* Summary Table Card */
+    .summary-card {
+      background: #FFFFFF;
+      border: 3px solid var(--ink);
+      border-radius: 20px;
+      padding: 20px 24px;
+      box-shadow: 5px 5px 0px var(--ink);
+    }
+
+    .summary-card h3 {
+      font-size: 1.12rem;
+      font-weight: 900;
+      margin-bottom: 12px;
+      color: var(--blue-dark);
+    }
+
+    .story-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.94rem;
+    }
+
+    .story-table th,
+    .story-table td {
+      border: 2px solid var(--ink);
+      padding: 10px 12px;
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    .story-table th {
+      background: var(--amber);
+      font-weight: 900;
+    }
+
+    .story-table td {
+      font-weight: 600;
+    }
+
+    /* Exam Paper (CAT1 style) */
+    .exam-paper {
+      background: #FFFFFF;
+      border: 3px solid var(--ink);
+      border-radius: 20px;
+      padding: 26px 28px;
+      box-shadow: 6px 6px 0px var(--ink);
+    }
+
+    .exam-top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+      border-bottom: 2.5px dashed #CBD5E1;
+    }
+
+    .exam-title-badge {
+      background: var(--blue);
+      color: #FFFFFF;
+      border: 2px solid var(--ink);
+      border-radius: 10px;
+      padding: 5px 14px;
+      font-weight: 900;
+      font-size: 0.95rem;
+      box-shadow: 2px 2px 0px var(--ink);
+    }
+
+    .exam-controls-top {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .q-block {
+      padding: 16px 18px;
+      border-radius: 14px;
+      border: 2.5px solid #CBD5E1;
+      background: #F8FAFC;
+      margin-bottom: 16px;
+    }
+
+    .q-block-title {
+      font-size: 0.88rem;
+      font-weight: 900;
+      color: var(--blue);
+      margin-bottom: 8px;
+    }
+
+    .q-line {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.14rem;
+      font-weight: 700;
+      line-height: 2.2;
+    }
+
+    .blank-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin: 0 3px;
+      vertical-align: baseline;
+    }
+
+    .blank-input {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: var(--blue-dark);
+      background: #FFFFFF;
+      border: none;
+      border-bottom: 2.5px solid var(--ink);
+      padding: 2px 8px;
+      width: 165px;
+      outline: none;
+      border-radius: 4px 4px 0 0;
+      text-align: center;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .blank-input.wide {
+      width: 230px;
+    }
+
+    .blank-input:focus {
+      border-bottom-color: var(--orange);
+      background: #FFF7ED;
+    }
+
+    .blank-input.ok {
+      background: var(--green-light);
+      border-bottom-color: var(--green);
+      color: var(--green);
+    }
+
+    .blank-input.err {
+      background: var(--red-light);
+      border-bottom-color: var(--red);
+      color: var(--red);
+    }
+
+    .q-mark {
+      font-family: 'Noto Sans TC', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #64748B;
+    }
+
+    .q-feedback {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .q-feedback.show {
+      display: block;
+    }
+
+    .q-feedback.ok { color: var(--green); }
+    .q-feedback.err { color: var(--red); }
+
+    .exam-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .submit-btn {
+      font-family: inherit;
+      font-size: 1.02rem;
+      font-weight: 900;
+      padding: 11px 26px;
+      border: 2.5px solid var(--ink);
+      border-radius: 14px;
+      background: var(--blue);
+      color: #FFFFFF;
+      cursor: pointer;
+      box-shadow: 4px 4px 0px var(--ink);
+    }
+
+    .submit-btn:hover {
+      background: var(--orange);
+    }
+
+    .reset-btn {
+      font-family: inherit;
+      font-size: 1.02rem;
+      font-weight: 800;
+      padding: 11px 22px;
+      border: 2.5px solid var(--ink);
+      border-radius: 14px;
+      background: #FFFFFF;
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 4px 4px 0px var(--ink);
+    }
+
+    .score-summary {
+      display: none;
+      margin-top: 20px;
+      padding: 18px 20px;
+      border: 3px solid var(--ink);
+      border-radius: 16px;
+      background: var(--amber);
+      box-shadow: 4px 4px 0px var(--ink);
+      text-align: center;
+    }
+
+    .score-summary.show {
+      display: block;
+    }
+
+    .score-big {
+      font-size: 1.5rem;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .score-msg {
+      font-size: 0.96rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 680px) {
+      .exam-paper, .para-card, .summary-card {
+        padding: 18px 15px;
+      }
+      .blank-input, .blank-input.wide {
+        width: 140px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <svg class="cat-logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="CAT2 貓咪標誌">
+          <circle cx="32" cy="34" r="24" fill="#F97316" stroke="#1E293B" stroke-width="3.5"/>
+          <path d="M12 24L16 8L27 17" fill="#F97316" stroke="#1E293B" stroke-width="3.5" stroke-linejoin="round"/>
+          <path d="M52 24L48 8L37 17" fill="#F97316" stroke="#1E293B" stroke-width="3.5" stroke-linejoin="round"/>
+          <path d="M18 19C22 12 42 12 46 19L49 23H15L18 19Z" fill="#2563EB" stroke="#1E293B" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M46 21H57C58.5 21 59 24 56 24.5H45" fill="#1D4ED8" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse cx="32" cy="39" rx="14" ry="11" fill="#FFEDD5"/>
+          <circle cx="24" cy="33" r="3" fill="#1E293B"/>
+          <circle cx="40" cy="33" r="3" fill="#1E293B"/>
+          <circle cx="25" cy="32" r="1" fill="#FFFFFF"/>
+          <circle cx="41" cy="32" r="1" fill="#FFFFFF"/>
+          <polygon points="32,37 29,40 35,40" fill="#1E293B"/>
+          <path d="M27 43C29 45.5 31 45.5 32 43C33 45.5 35 45.5 37 43" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M11 36H19M11 41H19M45 36H53M45 41H53" stroke="#1E293B" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <div class="brand-title">丁. 緒言「主題二：勤勞」</div>
+          <div class="brand-sub">中一中文 CAT2（P.85 必背重點＋全方位填充測驗）</div>
+        </div>
+      </div>
+
+      <div class="nav-tabs">
+        <button class="tab-btn active" data-tab="study" type="button">📖 緒言精讀與背誦</button>
+        <button class="tab-btn" data-tab="exam" type="button">📝 全方位填充測驗</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- STUDY PANEL -->
+    <section id="panel-study" class="section-panel active">
+      <div class="study-toolbar">
+        <div class="legend-group">
+          <span>必背標示：</span>
+          <span class="legend-chip quote">黃色：勤勞名言</span>
+          <span class="legend-chip keyword">藍色：核心態度／詞語</span>
+          <span class="legend-chip story">橙色：課文精神／克難方法</span>
+        </div>
+        <div class="toolbar-actions">
+          <button class="ctrl-btn" id="toggleClozeBtn" type="button">🙈 遮蓋必背詞語（背誦模式）</button>
+        </div>
+      </div>
+
+      <!-- Paragraph 1 -->
+      <article class="para-card" id="para-card-1">
+        <div class="para-header">
+          <div class="para-title-wrap">
+            <span class="para-badge">第一段</span>
+            <span class="para-focus">勤勞名言與日常實踐態度</span>
+          </div>
+          <div class="mini-audio">
+            <button class="mini-btn play" type="button" onclick="playPara(1)">▶ 播放</button>
+            <button class="mini-btn pause" type="button" onclick="pauseAudio()">⏸ 暫停</button>
+            <button class="mini-btn stop" type="button" onclick="stopAudio()">⏹ 停止</button>
+          </div>
+        </div>
+        <p class="para-text">
+          「<span class="mem quote">百尺竿頭立不難</span>，<span class="mem quote">一勤天下無難事</span>」、「<span class="mem quote">少壯不努力</span>，<span class="mem quote">老大徒傷悲</span>」、「<span class="mem quote">業精於勤荒於嬉</span>」。要培養勤勞精神，<span class="mem keyword">努力不倦</span>地學習和嘗試，在日常生活中培養<span class="mem keyword">不避艱苦</span>、<span class="mem keyword">勤奮向上</span>的態度；提升<span class="mem keyword">自理能力</span>，慣於<span class="mem keyword">出力流汗</span>，磨煉<span class="mem keyword">堅韌不拔</span>的意志，尊重各行各業的<span class="mem keyword">勞動者</span>；並在生活上<span class="mem keyword">自律有節</span>，<span class="mem keyword">不沉迷玩樂</span>；於生活中<span class="mem keyword">實踐所學</span>。
+        </p>
+        <div class="para-note">
+          💡 <strong>背誦提示：</strong>開首引用咗 3 句名言，跟住講培養勤勞嘅四個層面：① 學習態度（努力不倦、不避艱苦、勤奮向上）② 自理與意志（自理能力、出力流汗、堅韌不拔）③ 尊重他人（勞動者）④ 生活紀律（自律有節、不沉迷玩樂、實踐所學）。（點擊黑色遮蓋格即可逐個偷睇！）
+        </div>
+      </article>
+
+      <!-- Paragraph 2 -->
+      <article class="para-card" id="para-card-2">
+        <div class="para-header">
+          <div class="para-title-wrap">
+            <span class="para-badge">第二段</span>
+            <span class="para-focus">單元四篇故事展現「勤」的不同面貌</span>
+          </div>
+          <div class="mini-audio">
+            <button class="mini-btn play" type="button" onclick="playPara(2)">▶ 播放</button>
+            <button class="mini-btn pause" type="button" onclick="pauseAudio()">⏸ 暫停</button>
+            <button class="mini-btn stop" type="button" onclick="stopAudio()">⏹ 停止</button>
+          </div>
+        </div>
+        <p class="para-text">
+          本單元的四篇故事正好為我們展現了「勤」的不同面貌：〈二子學弈〉告訴我們學習必須<span class="mem story">心無旁騖</span>、<span class="mem story">抗拒誘惑</span>；〈囊螢夜讀〉與〈畫荻〉展現了古人在艱難環境中<span class="mem story">捉螢火蟲代替蠟燭</span>、<span class="mem story">用蘆葦桿在沙地教子</span>的<span class="mem story">克難智慧</span>；而〈王冕好學〉中放牛娃王冕在佛殿長明燈下<span class="mem story">潛心苦讀</span>的背影，則證明了真正的勤奮不需要<span class="mem story">外在鞭策</span>，而是源於內心對理想的<span class="mem story">主動追求</span>。
+        </p>
+        <div class="para-note">
+          💡 <strong>考試必考：</strong>〈二子學弈〉＝專心致志；〈囊螢夜讀〉＋〈畫荻〉＝克難智慧；〈王冕好學〉＝主動追求（無需外在鞭策）。
+        </div>
+      </article>
+
+      <!-- Paragraph 3 -->
+      <article class="para-card" id="para-card-3">
+        <div class="para-header">
+          <div class="para-title-wrap">
+            <span class="para-badge">第三段</span>
+            <span class="para-focus">前人信念的啟發與期許</span>
+          </div>
+          <div class="mini-audio">
+            <button class="mini-btn play" type="button" onclick="playPara(3)">▶ 播放</button>
+            <button class="mini-btn pause" type="button" onclick="pauseAudio()">⏸ 暫停</button>
+            <button class="mini-btn stop" type="button" onclick="stopAudio()">⏹ 停止</button>
+          </div>
+        </div>
+        <p class="para-text">
+          捕捉螢光、畫荻教子的身影雖然已融入歷史，但前人<span class="mem keyword">永不放棄</span>的信念依然是<span class="mem keyword">一面明鏡</span>，照亮著前路。願同學們也能<span class="mem keyword">腳踏實地</span>，以<span class="mem keyword">勤奮為雙翼</span>，飛向屬於自己的<span class="mem keyword">廣闊天地</span>！
+        </p>
+      </article>
+
+      <!-- Quick Reference Table -->
+      <div class="summary-card">
+        <h3>📌 四篇故事核心對照表（速記必考配對）</h3>
+        <table class="story-table">
+          <thead>
+            <tr>
+              <th>故事篇目</th>
+              <th>人物／做法</th>
+              <th>展現嘅「勤」面貌（必背關鍵詞）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>〈二子學弈〉</td>
+              <td>二人同師學下棋，一專心、一分心</td>
+              <td><strong>心無旁騖</strong>、<strong>抗拒誘惑</strong></td>
+            </tr>
+            <tr>
+              <td>〈囊螢夜讀〉</td>
+              <td>車胤捉螢火蟲代替蠟燭夜讀</td>
+              <td>艱難環境中嘅<strong>克難智慧</strong></td>
+            </tr>
+            <tr>
+              <td>〈畫荻〉</td>
+              <td>歐陽修母親用蘆葦桿在沙地教子</td>
+              <td>艱難環境中嘅<strong>克難智慧</strong></td>
+            </tr>
+            <tr>
+              <td>〈王冕好學〉</td>
+              <td>放牛娃王冕在佛殿長明燈下潛心苦讀</td>
+              <td>不需<strong>外在鞭策</strong>，源於內心對理想嘅<strong>主動追求</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- EXAM PANEL -->
+    <section id="panel-exam" class="section-panel">
+      <div class="exam-paper">
+        <div class="exam-top-meta">
+          <span class="exam-title-badge" id="examModeTitle">第 1 組考點（15 個必考空格・共 7.5 分）</span>
+          <div class="exam-controls-top">
+            <button class="ctrl-btn" id="swapSetBtn" type="button">🔀 切換第 2 組考點（全覆蓋）</button>
+            <button class="ctrl-btn secondary" id="showAnsBtn" type="button">👁️ 顯示標準答案</button>
+          </div>
+        </div>
+
+        <div id="examContainer"></div>
+
+        <div class="exam-actions">
+          <button class="submit-btn" id="submitExamBtn" type="button">✅ 交卷批改</button>
+          <button class="reset-btn" id="resetExamBtn" type="button">🔄 重新作答</button>
+        </div>
+
+        <div class="score-summary" id="scoreSummary">
+          <div class="score-big" id="scoreBig"></div>
+          <div class="score-msg" id="scoreMsg"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const PARA_TEXTS = {
+      1: "百尺竿頭立不難，一勤天下無難事；少壯不努力，老大徒傷悲；業精於勤荒於嬉。要培養勤勞精神，努力不倦地學習和嘗試，在日常生活中培養不避艱苦、勤奮向上的態度；提升自理能力，慣於出力流汗，磨煉堅韌不拔的意志，尊重各行各業的勞動者；並在生活上自律有節，不沉迷玩樂；於生活中實踐所學。",
+      2: "本單元的四篇故事正好為我們展現了勤的不同面貌：二子學弈告訴我們學習必須心無旁騖、抗拒誘惑；囊螢夜讀與畫荻展現了古人在艱難環境中捉螢火蟲代替蠟燭、用蘆葦桿在沙地教子的克難智慧；而王冕好學中放牛娃王冕在佛殿長明燈下潛心苦讀的背影，則證明了真正的勤奮不需要外在鞭策，而是源於內心對理想的主動追求。",
+      3: "捕捉螢光、畫荻教子的身影雖然已融入歷史，但前人永不放棄的信念依然是一面明鏡，照亮著前路。願同學們也能腳踏實地，以勤奮為雙翼，飛向屬於自己的廣闊天地！"
+    };
+
+    // Tabs
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".section-panel").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById("panel-" + btn.dataset.tab).classList.add("active");
+        stopAudio();
+      });
+    });
+
+    // Cloze mode in Study Panel
+    let clozeOn = false;
+    const toggleClozeBtn = document.getElementById("toggleClozeBtn");
+    toggleClozeBtn.addEventListener("click", () => {
+      clozeOn = !clozeOn;
+      document.querySelectorAll(".mem").forEach(el => {
+        el.classList.toggle("cloze-hidden", clozeOn);
+      });
+      toggleClozeBtn.classList.toggle("active-toggle", clozeOn);
+      toggleClozeBtn.textContent = clozeOn ? "👁️ 顯示所有必背詞語" : "🙈 遮蓋必背詞語（背誦模式）";
+    });
+
+    document.querySelectorAll(".mem").forEach(el => {
+      el.addEventListener("click", () => {
+        if (el.classList.contains("cloze-hidden")) {
+          el.classList.remove("cloze-hidden");
+        }
+      });
+    });
+
+    // Cantonese TTS
+    let activeParaId = null;
+    function clearParaHighlight() {
+      document.querySelectorAll(".para-card").forEach(c => c.classList.remove("speaking"));
+      activeParaId = null;
+    }
+
+    function playPara(id) {
+      if (!("speechSynthesis" in window)) return;
+      if (window.speechSynthesis.paused && activeParaId === id) {
+        window.speechSynthesis.resume();
+        return;
+      }
+      window.speechSynthesis.cancel();
+      clearParaHighlight();
+
+      const card = document.getElementById("para-card-" + id);
+      if (card) card.classList.add("speaking");
+      activeParaId = id;
+
+      const utter = new SpeechSynthesisUtterance(PARA_TEXTS[id]);
+      utter.lang = "zh-HK";
+      utter.rate = 0.95;
+      const voices = window.speechSynthesis.getVoices();
+      const hkVoice = voices.find(v => v.lang.toLowerCase().includes("zh-hk") || v.lang.toLowerCase().includes("yue"));
+      if (hkVoice) utter.voice = hkVoice;
+      utter.onend = clearParaHighlight;
+      utter.onerror = clearParaHighlight;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function pauseAudio() {
+      if ("speechSynthesis" in window && window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+      }
+    }
+
+    function stopAudio() {
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+      clearParaHighlight();
+    }
+
+    // Two complete exam sets covering every possible blank in P.85 緒言 (CAT1 image_40e081 style)
+    const EXAM_SETS = [
+      {
+        title: "第 1 組考點（15 個必考空格・共 7.5 分）",
+        blocks: [
+          {
+            label: "1. 勤勞名言引用（共 3 空）",
+            parts: [
+              { text: "「百尺竿頭立不難，" },
+              { blank: "一勤天下無難事", wide: true },
+              { text: "」、「少壯不努力，" },
+              { blank: "老大徒傷悲", wide: false },
+              { text: "」、「業精於勤" },
+              { blank: "荒於嬉", wide: false },
+              { text: "」。" }
+            ]
+          },
+          {
+            label: "2. 培養勤勞精神與生活態度（仿 CAT1 題型・共 5 空）",
+            parts: [
+              { text: "要培養勤勞精神，我們須努力不倦地學習和嘗試，在日常生活中培養" },
+              { blank: "不避艱苦", wide: false },
+              { text: "、勤奮向上的態度；提升" },
+              { blank: "自理能力", wide: false },
+              { text: "，慣於出力流汗，磨煉" },
+              { blank: "堅韌不拔", wide: false },
+              { text: "的意志，尊重各行各業的" },
+              { blank: "勞動者", wide: false },
+              { text: "；並在生活上" },
+              { blank: "自律有節", wide: false },
+              { text: "，不沉迷玩樂，於生活中實踐所學。" }
+            ]
+          },
+          {
+            label: "3. 四篇故事展現「勤」的不同面貌（共 4 空）",
+            parts: [
+              { text: "〈二子學弈〉告訴我們學習必須" },
+              { blank: "心無旁騖", wide: false },
+              { text: "、抗拒誘惑；〈囊螢夜讀〉與〈畫荻〉展現了古人在艱難環境中的" },
+              { blank: "克難智慧", wide: false },
+              { text: "；而〈王冕好學〉中放牛娃王冕在佛殿長明燈下" },
+              { blank: "潛心苦讀", wide: false },
+              { text: "的背影，則證明了真正的勤奮不需要外在鞭策，而是源於內心對理想的" },
+              { blank: "主動追求", wide: false },
+              { text: "。" }
+            ]
+          },
+          {
+            label: "4. 結語信念與期許（共 3 空）",
+            parts: [
+              { text: "捕捉螢光、畫荻教子的身影雖然已融入歷史，但前人" },
+              { blank: "永不放棄", wide: false },
+              { text: "的信念依然是一面明鏡，照亮著前路。願同學們也能" },
+              { blank: "腳踏實地", wide: false },
+              { text: "，以" },
+              { blank: "勤奮為雙翼", wide: false },
+              { text: "，飛向屬於自己的廣闊天地！" }
+            ]
+          }
+        ]
+      },
+      {
+        title: "第 2 組考點（其餘重點全覆蓋・14 個空格・共 7.0 分）",
+        blocks: [
+          {
+            label: "1. 勤勞名言上半句（共 3 空）",
+            parts: [
+              { text: "「" },
+              { blank: "百尺竿頭立不難", wide: true },
+              { text: "，一勤天下無難事」、「" },
+              { blank: "少壯不努力", wide: false },
+              { text: "，老大徒傷悲」、「" },
+              { blank: "業精於勤", wide: false },
+              { text: "荒於嬉」。" }
+            ]
+          },
+          {
+            label: "2. 培養勤勞精神其餘重點（共 5 空）",
+            parts: [
+              { text: "要培養勤勞精神，" },
+              { blank: "努力不倦", wide: false },
+              { text: "地學習和嘗試，在日常生活中培養不避艱苦、" },
+              { blank: "勤奮向上", wide: false },
+              { text: "的態度；慣於" },
+              { blank: "出力流汗", wide: false },
+              { text: "，磨煉堅韌不拔的意志；並在生活上自律有節，" },
+              { blank: "不沉迷玩樂", wide: false },
+              { text: "；於生活中" },
+              { blank: "實踐所學", wide: false },
+              { text: "。" }
+            ]
+          },
+          {
+            label: "3. 四篇故事細節與對比（共 4 空）",
+            parts: [
+              { text: "〈二子學弈〉告訴我們學習必須心無旁騖、" },
+              { blank: "抗拒誘惑", wide: false },
+              { text: "；〈囊螢夜讀〉與〈畫荻〉展現了古人在艱難環境中" },
+              { blank: "捉螢火蟲代替蠟燭", wide: true },
+              { text: "、用蘆葦桿在沙地教子的克難智慧；而〈王冕好學〉證明了真正的勤奮不需要" },
+              { blank: "外在鞭策", wide: false },
+              { text: "，而是源於內心對理想的主動追求。" }
+            ]
+          },
+          {
+            label: "4. 結語比喻與期許（共 2 空）",
+            parts: [
+              { text: "前人永不放棄的信念依然是" },
+              { blank: "一面明鏡", wide: false },
+              { text: "，照亮著前路。願同學們也能腳踏實地，以勤奮為雙翼，飛向屬於自己的" },
+              { blank: "廣闊天地", wide: false },
+              { text: "！" }
+            ]
+          }
+        ]
+      }
+    ];
+
+    let currentSetIdx = 0;
+    const examContainer = document.getElementById("examContainer");
+    const examModeTitle = document.getElementById("examModeTitle");
+    const scoreSummary = document.getElementById("scoreSummary");
+
+    function renderExam() {
+      const set = EXAM_SETS[currentSetIdx];
+      examModeTitle.textContent = set.title;
+      examContainer.innerHTML = "";
+      scoreSummary.classList.remove("show");
+
+      let blankCounter = 0;
+      set.blocks.forEach((blk, bIdx) => {
+        const div = document.createElement("div");
+        div.className = "q-block";
+
+        let lineHtml = "";
+        blk.parts.forEach(p => {
+          if (p.text !== undefined) {
+            lineHtml += `<span>${p.text}</span>`;
+          } else {
+            const idx = blankCounter++;
+            lineHtml += `<span class="blank-wrap"><input class="blank-input ${p.wide ? "wide" : ""}" type="text" data-bidx="${idx}" data-ans="${p.blank}" placeholder="(${idx + 1})" autocomplete="off" /><span class="q-mark">(0.5分)</span></span>`;
+          }
+        });
+
+        div.innerHTML = `
+          <div class="q-block-title">${blk.label}</div>
+          <div class="q-line">${lineHtml}</div>
+          <div class="q-feedback" id="blk-fb-${bIdx}"></div>
+        `;
+        examContainer.appendChild(div);
+      });
+    }
+
+    function normalizeAns(s) {
+      return s.replace(/[\s，。；、！？,.!?;:「」『』]/g, "").trim();
+    }
+
+    document.getElementById("swapSetBtn").addEventListener("click", () => {
+      currentSetIdx = currentSetIdx === 0 ? 1 : 0;
+      document.getElementById("swapSetBtn").textContent =
+        currentSetIdx === 0 ? "🔀 切換第 2 組考點（全覆蓋）" : "🔀 切換第 1 組考點（核心題）";
+      renderExam();
+    });
+
+    document.getElementById("showAnsBtn").addEventListener("click", () => {
+      document.querySelectorAll(".blank-input").forEach(inp => {
+        inp.value = inp.dataset.ans;
+      });
+    });
+
+    document.getElementById("resetExamBtn").addEventListener("click", () => {
+      renderExam();
+    });
+
+    document.getElementById("submitExamBtn").addEventListener("click", () => {
+      const blocks = examContainer.querySelectorAll(".q-block");
+      let totalBlanks = 0;
+      let correctCount = 0;
+
+      blocks.forEach((blk, bIdx) => {
+        const inputs = blk.querySelectorAll(".blank-input");
+        const fb = document.getElementById("blk-fb-" + bIdx);
+        let wrongList = [];
+
+        inputs.forEach(inp => {
+          totalBlanks++;
+          const ans = inp.dataset.ans;
+          inp.classList.remove("ok", "err");
+          if (normalizeAns(inp.value) === normalizeAns(ans)) {
+            correctCount++;
+            inp.classList.add("ok");
+          } else {
+            inp.classList.add("err");
+            wrongList.push(`(${parseInt(inp.dataset.bidx, 10) + 1}) ${ans}`);
+          }
+        });
+
+        if (wrongList.length === 0) {
+          fb.className = "q-feedback show ok";
+          fb.textContent = "✔ 本題全對！";
+        } else {
+          fb.className = "q-feedback show err";
+          fb.textContent = "✘ 正確答案：" + wrongList.join(" ｜ ");
+        }
+      });
+
+      const score = (correctCount * 0.5).toFixed(1);
+      const maxScore = (totalBlanks * 0.5).toFixed(1);
+      document.getElementById("scoreBig").textContent = `總分：${score} / ${maxScore} 分（答對 ${correctCount} / ${totalBlanks} 空）`;
+
+      const ratio = correctCount / totalBlanks;
+      const msgEl = document.getElementById("scoreMsg");
+      if (ratio === 1) {
+        msgEl.textContent = "滿分！緒言所有必背重點完全過關，記住切換去另一組考點試埋！";
+      } else if (ratio >= 0.7) {
+        msgEl.textContent = "表現好好！睇返紅色空格嘅正確字詞，再試一次就滿分！";
+      } else {
+        msgEl.textContent = "建議返去「📖 緒言精讀與背誦」開「遮蓋必背詞語」背熟先再考！";
+      }
+      scoreSummary.classList.add("show");
+    });
+
+    renderExam();
+  </script>
+</body>
+</html>
